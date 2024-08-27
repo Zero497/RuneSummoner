@@ -7,6 +7,5 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "2D/Tiles/DataTile")]
 public class DataTile : Tile
 {
-
     public TileData data;
 }
