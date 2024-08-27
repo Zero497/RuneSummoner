@@ -10,6 +10,8 @@ public class VisionManager : MonoBehaviour
 
     public Tilemap tilemap;
 
+    public HiddenTile hiddenTile;
+
     private HashSet<Vector3Int> revealedPositions = new HashSet<Vector3Int>();
 
     private void Awake()
@@ -22,21 +24,22 @@ public class VisionManager : MonoBehaviour
     {
         if (revealedPositions.Add(position))
         {
-            DataTile tileAtPosition = tilemap.GetTile<DataTile>(position);
-            DataTile ptr = tileAtPosition.data.hiddenTilePointer;
-            if (ptr != null)
+            HiddenTile tileAt = tilemap.GetTile<HiddenTile>(position);
+            if (tileAt != null)
             {
-                tilemap.SetTile(position, ptr);
+                tilemap.SetTile(position, tileAt.tileref);
             }
         }
     }
 
     public void ConcealPosition(Vector3Int position)
     {
-        if (revealedPositions.Remove(position))
+        if (tilemap.GetTile(position).GetType() != typeof(HiddenTile))
         {
+            revealedPositions.Remove(position);
             DataTile tileAtPosition = tilemap.GetTile<DataTile>(position);
-            
+            tilemap.SetTile(position, hiddenTile);
+            tilemap.GetTile<HiddenTile>(position).tileref = tileAtPosition;
         }
     }
 }

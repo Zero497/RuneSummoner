@@ -47,7 +47,7 @@ public static class MapGenerator
             for (int y = 0; y < sizeY; y++)
             {
                 int rand = Random.Range(0, fillerTiles.Count);
-                tilemap.SetTile(new Vector3Int(x,y,0), validTiles[fillerTiles[rand]]);
+                SetTileAtAndHide(tilemap, new Vector3Int(x,y,0), validTiles[fillerTiles[rand]]);
             }
         }
         foreach (int i in clusterTiles)
@@ -82,11 +82,11 @@ public static class MapGenerator
 
     private static void GenerateSolitaryTile(Tilemap tilemap, DataTile tile, Vector3Int coord, int sizeX, int sizeY)
     {
-        tilemap.SetTile(coord, tile);
+        SetTileAtAndHide(tilemap, coord, tile);
         int rand = Random.Range(0, 2);
         while (rand > 0)
         {
-            tilemap.SetTile(GetRandomAdjacentTile(coord, sizeX, sizeY), tile);
+            SetTileAtAndHide(tilemap, GetRandomAdjacentTile(coord, sizeX, sizeY), tile);
             rand--;
         }
     }
@@ -94,6 +94,12 @@ public static class MapGenerator
     private static void GenerateClusterTile(Tilemap tilemap, DataTile tile, Vector3Int coord)
     {
         //TODO
+    }
+
+    private static void SetTileAtAndHide(Tilemap tilemap, Vector3Int position, DataTile tile)
+    {
+        tilemap.SetTile(position, tile);
+        VisionManager.visionManager.ConcealPosition(position);
     }
 
     //collate the passed tiles into lists of indices for tiles of matching type
