@@ -22,7 +22,7 @@ public class MapTest : MonoBehaviour
     public InputActionReference click;
 
     public Camera cam;
-    private void Awake()
+    private void Start()
     {
         List<MapGenerator.GenDetails> detailsList = new List<MapGenerator.GenDetails>();
         for (int i = 0; i < genTypes.Count; i++)
@@ -47,6 +47,20 @@ public class MapTest : MonoBehaviour
         Vector2 position = context.ReadValue<Vector2>();
         Vector3 positionActual = new Vector3(position.x, position.y, 0);
         Vector3 positionWorld = cam.ScreenToWorldPoint(positionActual);
-        
+        Vector3 closestTilePosition = positionWorld - map.GetCellCenterWorld(new Vector3Int(0,0,0));
+        Vector3Int closestTile = new Vector3Int(0,0,0);
+        for (int x = 0; x < map.size.x; x++)
+        {
+            for (int y = 0; y < map.size.y; y++)
+            {
+                Vector3 tempTilePosition = positionWorld - map.GetCellCenterWorld(new Vector3Int(x,y,0));
+                if (tempTilePosition.magnitude < closestTilePosition.magnitude)
+                {
+                    closestTilePosition = tempTilePosition;
+                    closestTile = new Vector3Int(x, y, 0);
+                }
+            }
+        }
+        VisionManager.visionManager.RevealPosition(closestTile);
     }
 }
