@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 public class CameraMover : MonoBehaviour
@@ -9,6 +10,8 @@ public class CameraMover : MonoBehaviour
     public float speed;
 
     public Tilemap map;
+
+    public InputActionReference move;
 
     private Camera self;
 

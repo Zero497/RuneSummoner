@@ -8,11 +8,11 @@ public class VisionManager : MonoBehaviour
 {
     public static VisionManager visionManager;
 
-    public Tilemap tilemap;
+    public Tilemap hiddenMap;
 
-    public HiddenTile hiddenTile;
+    public Tile hiddenTile;
 
-    private HashSet<Vector3Int> revealedPositions = new HashSet<Vector3Int>();
+    private Dictionary<Vector3Int, List<String>> revealedPositions = new Dictionary<Vector3Int, List<String>>();
 
     private void Awake()
     {
@@ -20,26 +20,42 @@ public class VisionManager : MonoBehaviour
         visionManager = this;
     }
 
+    //reveal the specified position
     public void RevealPosition(Vector3Int position)
     {
-        if (revealedPositions.Add(position))
-        {
-            HiddenTile tileAt = tilemap.GetTile<HiddenTile>(position);
-            if (tileAt != null)
-            {
-                tilemap.SetTile(position, tileAt.tileref);
-            }
-        }
+        hiddenMap.SetTile(position, null);
     }
 
+    //conceal the specified position
     public void ConcealPosition(Vector3Int position)
     {
-        if (tilemap.GetTile(position).GetType() != typeof(HiddenTile))
+        revealedPositions.Remove(position);
+        hiddenMap.SetTile(position, hiddenTile);
+    }
+
+    /*
+     * pass a vector with negative values to oldposition for no original position
+     */
+    public void ChangeViewerPosition(String viewerID, int sightRadius, Vector3Int oldPosition, Vector3Int newPosition)
+    {
+        if (oldPosition is {x : > 0, y: > 0, z: > 0 })
         {
-            revealedPositions.Remove(position);
-            DataTile tileAtPosition = tilemap.GetTile<DataTile>(position);
-            tilemap.SetTile(position, hiddenTile);
-            tilemap.GetTile<HiddenTile>(position).tileref = tileAtPosition;
+            for (int x = -sightRadius; x < sightRadius; x++)
+            {
+                for (int y = -sightRadius; y < sightRadius; y++)
+                {
+                    int val = Mathf.Abs(x)+Mathf.Abs(y)/2;
+                    if (y % 2 != 0)
+                    {
+                        val++;
+                    }
+
+                    if (val < sightRadius)
+                    {
+                        
+                    }
+                }
+            }
         }
     }
 }

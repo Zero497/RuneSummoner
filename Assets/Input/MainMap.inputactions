@@ -1,0 +1,54 @@
+{
+    "name": "MainMap",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "2e2b900b-26b7-4650-9f01-6a8110b55325",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "b9637383-f19d-4d19-9142-c2b65a9dbebf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Test",
+                    "type": "Button",
+                    "id": "46f580bc-42e2-4d70-91cc-987d9d30aa30",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "4e099d32-2ca4-44e6-93fc-2f06dcc70f71",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7cc0d92-783a-48ad-9c46-64205ed69714",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Test",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

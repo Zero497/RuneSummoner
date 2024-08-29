@@ -34,17 +34,17 @@ public class MapTest : MonoBehaviour
 
     private void OnEnable()
     {
-        click.action.started += OnClickTile;
+        click.action.performed += OnClickTile;
     }
 
     private void OnDisable()
     {
-        click.action.started -= OnClickTile;
+        click.action.performed -= OnClickTile;
     }
 
     private void OnClickTile(InputAction.CallbackContext context)
     {
-        Vector2 position = context.ReadValue<Vector2>();
+        Vector2 position = Mouse.current.position.ReadValue();
         Vector3 positionActual = new Vector3(position.x, position.y, 0);
         Vector3 positionWorld = cam.ScreenToWorldPoint(positionActual);
         Vector3 closestTilePosition = positionWorld - map.GetCellCenterWorld(new Vector3Int(0,0,0));
