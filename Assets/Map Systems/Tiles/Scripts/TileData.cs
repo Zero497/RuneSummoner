@@ -10,4 +10,6 @@ public class TileData : ScriptableObject
     public float moveCost;
     //whether this is an impassable terrain tile
     public bool isImpassable;
+    //whether this terrain blocks line of sight
+    public bool lineOfSightBlocking;
 }

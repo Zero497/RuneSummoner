@@ -6,7 +6,7 @@
             "id": "2e2b900b-26b7-4650-9f01-6a8110b55325",
             "actions": [
                 {
-                    "name": "Click",
+                    "name": "LeftClick",
                     "type": "Button",
                     "id": "b9637383-f19d-4d19-9142-c2b65a9dbebf",
                     "expectedControlType": "Button",
@@ -15,13 +15,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Test",
+                    "name": "RightClick",
                     "type": "Button",
-                    "id": "46f580bc-42e2-4d70-91cc-987d9d30aa30",
+                    "id": "07b63ddf-d4e4-430b-b9ef-ed3347b18252",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "008ce74a-f99c-4f43-ab3e-f5035d2b741a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -32,20 +41,75 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click",
+                    "action": "LeftClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "a7cc0d92-783a-48ad-9c46-64205ed69714",
-                    "path": "<Keyboard>/e",
+                    "id": "0561d6cf-ed43-4243-aba0-d43e85c00974",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Test",
+                    "action": "RightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "WASD",
+                    "id": "44c347c8-de9d-4d4c-ac6c-f01515ff2425",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "3d2b1f9d-5bdd-49fe-9520-da9d4378da3f",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "0efa8a7d-07b1-4e0a-83b7-1f94e37e2d17",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "ff9e5efa-8ee6-407c-baec-5516fccca2c0",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "f19d2917-4022-4a9d-a81a-39b44ebdfbbd",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

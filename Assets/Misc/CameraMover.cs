@@ -22,9 +22,10 @@ public class CameraMover : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector2 axis = move.action.ReadValue<Vector2>();
         float xMod = 1.66f;
         float yMod = 1f;
-        float newX = transform.position.x + Input.GetAxis("Horizontal")*Time.deltaTime * speed;
+        float newX = transform.position.x +axis.x *Time.deltaTime * speed;
         if (newX < self.orthographicSize*xMod)
         {
             newX = self.orthographicSize*xMod;
@@ -33,7 +34,7 @@ public class CameraMover : MonoBehaviour
         {
             newX = map.localBounds.max.x-self.orthographicSize*xMod-0.25f;
         }
-        float newY = transform.position.y + Input.GetAxis("Vertical")*Time.deltaTime * speed;
+        float newY = transform.position.y + axis.y*Time.deltaTime * speed;
         if (newY < self.orthographicSize*yMod-0.5f)
         {
             newY = self.orthographicSize*yMod-0.5f;

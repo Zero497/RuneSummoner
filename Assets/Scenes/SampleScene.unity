@@ -187,13 +187,16 @@ MonoBehaviour:
   tiles:
   - {fileID: 11400000, guid: f9dd293a4b89e37428d8495aef14df5c, type: 2}
   - {fileID: 11400000, guid: b05ea68e7e0e00a4592823e1ccd27e9c, type: 2}
-  genTypes: 0000000002000000
+  - {fileID: 11400000, guid: f331beb332ad4e2429fd8caa05e1d607, type: 2}
+  genTypes: 000000000200000002000000
   spawnFrequency:
   - 0
-  - 0.1
-  sizeX: 25
-  sizeY: 35
-  click: {fileID: -9068564586023855081, guid: 9e8839b7e904b634098ab17556124833, type: 3}
+  - 0
+  - 0.06
+  sizeX: 40
+  sizeY: 50
+  lclick: {fileID: -9068564586023855081, guid: 9e8839b7e904b634098ab17556124833, type: 3}
+  rclick: {fileID: 8340161650310458189, guid: 9e8839b7e904b634098ab17556124833, type: 3}
   cam: {fileID: 519420031}
 --- !u!114 &146529950
 MonoBehaviour:
@@ -208,6 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hiddenMap: {fileID: 1230968753}
+  mainMap: {fileID: 1126495592}
   hiddenTile: {fileID: 11400000, guid: 9d57d827ea2db0845a056117456e6f5a, type: 2}
 --- !u!114 &146529951
 MonoBehaviour:
@@ -396,9 +400,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9096751fd0b53424d8a7bcbe95d7430c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 15
   map: {fileID: 1126495592}
-  move: {fileID: -3790569463947076118, guid: 89741ed7626090b4481e31cbf1d30dbc, type: 3}
+  move: {fileID: -2946064341501762728, guid: 9e8839b7e904b634098ab17556124833, type: 3}
 --- !u!1 &1016658050
 GameObject:
   m_ObjectHideFlags: 0
