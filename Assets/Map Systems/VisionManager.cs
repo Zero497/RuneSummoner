@@ -82,12 +82,34 @@ public class VisionManager : MonoBehaviour
             Vector3Int cur = openList.Dequeue();
             closedList.Add(cur);
             if(!mainMap.HasTile(cur)) continue;
-            viewableList.Add(cur);
             if (mainMap.GetTile<DataTile>(cur).data.lineOfSightBlocking)
                 viewBlockerList.Add(cur);
             List<Vector3Int> adjacents = HexTileUtility.GetAdjacentTiles(cur, mainMap);
             foreach (Vector3Int adjacent in adjacents)
             {
+                if (!closedList.Contains(adjacent) && !openList.Contains(adjacent))
+                {
+                    if (HexTileUtility.GetTileDistance(adjacent, start) >= sightRadius)
+                        closedList.Add(adjacent);
+                    else
+                        openList.Enqueue(adjacent);
+                }
+            }
+        }
+        openList = new Queue<Vector3Int>();
+        closedList = new HashSet<Vector3Int>();
+        openList.Enqueue(start);
+        while (openList.Count != 0)
+        {
+            Vector3Int cur = openList.Dequeue();
+            closedList.Add(cur);
+            if(!mainMap.HasTile(cur)) continue;
+            viewableList.Add(cur);
+            List<Vector3Int> adjacents = HexTileUtility.GetAdjacentTiles(cur, mainMap);
+            foreach (Vector3Int adjacent in adjacents)
+            {
+                if(adjacent == new Vector3Int(-11,-7,0))
+                    Debug.Log("ree");
                 if (!closedList.Contains(adjacent) && !openList.Contains(adjacent))
                 {
                     if (HexTileUtility.GetTileDistance(adjacent, start) >= sightRadius ||
@@ -107,7 +129,8 @@ public class VisionManager : MonoBehaviour
     {
         foreach (Vector3Int blocker in viewBlockers)
         {
-            if (blocker.y == viewer.y)
+            if(target == blocker) continue;
+            if (blocker.y == viewer.y && target.y == blocker.y)
             {
                 if (blocker.x < viewer.x && target.x < blocker.x)
                     return false;
@@ -124,9 +147,28 @@ public class VisionManager : MonoBehaviour
             }
             else if (HexTileUtility.isInLine(blocker, target) && HexTileUtility.isInLine(viewer, target))
             {
-                if (target.x < viewer.x && target.x < blocker.x || target.x > viewer.x && target.x > blocker.x)
+                int q1 = HexTileUtility.GetQuadrant(viewer, target);
+                if (q1 == HexTileUtility.GetQuadrant(viewer, blocker))
                 {
-                    return false;
+                    switch (q1)
+                    {
+                        case 0:
+                            if (blocker.y % 2 == 0 && target.x < blocker.x) return false;
+                            if (blocker.y % 2 != 0 && target.x <= blocker.x) return false;
+                            break;
+                        case 1:
+                            if (blocker.y % 2 == 0 && target.x >= blocker.x) return false;
+                            if (blocker.y % 2 != 0 && target.x > blocker.x) return false;
+                            break;
+                        case 3:
+                            if (blocker.y % 2 == 0 && target.x >= blocker.x) return false;
+                            if (blocker.y % 2 != 0 && target.x > blocker.x) return false;
+                            break;
+                        case 4:
+                            if (blocker.y % 2 == 0 && target.x < blocker.x) return false;
+                            if (blocker.y % 2 != 0 && target.x <= blocker.x) return false;
+                            break;
+                    }
                 }
             }
 

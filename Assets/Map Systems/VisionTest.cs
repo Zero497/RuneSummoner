@@ -41,6 +41,7 @@ public class VisionTest : MonoBehaviour
         Vector3 positionWorld = cam.ScreenToWorldPoint(positionActual);
         VisionManager.visionManager.ConcealInRadius("test", 8, lastPosition);
         lastPosition = HexTileUtility.GetNearestTile(positionWorld, map);
+        Debug.Log(lastPosition);
         VisionManager.visionManager.RevealInRadius("test",8, lastPosition);
     }
     

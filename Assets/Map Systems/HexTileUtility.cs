@@ -81,6 +81,21 @@ public static class HexTileUtility
     public static int GetQuadrant(Vector3Int start, Vector3Int target)
     {
         List<Vector3Int> lineVals = FindValsInLine(start, GetTileDistance(start, target));
+        for (int i = 0; i < lineVals.Count; i++)
+        {
+            if (lineVals[i] == target)
+            {
+                switch (i)
+                {
+                    case 0: return 0;
+                    case 1: return 1;
+                    case 2: return 4;
+                    case 3: return 3;
+                    case 4: return 5;
+                    case 5: return 2;
+                }
+            }
+        }
         if (isInLine(lineVals[0], target))
         {
             if (isInLine(target, lineVals[1])) return 0;
@@ -106,7 +121,7 @@ public static class HexTileUtility
             amt = Mathf.CeilToInt(dist / 2.0f);
         else
             amt = Mathf.FloorToInt(dist / 2.0f);
-        if (end.x == start.x - amt || end.x == start.x + amt)
+        if ((end.x == start.x - amt || end.x == start.x + amt) && (end.y == start.y+dist || end.y == start.y-dist))
         {
             return true;
         }
