@@ -5,6 +5,26 @@ using UnityEngine.Tilemaps;
 
 public static class HexTileUtility
 {
+    public static Vector3Int GetNearestTile(Vector3 worldPosition, Tilemap map)
+    {
+        var cellBounds = map.cellBounds;
+        Vector3 closestTilePosition = worldPosition - map.GetCellCenterWorld(new Vector3Int(cellBounds.min.x,cellBounds.min.y,0));
+        Vector3Int closestTile = new Vector3Int(cellBounds.min.x,cellBounds.min.y,0);
+        for (int x = cellBounds.min.x; x < map.size.x; x++)
+        {
+            for (int y = cellBounds.min.y; y < map.size.y; y++)
+            {
+                Vector3 tempTilePosition = worldPosition - map.GetCellCenterWorld(new Vector3Int(x,y,0));
+                if (tempTilePosition.magnitude < closestTilePosition.magnitude)
+                {
+                    closestTilePosition = tempTilePosition;
+                    closestTile = new Vector3Int(x, y, 0);
+                }
+            }
+        }
+        return closestTile;
+    }
+    
     public static List<Vector3Int> GetAdjacentTiles(Vector3Int tile, Tilemap map)
     {
         int x = tile.x;

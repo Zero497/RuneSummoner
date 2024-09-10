@@ -18,14 +18,6 @@ public class MapTest : MonoBehaviour
     public int sizeX;
 
     public int sizeY;
-
-    public InputActionReference lclick;
-
-    public InputActionReference rclick;
-
-    public Camera cam;
-    
-    private Vector3Int lastPosition = Vector3Int.zero;
     private void Start()
     {
         List<MapGenerator.GenDetails> detailsList = new List<MapGenerator.GenDetails>();
@@ -36,52 +28,5 @@ public class MapTest : MonoBehaviour
         MapGenerator.GenerateMap(map, tiles, detailsList, sizeX, sizeY);
     }
 
-    private void OnEnable()
-    {
-        lclick.action.performed += OnClickTile;
-        rclick.action.performed += OnClickTileR;
-    }
-
-    private void OnDisable()
-    {
-        lclick.action.performed -= OnClickTile;
-        rclick.action.performed -= OnClickTileR;
-    }
-
-    private Vector3Int GetNearestTile(Vector3 worldPosition)
-    {
-        Vector3 closestTilePosition = worldPosition - map.GetCellCenterWorld(new Vector3Int(0,0,0));
-        Vector3Int closestTile = new Vector3Int(0,0,0);
-        for (int x = 0; x < map.size.x; x++)
-        {
-            for (int y = 0; y < map.size.y; y++)
-            {
-                Vector3 tempTilePosition = worldPosition - map.GetCellCenterWorld(new Vector3Int(x,y,0));
-                if (tempTilePosition.magnitude < closestTilePosition.magnitude)
-                {
-                    closestTilePosition = tempTilePosition;
-                    closestTile = new Vector3Int(x, y, 0);
-                }
-            }
-        }
-        return closestTile;
-    }
-
-    private void OnClickTile(InputAction.CallbackContext context)
-    {
-        Vector2 position = Mouse.current.position.ReadValue();
-        Vector3 positionActual = new Vector3(position.x, position.y, 0);
-        Vector3 positionWorld = cam.ScreenToWorldPoint(positionActual);
-        VisionManager.visionManager.ConcealInRadius("test", 8, lastPosition);
-        lastPosition = GetNearestTile(positionWorld);
-        VisionManager.visionManager.RevealInRadius("test",8, lastPosition);
-    }
     
-    private void OnClickTileR(InputAction.CallbackContext context)
-    {
-        Vector2 position = Mouse.current.position.ReadValue();
-        Vector3 positionActual = new Vector3(position.x, position.y, 0);
-        Vector3 positionWorld = cam.ScreenToWorldPoint(positionActual);
-        VisionManager.visionManager.ConcealPosition(GetNearestTile(positionWorld));
-    }
 }

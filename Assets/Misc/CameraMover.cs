@@ -26,22 +26,22 @@ public class CameraMover : MonoBehaviour
         float xMod = 1.66f;
         float yMod = 1f;
         float newX = transform.position.x +axis.x *Time.deltaTime * speed;
-        if (newX < self.orthographicSize*xMod)
+        if (newX < map.LocalToWorld(map.localBounds.min).x+self.orthographicSize*xMod)
         {
-            newX = self.orthographicSize*xMod;
+            newX = map.LocalToWorld(map.localBounds.min).x+self.orthographicSize*xMod;
         }
-        if (newX > map.localBounds.max.x-self.orthographicSize*xMod-0.25f)
+        if (newX > map.LocalToWorld(map.localBounds.max).x-self.orthographicSize*xMod-0.25f)
         {
-            newX = map.localBounds.max.x-self.orthographicSize*xMod-0.25f;
+            newX = map.LocalToWorld(map.localBounds.max).x-self.orthographicSize*xMod-0.25f;
         }
         float newY = transform.position.y + axis.y*Time.deltaTime * speed;
-        if (newY < self.orthographicSize*yMod-0.5f)
+        if (newY < map.LocalToWorld(map.localBounds.min).y+self.orthographicSize*yMod+0.5f)
         {
-            newY = self.orthographicSize*yMod-0.5f;
+            newY = map.LocalToWorld(map.localBounds.min).y + self.orthographicSize * yMod + 0.5f;
         }
-        if (newY > map.localBounds.max.y-self.orthographicSize*yMod)
+        if (newY > map.LocalToWorld(map.localBounds.max).y-self.orthographicSize*yMod)
         {
-            newY = map.localBounds.max.y-self.orthographicSize*yMod;
+            newY = map.LocalToWorld(map.localBounds.max).y-self.orthographicSize*yMod;
         }
         transform.position = new Vector3(newX, newY, -1);
     }

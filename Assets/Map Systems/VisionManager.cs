@@ -81,6 +81,7 @@ public class VisionManager : MonoBehaviour
         {
             Vector3Int cur = openList.Dequeue();
             closedList.Add(cur);
+            if(!mainMap.HasTile(cur)) continue;
             viewableList.Add(cur);
             if (mainMap.GetTile<DataTile>(cur).data.lineOfSightBlocking)
                 viewBlockerList.Add(cur);
