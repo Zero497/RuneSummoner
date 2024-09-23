@@ -1,12 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 public static class MapGenerator
 {
+    //chance for tiles adjacent to cluster center to be added to the cluster
+    //chance is halved for each tile further out
+    private static float CLUSTERCHANCE = 0.6f;
+    
     public enum GenerationType
     {
         //filler will be the default tile in the generated map
@@ -42,12 +48,24 @@ public static class MapGenerator
         List<int> clusterTiles;
         List<int> solitaryTiles;
         ParseGenTypes(validTiles, tileGen, out fillerTiles, out clusterTiles, out solitaryTiles);
+        List<float> weights = ParseWeights(GetFrequencyList(fillerTiles, tileGen));
         for(int x = 0; x < sizeX; x++)
         {
             for (int y = 0; y < sizeY; y++)
             {
-                int rand = Random.Range(0, fillerTiles.Count);
-                SetTileAtAndHide(tilemap, new Vector3Int(x,y,0), validTiles[fillerTiles[rand]]);
+                float rand = Random.Range(0, 1.0f);
+                int index = weights.Count - 1;
+                float cur = 0;
+                for (int i = 0; i < weights.Count - 1; i++)
+                {
+                    cur += weights[i];
+                    if (rand < cur)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+                SetTileAtAndHide(tilemap, new Vector3Int(x,y,0), validTiles[fillerTiles[index]]);
             }
         }
         foreach (int i in clusterTiles)
@@ -80,6 +98,28 @@ public static class MapGenerator
         }
     }
 
+    private static List<float> GetFrequencyList(List<int> indices, List<GenDetails> genList)
+    {
+        List<float> retval = new List<float>();
+        foreach (int index in indices)
+        {
+            retval.Add(genList[index].spawnFrequency);
+        }
+        return retval;
+    }
+
+    private static List<float> ParseWeights(List<float> frequencies)
+    {
+        float total = frequencies.Sum();
+        List<float> weights = new List<float>();
+        foreach (float freq in frequencies)
+        {
+            weights.Add(freq/total);
+        }
+
+        return weights;
+    }
+
     private static void GenerateSolitaryTile(Tilemap tilemap, DataTile tile, Vector3Int coord, int sizeX, int sizeY)
     {
         SetTileAtAndHide(tilemap, coord, tile);
@@ -93,7 +133,31 @@ public static class MapGenerator
 
     private static void GenerateClusterTile(Tilemap tilemap, DataTile tile, Vector3Int coord)
     {
-        //TODO
+        Queue<Vector3Int> openList = new Queue<Vector3Int>();
+        HashSet<Vector3Int> closedList = new HashSet<Vector3Int>();
+        List<float> chances = new List<float> { CLUSTERCHANCE };
+        openList.Enqueue(coord);
+        while (openList.Count != 0)
+        {
+            Vector3Int cur = openList.Dequeue();
+            List<Vector3Int> adjs = HexTileUtility.GetAdjacentTiles(coord, tilemap);
+            SetTileAtAndHide(tilemap, cur, tile);
+            closedList.Add(cur);
+            foreach (Vector3Int adj in adjs)
+            {
+                if(closedList.Contains(adj)) continue;
+                float rand = Random.Range(0, 1.0f);
+                int dist = HexTileUtility.GetTileDistance(coord, adj);
+                while (dist > chances.Count)
+                {
+                    chances.Add(chances[^1]/2);
+                }
+                if (chances[dist-1] > rand) openList.Enqueue(adj);
+                else closedList.Add(adj);
+            }
+            
+        }
+        
     }
 
     private static void SetTileAtAndHide(Tilemap tilemap, Vector3Int position, DataTile tile)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,12 +32,24 @@ public static class HexTileUtility
         int y = tile.y;
         int z = tile.z;
         List<Vector3Int> retval = new List<Vector3Int>();
-        retval.Add(new Vector3Int(x, y+1, z));
-        retval.Add(new Vector3Int(x-1, y+1, z));
-        retval.Add(new Vector3Int(x-1, y, z));
-        retval.Add(new Vector3Int(x-1, y-1, z));
-        retval.Add(new Vector3Int(x, y-1, z));
-        retval.Add(new Vector3Int(x+1, y, z));
+        if (tile.y % 2 == 0)
+        {
+            retval.Add(new Vector3Int(x-1,y+1,z));
+            retval.Add(new Vector3Int(x,y+1,z));
+            retval.Add(new Vector3Int(x+1,y,z));
+            retval.Add(new Vector3Int(x,y-1,z));
+            retval.Add(new Vector3Int(x-1,y-1,z));
+            retval.Add(new Vector3Int(x-1,y,z));
+        }
+        else
+        {
+            retval.Add(new Vector3Int(x,y+1,z));
+            retval.Add(new Vector3Int(x+1,y+1,z));
+            retval.Add(new Vector3Int(x+1,y,z));
+            retval.Add(new Vector3Int(x+1,y-1,z));
+            retval.Add(new Vector3Int(x,y-1,z));
+            retval.Add(new Vector3Int(x-1,y,z));
+        }
         int i = 0;
         while (i < retval.Count)
         {

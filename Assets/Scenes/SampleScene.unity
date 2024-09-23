@@ -188,11 +188,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f9dd293a4b89e37428d8495aef14df5c, type: 2}
   - {fileID: 11400000, guid: b05ea68e7e0e00a4592823e1ccd27e9c, type: 2}
   - {fileID: 11400000, guid: f331beb332ad4e2429fd8caa05e1d607, type: 2}
-  genTypes: 000000000200000002000000
+  genTypes: 000000000100000002000000
   spawnFrequency:
   - 0
-  - 0
-  - 0.06
+  - 0.04
+  - 0.01
   sizeX: 40
   sizeY: 50
 --- !u!114 &146529950

@@ -108,8 +108,6 @@ public class VisionManager : MonoBehaviour
             List<Vector3Int> adjacents = HexTileUtility.GetAdjacentTiles(cur, mainMap);
             foreach (Vector3Int adjacent in adjacents)
             {
-                if(adjacent == new Vector3Int(-11,-7,0))
-                    Debug.Log("ree");
                 if (!closedList.Contains(adjacent) && !openList.Contains(adjacent))
                 {
                     if (HexTileUtility.GetTileDistance(adjacent, start) >= sightRadius ||
@@ -141,7 +139,13 @@ public class VisionManager : MonoBehaviour
             {
                 if (HexTileUtility.isInLine(viewer, target))
                     continue;
-                if (HexTileUtility.GetQuadrant(viewer, blocker) == HexTileUtility.GetQuadrant(blocker, target))
+                int q1 = HexTileUtility.GetQuadrant(blocker, target);
+                if (HexTileUtility.GetQuadrant(viewer, blocker) == q1)
+                    return false;
+                q1 -= 1;
+                if (q1 < 0) q1 = 5;
+                if (HexTileUtility.isInLine(blocker, target) && HexTileUtility.GetQuadrant(viewer, blocker) ==
+                    q1)
                     return false;
 
             }
