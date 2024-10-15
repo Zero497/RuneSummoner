@@ -72,53 +72,29 @@ public class VisionManager : MonoBehaviour
     
     private List<Vector3Int> DjikstrasSightCheck(Vector3Int start, int sightRadius, bool ignoreSightBlocking = false)
     {
-        HashSet<Vector3Int> closedList = new HashSet<Vector3Int>();
-        List<Vector3Int> viewBlockerList = new List<Vector3Int>();
         List<Vector3Int> viewableList = new List<Vector3Int>();
-        Queue<Vector3Int> openList = new Queue<Vector3Int>();
-        openList.Enqueue(start);
-        while (openList.Count != 0)
+        List<HexTileUtility.DjikstrasNode> allInRange =
+            HexTileUtility.DjikstrasGetTilesInRange(mainMap, start, sightRadius, -1);
+        List<Vector3Int> viewBlockerList = new List<Vector3Int>();
+        foreach (HexTileUtility.DjikstrasNode val in allInRange)
         {
-            Vector3Int cur = openList.Dequeue();
-            closedList.Add(cur);
-            if(!mainMap.HasTile(cur)) continue;
-            if (mainMap.GetTile<DataTile>(cur).data.lineOfSightBlocking)
-                viewBlockerList.Add(cur);
-            List<Vector3Int> adjacents = HexTileUtility.GetAdjacentTiles(cur, mainMap);
-            foreach (Vector3Int adjacent in adjacents)
+            if (mainMap.GetTile<DataTile>(val.location).data.isImpassable)
             {
-                if (!closedList.Contains(adjacent) && !openList.Contains(adjacent))
-                {
-                    if (HexTileUtility.GetTileDistance(adjacent, start) >= sightRadius)
-                        closedList.Add(adjacent);
-                    else
-                        openList.Enqueue(adjacent);
-                }
+                viewBlockerList.Add(val.location);
             }
+            viewableList.Add(val.location);
         }
-        openList = new Queue<Vector3Int>();
-        closedList = new HashSet<Vector3Int>();
-        openList.Enqueue(start);
-        while (openList.Count != 0)
+        if (ignoreSightBlocking) return viewableList;
+        int i = 0;
+        while (i < viewableList.Count)
         {
-            Vector3Int cur = openList.Dequeue();
-            closedList.Add(cur);
-            if(!mainMap.HasTile(cur)) continue;
-            viewableList.Add(cur);
-            List<Vector3Int> adjacents = HexTileUtility.GetAdjacentTiles(cur, mainMap);
-            foreach (Vector3Int adjacent in adjacents)
+            Vector3Int location = viewableList[i];
+            if (!IsInView(location, start, viewBlockerList))
             {
-                if (!closedList.Contains(adjacent) && !openList.Contains(adjacent))
-                {
-                    if (HexTileUtility.GetTileDistance(adjacent, start) >= sightRadius ||
-                        (!IsInView(adjacent, start, viewBlockerList) && !ignoreSightBlocking))
-                        closedList.Add(adjacent);
-                    else
-                        openList.Enqueue(adjacent);
-                }
+                viewableList.RemoveAt(i);
             }
+            else i++;
         }
-
         return viewableList;
     }
 

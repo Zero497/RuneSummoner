@@ -13,11 +13,14 @@ public class CameraMover : MonoBehaviour
 
     public InputActionReference move;
 
+    private float zPos;
+
     private Camera self;
 
     private void Awake()
     {
         self = GetComponent<Camera>();
+        zPos = transform.position.z;
     }
 
     void FixedUpdate()
@@ -43,6 +46,6 @@ public class CameraMover : MonoBehaviour
         {
             newY = map.LocalToWorld(map.localBounds.max).y-self.orthographicSize*yMod;
         }
-        transform.position = new Vector3(newX, newY, -1);
+        transform.position = new Vector3(newX, newY, zPos);
     }
 }

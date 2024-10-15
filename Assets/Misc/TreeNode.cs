@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Misc
 {
-    public class TreeNode<T> where T : IComparable
+    public class TreeNode<T> where T : IComparable<T>
     {
         public TreeNode<T> left = null;
 

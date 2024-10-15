@@ -17,6 +17,8 @@ public class VisionTest : MonoBehaviour
     
     public Camera cam;
 
+    public int sightRadius;
+
     private void Awake()
     {
         lastPosition = map.cellBounds.min;
@@ -39,10 +41,10 @@ public class VisionTest : MonoBehaviour
         Vector2 position = Mouse.current.position.ReadValue();
         Vector3 positionActual = new Vector3(position.x, position.y, 0);
         Vector3 positionWorld = cam.ScreenToWorldPoint(positionActual);
-        VisionManager.visionManager.ConcealInRadius("test", 8, lastPosition);
+        VisionManager.visionManager.ConcealInRadius("test", sightRadius, lastPosition);
         lastPosition = HexTileUtility.GetNearestTile(positionWorld, map);
         Debug.Log(lastPosition);
-        VisionManager.visionManager.RevealInRadius("test",8, lastPosition);
+        VisionManager.visionManager.RevealInRadius("test",sightRadius, lastPosition);
     }
     
     private void OnClickTileR(InputAction.CallbackContext context)

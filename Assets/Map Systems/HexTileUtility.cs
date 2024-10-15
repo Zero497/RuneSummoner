@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Misc;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -59,6 +60,116 @@ public static class HexTileUtility
                 i++;
         }
         return retval;
+    }
+
+    public class DjikstrasNode : IComparable<DjikstrasNode>, IEquatable<DjikstrasNode>
+    {
+        public readonly Vector3Int location;
+
+        public float cost;
+
+        public DjikstrasNode parent;
+
+        public DjikstrasNode(Vector3Int loc, float cos, DjikstrasNode par)
+        {
+            location = loc;
+            cost = cos;
+            parent = par;
+        }
+        
+        public float getCost()
+        {
+            if (parent == null) return cost;
+            return cost + parent.getCost();
+        }
+
+
+        public int CompareTo(DjikstrasNode other)
+        {
+            if (Math.Abs(other.getCost() - getCost()) < 0.1) return 0;
+            if (other.getCost() > getCost()) return -1;
+            return 1;
+        }
+        
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            DjikstrasNode objAsNode = obj as DjikstrasNode;
+            if (objAsNode == null) return false;
+            return Equals(objAsNode);
+        }
+
+        public override int GetHashCode()
+        {
+            return location.GetHashCode();
+        }
+
+        public bool Equals(DjikstrasNode other)
+        {
+            if (other == null) return false;
+            if (other.location == location) return true;
+            return false;
+        }
+    }
+    
+    public static List<DjikstrasNode> DjikstrasGetTilesInRange(Tilemap map, Vector3Int start, float energy, int typeIndex)
+    {
+        if (!map.HasTile(start)) return new List<DjikstrasNode>();
+        HashSet<Vector3Int> closedList = new HashSet<Vector3Int>();
+        List<DjikstrasNode> validList = new List<DjikstrasNode>();
+        RBT<DjikstrasNode> openList = new RBT<DjikstrasNode>();
+        DjikstrasNode n = new DjikstrasNode(start, 0, null);
+        openList.insert(n);
+        validList.Add(n);
+        while (openList.Count != 0)
+        {
+            DjikstrasNode cur = openList.deleteMin();
+            if (cur.location == new Vector3Int(-7, -5))
+            {
+                Debug.Log("cur is -7 -5");
+            }
+            closedList.Add(cur.location);
+            if(!map.HasTile(cur.location)) continue;
+            List<Vector3Int> adjacents = GetAdjacentTiles(cur.location, map);
+            foreach (Vector3Int adjacent in adjacents)
+            {
+                if (adjacent == new Vector3Int(-7, -5))
+                {
+                    Debug.Log("cur is -7 -5");
+                }
+                TreeNode<DjikstrasNode> adjNode = openList.rawGet(new DjikstrasNode(adjacent, 0, null));
+                float locCost = map.GetTile<DataTile>(adjacent).data.getCostByType(typeIndex);
+                float cost = cur.getCost() + locCost;
+                if (!closedList.Contains(adjacent) && adjNode == null)
+                {
+                    if(cost <= energy)
+                    {
+                        DjikstrasNode node = new DjikstrasNode(adjacent, locCost, cur);
+                        openList.insert(node);
+                        validList.Add(node);
+                    }
+                }
+                else if (!closedList.Contains(adjacent) && adjNode != null)
+                {
+                    DjikstrasNode temp = new DjikstrasNode(adjacent, 0, null);
+                    foreach (DjikstrasNode node in adjNode.values)
+                    {
+                        if (temp.Equals(node))
+                        {
+                            temp = node;
+                            break;
+                        }
+                    }
+                    if (cost < temp.getCost())
+                    {
+                        openList.delete(temp);
+                        temp.parent = cur;
+                        openList.insert(temp);
+                    }
+                }
+            }
+        }
+        return validList;
     }
 
     //get distance between two tiles

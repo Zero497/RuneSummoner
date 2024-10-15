@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 namespace Misc
 {
-    public class RBT<T> where T : IComparable
+    public class RBT<T> where T : IComparable<T>
     {
         public TreeNode<T> root = null;
 
@@ -70,6 +70,18 @@ namespace Misc
             Count--;
         }
         
+        //traverses the entire tree in search of a particular element,
+        //returns null if that element does not exist
+        //purpose is to allow search when elements have custom equality different from IComparable
+        public TreeNode<T> rawGet(T element)
+        {
+            if (element == null)
+            {
+                return null;
+            }
+            return rawGetHelper(element, root);
+        }
+
         //finds and returns the tree node that contains the passed value
         //returns null if such a node does not exist
         public TreeNode<T> get(T element)
@@ -111,6 +123,21 @@ namespace Misc
             }
 
             return null;
+        }
+
+        private TreeNode<T> rawGetHelper(T element, TreeNode<T> cur)
+        {
+            if (cur == null) return null;
+            foreach (T val in cur.values)
+            {
+                if (val.Equals(element))
+                {
+                    return cur;
+                }
+            }
+            TreeNode<T> right = rawGetHelper(element, cur.right);
+            if (right != null) return right;
+            return rawGetHelper(element, cur.left);
         }
 
         /*finds the right successor to the passed node, or the left successor if there is no right successor, while
