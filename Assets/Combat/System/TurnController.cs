@@ -31,16 +31,18 @@ public class TurnController : MonoBehaviour
             temp.GetComponent<Image>().sprite = unit.baseData.portrait;
         }
         turnQueue = new Queue<UnitBase>(UnitsInBattle);
+        NextTurn();
     }
 
     public void NextTurn()
     {
         UnitBase cur = turnQueue.Dequeue();
-        Destroy(transform.GetChild(0));
+        Destroy(transform.GetChild(0).gameObject);
         GameObject temp = Instantiate(unitPortraitPrefab, transform);
         temp.GetComponent<Image>().sprite = cur.baseData.portrait;
         _currentActor = cur;
         cur.TurnStarted();
+        MoveController.mControl.InitMovement(cur);
         turnQueue.Enqueue(cur);
     }
 

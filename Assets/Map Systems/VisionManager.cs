@@ -58,7 +58,7 @@ public class VisionManager : MonoBehaviour
     }
 
     //reveal all tiles in a specified radius around a target
-    public void RevealInRadius(String viewerID, int sightRadius, Vector3Int center)
+    public void RevealInRadius(String viewerID, float sightRadius, Vector3Int center)
     {
         List<Vector3Int> revealTiles = DjikstrasSightCheck(center, sightRadius);
         foreach (Vector3Int tile in revealTiles)
@@ -70,7 +70,7 @@ public class VisionManager : MonoBehaviour
         }
     }
     
-    private List<Vector3Int> DjikstrasSightCheck(Vector3Int start, int sightRadius, bool ignoreSightBlocking = false)
+    private List<Vector3Int> DjikstrasSightCheck(Vector3Int start, float sightRadius, bool ignoreSightBlocking = false)
     {
         List<Vector3Int> viewableList = new List<Vector3Int>();
         List<HexTileUtility.DjikstrasNode> allInRange =
