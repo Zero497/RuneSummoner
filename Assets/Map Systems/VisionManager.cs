@@ -69,6 +69,27 @@ public class VisionManager : MonoBehaviour
             RevealPosition(tile);
         }
     }
+
+    public void UpdateVision(UnitBase unit)
+    {
+        List<Vector3Int> rmvList = new List<Vector3Int>();
+        foreach (KeyValuePair<Vector3Int, HashSet<String>> kvp in revealedPositions)
+        {
+            if (kvp.Value.Contains(unit.myId))
+            {
+                rmvList.Add(kvp.Key);
+            }
+        }
+        foreach (Vector3Int tile in rmvList)
+        {
+            revealedPositions[tile].Remove(unit.myId);
+            if (revealedPositions[tile].Count == 0)
+            {
+                ConcealPosition(tile);
+            }
+        }
+        RevealInRadius(unit.myId, unit.baseData.sightRadius, unit.currentPosition);
+    }
     
     private List<Vector3Int> DjikstrasSightCheck(Vector3Int start, float sightRadius, bool ignoreSightBlocking = false)
     {

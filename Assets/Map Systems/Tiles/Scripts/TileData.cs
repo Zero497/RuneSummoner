@@ -18,6 +18,7 @@ public class TileData : ScriptableObject
         switch (index)
         {
             case 0:
+                if (isImpassable) return float.PositiveInfinity;
                 return moveCost;
             default:
                 return 1;

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MoveOverlayTile
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300008, guid: ac1645b9b895a8c4a9f8d5b744dcf28b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.48235294}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.19607843}
   m_Transform:
     e00: 1
     e01: 0
