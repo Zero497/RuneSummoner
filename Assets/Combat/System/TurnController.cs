@@ -63,6 +63,19 @@ public class TurnController : MonoBehaviour
         return false;
     }
 
+    public UnitBase getUnitAtPosition(Vector3Int tile)
+    {
+        foreach (UnitBase unit in allFriendly)
+        {
+            if(unit.currentPosition == tile) return unit;
+        }
+        foreach (UnitBase unit in allEnemy)
+        {
+            if(unit.currentPosition == tile) return unit;
+        }
+        return null;
+    }
+
     public void AddToQueue(UnitBase add)
     {
         turnQueue.Enqueue(add);
