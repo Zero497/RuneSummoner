@@ -14,7 +14,7 @@ public abstract class UnitAction
     public bool inProgress = false;
     
     //attempt to run the action at the target position. return false on failure
-    public abstract bool RunAction(Vector3Int target);
+    public abstract bool RunAction(SendData actionData);
 
     public abstract bool PrepAction();
 
@@ -35,9 +35,8 @@ public abstract class UnitAction
         return null;
     }
 
-    public virtual void Initialize(string dataname)
+    public virtual void Initialize(SendData sendData)
     {
-        abilityData = Resources.Load<AbilityData>("AbilityData/"+dataname);
+        abilityData = Resources.Load<AbilityData>("AbilityData/"+sendData.strData[0]);
     }
-    
 }

@@ -25,6 +25,11 @@ public class ClickManager : MonoBehaviour
 
     private DateTime sinceLastClick;
 
+    public void SetAction(UnitAction action)
+    {
+        currentAction = action;
+    }
+
     private void Awake()
     {
         clickManager = this;
@@ -53,7 +58,7 @@ public class ClickManager : MonoBehaviour
         }
         if (currentAction is { inProgress: false })
         {
-            if (!currentAction.RunAction(clickPosition))
+            if (!currentAction.RunAction(new SendData(clickPosition)))
             {
                 Debug.Log("Action failed!");
             }
@@ -117,7 +122,7 @@ public class ClickManager : MonoBehaviour
                 if (MoveController.mControl.IsValidMove(clickPosition))
                 {
                     currentAction = new Move();
-                    currentAction.RunAction(clickPosition);
+                    currentAction.RunAction(new SendData(clickPosition));
                 }
             }
         }

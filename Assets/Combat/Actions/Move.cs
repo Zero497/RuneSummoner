@@ -5,11 +5,11 @@ using UnityEngine;
 public class Move : UnitAction
 {
     Coroutine moveRoutine;
-    public override bool RunAction(Vector3Int target)
+    public override bool RunAction(SendData data)
     {
         if (inProgress) return false;
         inProgress = true;
-        return MoveController.mControl.Move(target, out moveRoutine, OnMoveStopped);
+        return MoveController.mControl.Move(data.positionData[0], out moveRoutine, OnMoveStopped);
     }
 
     public override bool PrepAction()

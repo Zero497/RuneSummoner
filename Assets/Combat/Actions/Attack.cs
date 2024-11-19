@@ -6,9 +6,38 @@ public class Attack : ActiveAbility
 {
     public AttackData data;
 
-    public override bool RunAction(Vector3Int target)
+    public UnitBase source;
+
+    public override bool RunAction(SendData sentData)
     {
-        throw new System.NotImplementedException();
+        AttackMessageToTarget outgoingAttack = PrepareMessage();
+        switch (data.MyAbilityData.targetType)
+        {
+            case AbilityData.TargetType.self:
+                source.ReceiveAttack(outgoingAttack);
+                break;
+            case AbilityData.TargetType.aoeNeutral:
+                
+                break;
+        }
+        return true;
+    }
+
+    private AttackMessageToTarget PrepareMessage()
+    {
+        AttackMessageToTarget retval = new AttackMessageToTarget(data);
+        float mult = 1;
+        if (retval.damageType == AttackData.DamageType.Magic)
+        {
+            mult += source.magicalAttack / 100;
+        }
+        else if (retval.damageType == AttackData.DamageType.Physical)
+        {
+            mult += source.physicalAttack / 100;
+        }
+        retval.damage *= mult;
+        source.ModifyOutgoingAttack(retval);
+        return retval;
     }
 
     public override bool PrepAction()
@@ -31,9 +60,10 @@ public class Attack : ActiveAbility
         throw new System.NotImplementedException();
     }
 
-    public override void Initialize(string dataname)
+    public override void Initialize(SendData sendData)
     {
-        data = Resources.Load<AttackData>("AttackData/" + dataname);
+        source = sendData.unitData[0];
+        base.Initialize(sendData);
     }
 
     public class AttackMessageToTarget

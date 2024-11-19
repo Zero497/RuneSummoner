@@ -53,6 +53,8 @@ public class UnitBase : MonoBehaviour
     public string myId;
 
     public bool isFriendly;
+    
+    public int myTeam = 0;
 
     [NonSerialized]public bool forceMove;
     
@@ -61,6 +63,10 @@ public class UnitBase : MonoBehaviour
     [NonSerialized]public EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget> onAttacked = new EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget>();
     
     [NonSerialized]public EventPriorityWrapper<UnitBase, float> onTakeDamage = new EventPriorityWrapper<UnitBase, float>();
+    
+    [NonSerialized]public EventPriorityWrapper<UnitBase> onDeath = new EventPriorityWrapper<UnitBase>();
+    
+    [NonSerialized]public EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget> applyToOutgoingAttack = new EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget>();
     
     
 
@@ -100,6 +106,7 @@ public class UnitBase : MonoBehaviour
     public void ReceiveAttack(Attack.AttackMessageToTarget attack)
     {
         attack.damage *= typeMatchups[myElement][attack.element];
+        //TODO: effects for certain type matchups
         onAttacked.Invoke(this, attack);
         if (attack.damageType == AttackData.DamageType.Physical)
         {
@@ -110,7 +117,23 @@ public class UnitBase : MonoBehaviour
             attack.damage -= magicalDefence;
         }
         currentHealth -= attack.damage;
+        //TODO: apply effect on damage
         onTakeDamage.Invoke(this, attack.damage);
+        if (currentHealth <= 0)
+        {
+            onDeath.Invoke(this);
+            Die();
+        }
+    }
+
+    public void ModifyOutgoingAttack(Attack.AttackMessageToTarget attack)
+    {
+        applyToOutgoingAttack.Invoke(this, attack);
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
     }
     
     public static int CompareByInitiative(UnitBase item1, UnitBase item2)
