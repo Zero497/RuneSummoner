@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EventPriorityWrapper<T> : MonoBehaviour
+public class EventPriorityWrapper<T>
 {
     private List<ActionPriorityWrapper<T>> _actions = new List<ActionPriorityWrapper<T>>();
     
@@ -27,7 +27,7 @@ public class EventPriorityWrapper<T> : MonoBehaviour
     }
 }
 
-public class EventPriorityWrapper<T0, T1> : MonoBehaviour
+public class EventPriorityWrapper<T0, T1>
 {
     private List<ActionPriorityWrapper<T0, T1>> _actions = new List<ActionPriorityWrapper<T0, T1>>();
     

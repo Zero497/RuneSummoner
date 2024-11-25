@@ -24,6 +24,11 @@ public class VisionManager : MonoBehaviour
         visionManager = this;
     }
 
+    public bool isRevealed(Vector3Int position)
+    {
+        return revealedPositions.ContainsKey(position);
+    }
+
     //reveal the specified position
     public void RevealPosition(Vector3Int position)
     {
@@ -99,7 +104,7 @@ public class VisionManager : MonoBehaviour
         List<Vector3Int> viewBlockerList = new List<Vector3Int>();
         foreach (HexTileUtility.DjikstrasNode val in allInRange)
         {
-            if (mainMap.GetTile<DataTile>(val.location).data.isImpassable)
+            if (mainMap.GetTile<DataTile>(val.location).data.lineOfSightBlocking)
             {
                 viewBlockerList.Add(val.location);
             }

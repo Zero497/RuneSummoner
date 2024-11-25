@@ -11,8 +11,6 @@ public class UnitBase : MonoBehaviour
     public UnitData baseData;
     
     public UnitData.Element myElement;
-
-    public UnitData.CombatType myType;
     
     public float summonCost;
 
@@ -60,6 +58,10 @@ public class UnitBase : MonoBehaviour
     
     [NonSerialized]public float currentHealth;
     
+    [NonSerialized]public float currentMana;
+    
+    [NonSerialized]public float currentStamina;
+    
     [NonSerialized]public EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget> onAttacked = new EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget>();
     
     [NonSerialized]public EventPriorityWrapper<UnitBase, float> onTakeDamage = new EventPriorityWrapper<UnitBase, float>();
@@ -73,6 +75,11 @@ public class UnitBase : MonoBehaviour
     //number of seconds to reach destination (from 1 tile to another)
     private static float moveSpeed = 0.2f;
 
+    private void Start()
+    {
+        Init(1, baseData);
+    }
+
     public void TurnStarted()
     {
         moveRemaining = speed;
@@ -84,7 +91,6 @@ public class UnitBase : MonoBehaviour
         level = inputlevel;
         inputlevel -= 1;
         myElement = inBaseData.myElement;
-        myType = inBaseData.myType;
         summonCost = inBaseData.summonCost;
         health = inBaseData.health + inBaseData.healthPerLevel * inputlevel;
         abilityPower = inBaseData.abilityPower + inBaseData.abilityPowerPerLevel * inputlevel;
@@ -100,7 +106,9 @@ public class UnitBase : MonoBehaviour
         speed = inBaseData.speed;
         sightRadius = inBaseData.sightRadius;
         activeAbilities.Add(inBaseData.defaultAttack);
-
+        currentHealth = health;
+        currentMana = mana;
+        currentStamina = stamina;
     }
 
     public void ReceiveAttack(Attack.AttackMessageToTarget attack)

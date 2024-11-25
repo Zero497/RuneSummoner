@@ -6,6 +6,8 @@ using UnityEngine.Serialization;
 [CreateAssetMenu]
 public class UnitData : ScriptableObject
 {
+    public string unitDescription;
+    
     public Element myElement;
 
     public CombatType myType;

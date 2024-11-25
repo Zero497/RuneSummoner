@@ -27,11 +27,6 @@ public class Move : UnitAction
         return true;
     }
 
-    public override bool IsFree()
-    {
-        return true;
-    }
-
     public override string GetDescription()
     {
         return "";

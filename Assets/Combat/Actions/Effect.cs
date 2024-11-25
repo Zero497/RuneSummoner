@@ -11,8 +11,8 @@ public abstract class Effect
         effectName = effectName.ToLower();
         switch (effectName)
         {
-            
+            default:
+                return null;
         }
-        return null;
     }
 }

@@ -50,7 +50,6 @@ public class ClickManager : MonoBehaviour
     private void OnClickTile(InputAction.CallbackContext context)
     {
         Vector3Int clickPosition = GetClickPosition();
-        Debug.Log(clickPosition);
         if (currentAction is Move && clickPosition == TurnController.controller.currentActor.currentPosition)
         {
             MoveController.mControl.InitMovement(TurnController.controller.currentActor, false);
@@ -64,7 +63,6 @@ public class ClickManager : MonoBehaviour
             }
             return;
         }
-
         if (isDoubleClick())
         {
             OnDoubleClickTile(clickPosition);
@@ -89,7 +87,9 @@ public class ClickManager : MonoBehaviour
     
     private void OnClickTileR(InputAction.CallbackContext context)
     {
-        
+        Vector3Int clickPosition = GetClickPosition();
+        if (DateTime.Now - sinceLastClick > TimeSpan.FromSeconds(2))
+            DescriptionViewLoader.LoadDescriptionView(clickPosition);
     }
 
     private Vector3Int GetClickPosition()

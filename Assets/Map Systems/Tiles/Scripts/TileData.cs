@@ -12,6 +12,8 @@ public class TileData : ScriptableObject
     public bool isImpassable;
     //whether this terrain blocks line of sight
     public bool lineOfSightBlocking;
+    
+    public string description;
 
     public float getCostByType(int index)
     {

@@ -20,8 +20,6 @@ public abstract class UnitAction
 
     public abstract bool RushCompletion();
     
-    public abstract bool IsFree();
-    
     public abstract string GetDescription();
 
     public static UnitAction GetAction(string actionName)

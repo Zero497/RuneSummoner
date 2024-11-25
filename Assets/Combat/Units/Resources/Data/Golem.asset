@@ -12,7 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebdf6368fd91754bb2001620b47e7a4, type: 3}
   m_Name: Golem
   m_EditorClassIdentifier: 
-  Initiative: 0
+  unitDescription: 
+  myElement: 2
+  myType: 2
+  summonCost: 200
+  health: 220
+  healthPerLevel: 0
+  initiative: 50
+  abilityPower: 10
+  abilityPowerPerLevel: 0
+  magicalAttack: 5
+  magicalAttackPerLevel: 0
+  physicalAttack: 20
+  physicalAttackPerLevel: 0
+  magicalDefence: 15
+  magicalDefencePerLevel: 0
+  physicalDefence: 15
+  physicalDefencePerLevel: 0
+  mana: 100
+  manaPerLevel: 0
+  manaRegen: 30
+  manaRegenPerLevel: 0
+  sightRadius: 10
+  speed: 8
+  stamina: 300
+  staminaPerLevel: 0
+  staminaRegen: 120
+  staminaRegenPerLevel: 0
   portrait: {fileID: 21300000, guid: c1e153c81701ef64a9e20c65186b959e, type: 3}
-  movementSpeed: 5
-  sightRadius: 8
+  uniqueTree: {fileID: 0}

@@ -11,14 +11,9 @@ public class Attack : ActiveAbility
     public override bool RunAction(SendData sentData)
     {
         AttackMessageToTarget outgoingAttack = PrepareMessage();
-        switch (data.MyAbilityData.targetType)
+        foreach (UnitBase unit in sentData.unitData)
         {
-            case AbilityData.TargetType.self:
-                source.ReceiveAttack(outgoingAttack);
-                break;
-            case AbilityData.TargetType.aoeNeutral:
-                
-                break;
+            unit.ReceiveAttack(outgoingAttack);
         }
         return true;
     }
@@ -42,20 +37,22 @@ public class Attack : ActiveAbility
 
     public override bool PrepAction()
     {
-        throw new System.NotImplementedException();
+        OverlayManager.instance.ClearOverlays();
+        OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, data.MyAbilityData.range, 1),"AttackOverlay");
+        return true;
     }
 
     public override bool RushCompletion()
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 
-    public override bool IsFree()
+    public override string GetDescription()
     {
         throw new System.NotImplementedException();
     }
 
-    public override string GetDescription()
+    private string ParseDescription(string description)
     {
         throw new System.NotImplementedException();
     }
