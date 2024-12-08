@@ -70,6 +70,8 @@ public class UnitBase : MonoBehaviour
     
     [NonSerialized]public EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget> applyToOutgoingAttack = new EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget>();
     
+    private bool initialized = false;
+    
     
 
     //number of seconds to reach destination (from 1 tile to another)
@@ -81,12 +83,14 @@ public class UnitBase : MonoBehaviour
     }
 
     public void TurnStarted()
-    {
+    { 
+        Init(1, baseData);
         moveRemaining = speed;
     }
 
     public void Init(int inputlevel, UnitData inBaseData /*, TODO: EquipmentData */)
     {
+        if (initialized) return;
         baseData = inBaseData;
         level = inputlevel;
         inputlevel -= 1;
@@ -109,6 +113,7 @@ public class UnitBase : MonoBehaviour
         currentHealth = health;
         currentMana = mana;
         currentStamina = stamina;
+        initialized = true;
     }
 
     public void ReceiveAttack(Attack.AttackMessageToTarget attack)

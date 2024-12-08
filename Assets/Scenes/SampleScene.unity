@@ -998,7 +998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55759dafb7be10a458940f7f0ea4590e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overlayMap: {fileID: 0}
+  overlayMap: {fileID: 2134996599}
   overlayOptions: []
   overlayTiles: []
 --- !u!1 &1466889156
