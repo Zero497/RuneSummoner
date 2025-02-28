@@ -54,7 +54,7 @@ public class UnitDescManager : MonoBehaviour
 
     public void Reset()
     {
-        UnitBase target = TurnController.controller.getUnitAtPosition(DescriptionViewLoader.targetTile);
+        UnitBase target = MainCombatManager.manager.getUnitAtPosition(DescriptionViewLoader.targetTile);
         unitID.text = target.myId;
         unitName.text = "Unit Name: "+target.baseData.name;
         unitPortrait.sprite = target.baseData.portrait;
@@ -67,7 +67,7 @@ public class UnitDescManager : MonoBehaviour
         element.text = "Type: "+target.myElement.ToString();
         combatType.text = "Specialization: "+target.baseData.myType.ToString();
         level.text = "Level: "+target.level;
-        health.text = "Health: "+target.health+"/"+target.currentHealth;
+        health.text = "Health: "+target.currentHealth+"/"+target.health;
         mana.text = "Mana: "+target.mana+"/"+target.currentMana;
         stamina.text = "Stamina: "+target.stamina+"/"+target.currentStamina;
         initiative.text = "Initiative: "+target.initiative;

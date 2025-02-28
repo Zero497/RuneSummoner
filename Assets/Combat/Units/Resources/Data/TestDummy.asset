@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ebdf6368fd91754bb2001620b47e7a4, type: 3}
+  m_Name: TestDummy
+  m_EditorClassIdentifier: 
+  unitDescription: Is Test Dummy
+  myElement: 2
+  myType: 2
+  summonCost: 0
+  health: 1000
+  healthPerLevel: 200
+  initiative: 200
+  abilityPower: 0
+  abilityPowerPerLevel: 0
+  magicalAttack: 0
+  magicalAttackPerLevel: 0
+  physicalAttack: 0
+  physicalAttackPerLevel: 0
+  magicalDefence: 5
+  magicalDefencePerLevel: 2
+  physicalDefence: 5
+  physicalDefencePerLevel: 2
+  mana: 0
+  manaPerLevel: 0
+  manaRegen: 0
+  manaRegenPerLevel: 0
+  sightRadius: 0
+  speed: 0
+  stamina: 0
+  staminaPerLevel: 0
+  staminaRegen: 0
+  staminaRegenPerLevel: 0
+  abilities:
+  - PhysicalMelee
+  portrait: {fileID: -4010617647764655359, guid: b888876063e2a074ab1a30cd7d8f7821, type: 3}
+  defaultEntryState: {fileID: 11400000, guid: 68b526774f71c954bb25a07405e9eb6b, type: 2}
+  uniqueTree: {fileID: 0}

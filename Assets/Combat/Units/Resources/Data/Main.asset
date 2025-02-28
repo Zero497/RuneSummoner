@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebdf6368fd91754bb2001620b47e7a4, type: 3}
   m_Name: Main
   m_EditorClassIdentifier: 
+  unitDescription: 
   myElement: 1
   myType: 0
   summonCost: 0
@@ -38,5 +39,8 @@ MonoBehaviour:
   staminaPerLevel: 0
   staminaRegen: 100
   staminaRegenPerLevel: 0
+  abilities:
+  - PhysicalMelee
   portrait: {fileID: 21300000, guid: 9bd3b7bfa4d30594dba2b397b131519a, type: 3}
+  defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}

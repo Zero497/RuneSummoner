@@ -29,7 +29,7 @@ public static class DescriptionViewLoader
         else
         {
             targetTile = target;
-            if (TurnController.controller.isTileOccupied(target))
+            if (MainCombatManager.manager.isTileOccupied(target))
             {
                 if (SceneManager.GetSceneByName("UnitDescriptionView").isLoaded)
                 {

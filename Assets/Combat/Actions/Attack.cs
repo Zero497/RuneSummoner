@@ -1,26 +1,78 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Attack : ActiveAbility
 {
-    public AttackData data;
-
-    public UnitBase source;
-
     public override bool RunAction(SendData sentData)
     {
+        if (source.usedAbilityThisTurn) return false;
+        bool ret = true;
+        switch (abilityData.targetType)
+        {
+            case AbilityData.TargetType.singleTargetEnemy:
+            case AbilityData.TargetType.singleTargetFriendly:
+            case AbilityData.TargetType.singleTargetNeutral:
+                ret = RunSingleTarget(getValidTargets(), sentData.positionData[0]);
+                break;
+        }
+        if (ret)
+        {
+            source.usedAbilityThisTurn = true;
+        }
+        OverlayManager.instance.ClearOverlays();
+        ClickManager.clickManager.SetAction(null);
+        return ret;
+    }
+    
+    public Func<int, bool> getValidTargets()
+    {
+        switch (abilityData.targetType)
+        {
+            case AbilityData.TargetType.singleTargetEnemy:
+            case AbilityData.TargetType.multiTargetEnemy:
+            case AbilityData.TargetType.aoeEnemyOnly:
+                return i => i != source.myTeam;
+            case AbilityData.TargetType.singleTargetFriendly:
+            case AbilityData.TargetType.multiTargetFriendly:
+            case AbilityData.TargetType.aoeFriendlyOnly:
+                return i => i == source.myTeam;
+            case AbilityData.TargetType.singleTargetNeutral:
+            case AbilityData.TargetType.multiTargetNeutral:
+            case AbilityData.TargetType.aoeNeutral:
+                return i => true; 
+        }
+        return null;
+    }
+
+    private bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position)
+    {
+        UnitBase unitAtPosition = MainCombatManager.manager.getUnitAtPosition(position);
+        if (unitAtPosition != null && validTarget(unitAtPosition.myTeam))
+        {
+            RunAttack(new List<UnitBase>{unitAtPosition});
+            return true;
+        }
+        return false;
+    }
+
+    private void RunAttack(List<UnitBase> targets)
+    {
         AttackMessageToTarget outgoingAttack = PrepareMessage();
-        foreach (UnitBase unit in sentData.unitData)
+        foreach (UnitBase unit in targets)
         {
             unit.ReceiveAttack(outgoingAttack);
         }
-        return true;
     }
 
     private AttackMessageToTarget PrepareMessage()
     {
-        AttackMessageToTarget retval = new AttackMessageToTarget(data);
+        AttackMessageToTarget retval = new AttackMessageToTarget(abilityData as AttackData);
+        if ((abilityData as AttackData).useUnitElement)
+        {
+            retval.element = source.myElement;
+        }
         float mult = 1;
         if (retval.damageType == AttackData.DamageType.Magic)
         {
@@ -38,8 +90,16 @@ public class Attack : ActiveAbility
     public override bool PrepAction()
     {
         OverlayManager.instance.ClearOverlays();
-        OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, data.MyAbilityData.range, 1),"AttackOverlay");
-        return true;
+        if (!prepped)
+        {
+            OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, (abilityData as AttackData).range, 1),"AttackOverlay");
+            prepped = true;
+            ClickManager.clickManager.SetAction(this);
+            return false;
+        }
+        ClickManager.clickManager.SetAction(null);
+        prepped = false;
+        return false;
     }
 
     public override bool RushCompletion()
@@ -60,7 +120,7 @@ public class Attack : ActiveAbility
     public override void Initialize(SendData sendData)
     {
         source = sendData.unitData[0];
-        base.Initialize(sendData);
+        abilityData = Resources.Load<AbilityData>("AttackData/"+sendData.strData[0]);
     }
 
     public class AttackMessageToTarget
@@ -77,7 +137,6 @@ public class Attack : ActiveAbility
 
         public AttackMessageToTarget(AttackData defaultData)
         {
-            MyAbilityData = defaultData.MyAbilityData;
             damageType = defaultData.damageType;
             element = defaultData.element;
             damage = defaultData.damage;

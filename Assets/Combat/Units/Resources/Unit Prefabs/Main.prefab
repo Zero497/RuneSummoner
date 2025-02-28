@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 7489029354612921021}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 425.641, y: 296.035, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -50,6 +50,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -98,3 +101,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseData: {fileID: 11400000, guid: 82fb63dec96ec594f9ce7b06bf9c5c5c, type: 2}
+  myElement: 0
+  summonCost: 0
+  level: 0
+  health: 0
+  initiative: 0
+  abilityPower: 0
+  magicalAttack: 0
+  physicalAttack: 0
+  magicalDefence: 0
+  physicalDefence: 0
+  mana: 0
+  manaRegen: 0
+  sightRadius: 0
+  speed: 0
+  stamina: 0
+  staminaRegen: 0
+  moveRemaining: 0
+  currentPosition: {x: 0, y: 0, z: 0}
+  myId: 
+  isFriendly: 0
+  myTeam: 0
+  state: {fileID: 0}

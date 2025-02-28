@@ -59,6 +59,7 @@ public class ClickManager : MonoBehaviour
         {
             if (!currentAction.RunAction(new SendData(clickPosition)))
             {
+                OverlayManager.instance.ClearOverlays();
                 Debug.Log("Action failed!");
             }
             return;
@@ -106,7 +107,7 @@ public class ClickManager : MonoBehaviour
         UnitBase curActor = TurnController.controller.currentActor;
         if (clickType == 1 )
         {
-            if (curActor.isFriendly)
+            if (curActor != null && curActor.isFriendly)
             {
                 if (clickPosition == curActor.currentPosition)
                 {

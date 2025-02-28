@@ -17,7 +17,7 @@ public class UnitData : ScriptableObject
     public float health;
     public float healthPerLevel;
     
-    public float initiative;
+    public int initiative;
     
     public float abilityPower;
     public float abilityPowerPerLevel;
@@ -50,14 +50,17 @@ public class UnitData : ScriptableObject
     public float staminaRegen;
     public float staminaRegenPerLevel;
     
-    public Attack defaultAttack;
+    public List<string> abilities;
     
     public Sprite portrait;
+
+    public FSMNode defaultEntryState;
 
     public UpgradeTreeNode uniqueTree;
     
     public enum Element
     {
+        none,
         beast,
         human,
         machine,

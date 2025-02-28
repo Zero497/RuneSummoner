@@ -14,7 +14,7 @@ public class OverlayManager : MonoBehaviour
     
     public List<Tile> overlayTiles;
     
-    private Dictionary<string, Tile> overlayTilesDictionary;
+    private Dictionary<string, Tile> overlayTilesDictionary = new Dictionary<string, Tile>();
     
     private List<Vector3Int> overlayTilesPositions = new List<Vector3Int>();
 

@@ -25,4 +25,9 @@ public class SendData
     {
         positionData.Add(pos);
     }
+
+    public void AddStr(string str)
+    {
+        strData.Add(str);
+    }
 }

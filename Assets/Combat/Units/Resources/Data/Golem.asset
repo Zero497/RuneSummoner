@@ -18,7 +18,7 @@ MonoBehaviour:
   summonCost: 200
   health: 220
   healthPerLevel: 0
-  initiative: 50
+  initiative: 150
   abilityPower: 10
   abilityPowerPerLevel: 0
   magicalAttack: 5
@@ -39,5 +39,8 @@ MonoBehaviour:
   staminaPerLevel: 0
   staminaRegen: 120
   staminaRegenPerLevel: 0
+  abilities:
+  - PhysicalMelee
   portrait: {fileID: 21300000, guid: c1e153c81701ef64a9e20c65186b959e, type: 3}
+  defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}

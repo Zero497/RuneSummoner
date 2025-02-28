@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+[CreateAssetMenu(fileName = "AbilityData", menuName = "AbilityData/AbilityData")]
 public class AbilityData : ScriptableObject
 {
+    public string abilityName;
+    
     public bool isFree;
     
     public int range;
@@ -13,6 +17,8 @@ public class AbilityData : ScriptableObject
     public TargetType targetType;
     
     public string description;
+
+    
     
     public enum TargetType
     {

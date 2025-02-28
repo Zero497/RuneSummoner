@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Misc;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
@@ -9,50 +10,54 @@ using UnityEngine.Tilemaps;
 public class UnitBase : MonoBehaviour
 {
     public UnitData baseData;
-    
-    public UnitData.Element myElement;
-    
-    public float summonCost;
 
-    public int level;
+    [NonSerialized]public bool usedAbilityThisTurn;
     
-    public float health;
+    [NonSerialized]public UnitData.Element myElement;
     
-    public float initiative;
-    
-    public float abilityPower;
+    [NonSerialized]public float summonCost;
 
-    public float magicalAttack;
+    [NonSerialized]public int level;
     
-    public float physicalAttack;
+    [NonSerialized]public float health;
     
-    public float magicalDefence;
+    [NonSerialized]public int initiative;
     
-    public float physicalDefence;
+    [NonSerialized]public float abilityPower;
 
-    public float mana;
-
-    public float manaRegen;
+    [NonSerialized]public float magicalAttack;
     
-    public float sightRadius;
-
-    public float speed;
-
-    public float stamina;
+    [NonSerialized]public float physicalAttack;
     
-    public float staminaRegen;
+    [NonSerialized]public float magicalDefence;
     
-    public List<ActiveAbility> activeAbilities = new List<ActiveAbility>();
+    [NonSerialized]public float physicalDefence;
 
-    public float moveRemaining;
+    [NonSerialized]public float mana;
 
-    public Vector3Int currentPosition;
+    [NonSerialized]public float manaRegen;
     
-    public string myId;
+    [NonSerialized]public float sightRadius;
 
-    public bool isFriendly;
+    [NonSerialized]public float speed;
+
+    [NonSerialized]public float stamina;
     
-    public int myTeam = 0;
+    [NonSerialized]public float staminaRegen;
+    
+    [NonSerialized]public List<ActiveAbility> activeAbilities = new List<ActiveAbility>();
+
+    [NonSerialized]public float moveRemaining;
+
+    [NonSerialized]public Vector3Int currentPosition;
+    
+    [NonSerialized]public string myId;
+
+    [NonSerialized]public bool isFriendly;
+    
+    [NonSerialized]public int myTeam = 0;
+
+    [NonSerialized]public FSMNode state = null;
 
     [NonSerialized]public bool forceMove;
     
@@ -85,11 +90,21 @@ public class UnitBase : MonoBehaviour
     public void TurnStarted()
     { 
         Init(1, baseData);
+        usedAbilityThisTurn = false;
         moveRemaining = speed;
+        if (myTeam != 0)
+        {
+            state.OnTurnStarted();
+        }
+        else
+        {
+            MainCombatManager.manager.SendAbilities(activeAbilities);
+        }
     }
 
-    public void Init(int inputlevel, UnitData inBaseData /*, TODO: EquipmentData */)
+    public void Init(int inputlevel, UnitData inBaseData=null /*, TODO: EquipmentData */)
     {
+        if (inBaseData == null) inBaseData = baseData;
         if (initialized) return;
         baseData = inBaseData;
         level = inputlevel;
@@ -109,7 +124,11 @@ public class UnitBase : MonoBehaviour
         initiative = inBaseData.initiative;
         speed = inBaseData.speed;
         sightRadius = inBaseData.sightRadius;
-        activeAbilities.Add(inBaseData.defaultAttack);
+        Attack myBasicAttack = new Attack();
+        SendData send = new SendData(this);
+        send.AddStr(inBaseData.abilities[0]);
+        myBasicAttack.Initialize(send);
+        activeAbilities.Add(myBasicAttack);
         currentHealth = health;
         currentMana = mana;
         currentStamina = stamina;
@@ -129,6 +148,8 @@ public class UnitBase : MonoBehaviour
         {
             attack.damage -= magicalDefence;
         }
+        if (attack.damage < 0)
+            attack.damage = 0;
         currentHealth -= attack.damage;
         //TODO: apply effect on damage
         onTakeDamage.Invoke(this, attack.damage);
@@ -191,8 +212,8 @@ public class UnitBase : MonoBehaviour
             VisionManager.visionManager.UpdateVision(this);
             List<HexTileUtility.DjikstrasNode> newInRange = HexTileUtility.DjikstrasGetTilesInRange(mainMap, currentPosition, sightRadius, -1);
             List<UnitBase> compList;
-            if (isFriendly) compList = TurnController.controller.allEnemy;
-            else compList = TurnController.controller.allFriendly;
+            if (isFriendly) compList = MainCombatManager.manager.allEnemy;
+            else compList = MainCombatManager.manager.allFriendly;
             if (UnitInDiff(newInRange.diff(allInRange), compList))
             {
                 if (returnToCaller != null) returnToCaller(false);

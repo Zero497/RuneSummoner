@@ -138,7 +138,7 @@ public static class HexTileUtility
             foreach (Vector3Int adjacent in adjacents)
             {
                 if(closedList.Contains(adjacent)) continue;
-                if (excludeOccupiedTiles && TurnController.controller.isTileOccupied(adjacent))
+                if (excludeOccupiedTiles && MainCombatManager.manager.isTileOccupied(adjacent))
                 {
                     closedList.Add(adjacent);
                     continue;

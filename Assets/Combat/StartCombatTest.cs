@@ -9,23 +9,14 @@ public class StartCombatTest : MonoBehaviour
 
     public GameObject golem;
 
+    public GameObject dummy;
+
     public Tilemap mainMap;
     void Start()
     {
-        GameObject actGolem = Instantiate(golem);
-        GameObject actMain = Instantiate(main);
-        UnitBase golemBase = actGolem.GetComponent<UnitBase>();
-        UnitBase mainBase = actMain.GetComponent<UnitBase>();
-        golemBase.isFriendly = true;
-        mainBase.isFriendly = true;
-        actGolem.transform.position = mainMap.GetCellCenterWorld(new Vector3Int(30, 30));
-        golemBase.currentPosition = new Vector3Int(30, 30);
-        actMain.transform.position = mainMap.GetCellCenterWorld(new Vector3Int(2, 2));
-        mainBase.currentPosition = new Vector3Int(2, 2);
-        golemBase.myId = "Golem";
-        mainBase.myId = "MC";
-        VisionManager.visionManager.UpdateVision(golemBase);
-        VisionManager.visionManager.UpdateVision(mainBase);
-        TurnController.controller.SetQueue(new List<UnitBase>(){actGolem.GetComponent<UnitBase>(), actMain.GetComponent<UnitBase>()});
+        MainCombatManager.manager.CreateUnit(main, new Vector3Int(0, 0), "main", false);
+        MainCombatManager.manager.CreateUnit(golem, new Vector3Int(0, 1), "golem", false);
+        MainCombatManager.manager.CreateUnit(dummy, new Vector3Int(5, 5), "dummy", false, team:1);
+        MainCombatManager.manager.StartCombat();
     }
 }

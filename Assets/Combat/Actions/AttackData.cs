@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackData : ScriptableObject
+[CreateAssetMenu(fileName = "AttackData", menuName = "AbilityData/AttackData")]
+public class AttackData : AbilityData
 {
-    public AbilityData MyAbilityData;
-    
     public DamageType damageType;
     
     public UnitData.Element element;
