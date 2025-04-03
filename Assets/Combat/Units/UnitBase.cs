@@ -66,18 +66,10 @@ public class UnitBase : MonoBehaviour
     [NonSerialized]public float currentMana;
     
     [NonSerialized]public float currentStamina;
-    
-    [NonSerialized]public EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget> onAttacked = new EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget>();
-    
-    [NonSerialized]public EventPriorityWrapper<UnitBase, float> onTakeDamage = new EventPriorityWrapper<UnitBase, float>();
-    
-    [NonSerialized]public EventPriorityWrapper<UnitBase> onDeath = new EventPriorityWrapper<UnitBase>();
-    
-    [NonSerialized]public EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget> applyToOutgoingAttack = new EventPriorityWrapper<UnitBase, Attack.AttackMessageToTarget>();
+
+    public UnitEvents myEvents = new UnitEvents();
     
     private bool initialized = false;
-    
-    
 
     //number of seconds to reach destination (from 1 tile to another)
     private static float moveSpeed = 0.2f;
@@ -92,6 +84,13 @@ public class UnitBase : MonoBehaviour
         Init(1, baseData);
         usedAbilityThisTurn = false;
         moveRemaining = speed;
+        Float stamToRegen = new Float(staminaRegen);
+        myEvents.modStamRegen.Invoke(this, stamToRegen);
+        currentStamina = Mathf.Min(stamina, currentStamina + stamToRegen.flt);
+        Float manaToRegen = new Float(manaRegen);
+        myEvents.modManaRegen.Invoke(this, manaToRegen);
+        currentMana = Mathf.Min(mana, currentMana + manaToRegen.flt);
+        myEvents.onTurnStarted.Invoke(this);
         if (myTeam != 0)
         {
             state.OnTurnStarted();
@@ -135,11 +134,39 @@ public class UnitBase : MonoBehaviour
         initialized = true;
     }
 
+    public bool PayCost(ActiveAbility ability)
+    {
+        if (ability.abilityData.staminaCost > 0)
+        {
+            Float cost = new Float(ability.abilityData.staminaCost);
+            myEvents.modStamCost.Invoke(this, ability, cost);
+            if (cost.flt > currentStamina)
+            {
+                return false;
+            }
+            currentStamina -= cost.flt;
+            myEvents.onPayStam.Invoke(this, cost);
+        }
+        if (ability.abilityData.manaCost > 0)
+        {
+            Float cost = new Float(ability.abilityData.manaCost);
+            myEvents.modManaCost.Invoke(this, ability, cost);
+            if (cost.flt > currentMana)
+            {
+                return false;
+            }
+            currentMana -= cost.flt;
+            myEvents.onPayMana.Invoke(this, cost);
+        }
+
+        return true;
+    }
+
     public void ReceiveAttack(Attack.AttackMessageToTarget attack)
     {
         attack.damage *= typeMatchups[myElement][attack.element];
         //TODO: effects for certain type matchups
-        onAttacked.Invoke(this, attack);
+        myEvents.onAttacked.Invoke(this, attack);
         if (attack.damageType == AttackData.DamageType.Physical)
         {
             attack.damage -= physicalDefence;
@@ -152,17 +179,17 @@ public class UnitBase : MonoBehaviour
             attack.damage = 0;
         currentHealth -= attack.damage;
         //TODO: apply effect on damage
-        onTakeDamage.Invoke(this, attack.damage);
+        myEvents.onTakeDamage.Invoke(this, attack.damage);
         if (currentHealth <= 0)
         {
-            onDeath.Invoke(this);
+            myEvents.onDeath.Invoke(this);
             Die();
         }
     }
 
     public void ModifyOutgoingAttack(Attack.AttackMessageToTarget attack)
     {
-        applyToOutgoingAttack.Invoke(this, attack);
+        myEvents.applyToOutgoingAttack.Invoke(this, attack);
     }
 
     public void Die()

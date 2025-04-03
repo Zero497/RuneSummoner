@@ -102,11 +102,17 @@ public class VisionManager : MonoBehaviour
         List<HexTileUtility.DjikstrasNode> allInRange =
             HexTileUtility.DjikstrasGetTilesInRange(mainMap, start, sightRadius, -1);
         List<Vector3Int> viewBlockerList = new List<Vector3Int>();
+        List<Vector3Int> addBlockers = GetAddBlockers(start);
         foreach (HexTileUtility.DjikstrasNode val in allInRange)
         {
             if (mainMap.GetTile<DataTile>(val.location).data.lineOfSightBlocking)
             {
                 viewBlockerList.Add(val.location);
+            }
+            if (addBlockers.Contains(val.location))
+            {
+                viewBlockerList.Add(val.location);
+                continue;
             }
             viewableList.Add(val.location);
         }
@@ -123,6 +129,66 @@ public class VisionManager : MonoBehaviour
         }
         return viewableList;
     }
+
+    private List<Vector3Int> GetAddBlockers(Vector3Int start)
+    {
+        List<Vector3Int> ret = new List<Vector3Int>();
+        List<Vector3Int> adj = HexTileUtility.GetAdjacentTiles(start);
+        bool mod2 = start.y % 2 == 0;
+        DataTile t1 = mainMap.GetTile<DataTile>(adj[0]);
+        DataTile t2 = mainMap.GetTile<DataTile>(adj[1]);
+        DataTile t3 = mainMap.GetTile<DataTile>(adj[2]);
+        DataTile t4 = mainMap.GetTile<DataTile>(adj[3]);
+        DataTile t5 = mainMap.GetTile<DataTile>(adj[4]);
+        DataTile t6 = mainMap.GetTile<DataTile>(adj[5]);
+        Vector3Int toAdd;
+        if (t1 != null && t1.data.lineOfSightBlocking)
+        {
+            if (t2 != null && t2.data.lineOfSightBlocking)
+            {
+                if (mod2) toAdd = new Vector3Int(adj[0].x + 1, adj[0].y + 1);
+                else toAdd = new Vector3Int(adj[0].x, adj[0].y + 1);
+                if(mainMap.HasTile(toAdd)) ret.Add(toAdd);
+            }
+            if (t6 != null && t6.data.lineOfSightBlocking)
+            {
+                toAdd = new Vector3Int(adj[0].x-1, adj[0].y);
+                if(mainMap.HasTile(toAdd)) ret.Add(toAdd);
+            }
+        }
+        if (t3 != null && t3.data.lineOfSightBlocking)
+        {
+            if (t2 != null && t2.data.lineOfSightBlocking)
+            {
+                if (mod2) toAdd = new Vector3Int(adj[2].x, adj[2].y + 1);
+                else toAdd = new Vector3Int(adj[2].x+1, adj[2].y + 1);
+                if(mainMap.HasTile(toAdd)) ret.Add(toAdd);
+            }
+            if (t4 != null && t4.data.lineOfSightBlocking)
+            {
+                if (mod2) toAdd = new Vector3Int(adj[2].x, adj[2].y - 1);
+                else toAdd = new Vector3Int(adj[2].x+1, adj[2].y - 1);
+                if(mainMap.HasTile(toAdd)) ret.Add(toAdd);
+            }
+        }
+        if (t5 != null && t5.data.lineOfSightBlocking)
+        {
+            if (t4 != null && t4.data.lineOfSightBlocking)
+            {
+                if (mod2) toAdd = new Vector3Int(adj[4].x + 1, adj[4].y - 1);
+                else toAdd = new Vector3Int(adj[4].x, adj[4].y - 1);
+                if(mainMap.HasTile(toAdd)) ret.Add(toAdd);
+            }
+            if (t6 != null && t6.data.lineOfSightBlocking)
+            {
+                toAdd = new Vector3Int(adj[0].x-1, adj[0].y);
+                if(mainMap.HasTile(toAdd)) ret.Add(toAdd);
+            }
+        }
+        return ret;
+    }
+    
+    
 
     //checks if a target tile is in view of the viewer
     private bool IsInView(Vector3Int target, Vector3Int viewer, List<Vector3Int> viewBlockers)

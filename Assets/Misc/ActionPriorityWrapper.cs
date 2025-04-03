@@ -31,3 +31,17 @@ public class ActionPriorityWrapper<T0, T1> : IComparable<ActionPriorityWrapper<T
         return 0;
     }
 }
+
+public class ActionPriorityWrapper<T0, T1, T2> : IComparable<ActionPriorityWrapper<T0, T1, T2>>
+{
+    public int priority;
+    
+    public UnityAction<T0, T1, T2> action;
+    
+    public int CompareTo(ActionPriorityWrapper<T0, T1, T2> other)
+    {
+        if (priority < other.priority) return -1;
+        else if(priority > other.priority) return 1;
+        return 0;
+    }
+}

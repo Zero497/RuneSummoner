@@ -10,6 +10,10 @@ public class AbilityData : ScriptableObject
     
     public bool isFree;
     
+    public float staminaCost;
+
+    public float manaCost;
+    
     public int range;
 
     public int aoeRange;

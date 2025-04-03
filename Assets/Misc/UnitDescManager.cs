@@ -68,8 +68,8 @@ public class UnitDescManager : MonoBehaviour
         combatType.text = "Specialization: "+target.baseData.myType.ToString();
         level.text = "Level: "+target.level;
         health.text = "Health: "+target.currentHealth+"/"+target.health;
-        mana.text = "Mana: "+target.mana+"/"+target.currentMana;
-        stamina.text = "Stamina: "+target.stamina+"/"+target.currentStamina;
+        mana.text = "Mana: "+target.currentMana+"/"+target.mana;
+        stamina.text = "Stamina: "+target.currentStamina+"/"+target.stamina;
         initiative.text = "Initiative: "+target.initiative;
         abilityPower.text = "Ability Power: "+target.abilityPower;
         magicAttack.text = "Magical Attack: " + target.magicalAttack;

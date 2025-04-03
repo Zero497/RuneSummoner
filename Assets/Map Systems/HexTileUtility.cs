@@ -62,6 +62,33 @@ public static class HexTileUtility
         }
         return retval;
     }
+    
+    public static List<Vector3Int> GetAdjacentTiles(Vector3Int tile)
+    {
+        int x = tile.x;
+        int y = tile.y;
+        int z = tile.z;
+        List<Vector3Int> retval = new List<Vector3Int>();
+        if (tile.y % 2 == 0)
+        {
+            retval.Add(new Vector3Int(x-1,y+1,z));
+            retval.Add(new Vector3Int(x,y+1,z));
+            retval.Add(new Vector3Int(x+1,y,z));
+            retval.Add(new Vector3Int(x,y-1,z));
+            retval.Add(new Vector3Int(x-1,y-1,z));
+            retval.Add(new Vector3Int(x-1,y,z));
+        }
+        else
+        {
+            retval.Add(new Vector3Int(x,y+1,z));
+            retval.Add(new Vector3Int(x+1,y+1,z));
+            retval.Add(new Vector3Int(x+1,y,z));
+            retval.Add(new Vector3Int(x+1,y-1,z));
+            retval.Add(new Vector3Int(x,y-1,z));
+            retval.Add(new Vector3Int(x-1,y,z));
+        }
+        return retval;
+    }
 
     public class DjikstrasNode : IComparable<DjikstrasNode>, IEquatable<DjikstrasNode>
     {

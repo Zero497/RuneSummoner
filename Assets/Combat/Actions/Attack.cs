@@ -9,6 +9,7 @@ public class Attack : ActiveAbility
     {
         if (source.usedAbilityThisTurn) return false;
         bool ret = true;
+        if (!source.PayCost(this)) return false;
         switch (abilityData.targetType)
         {
             case AbilityData.TargetType.singleTargetEnemy:

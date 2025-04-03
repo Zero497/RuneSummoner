@@ -60,19 +60,22 @@ public class MainCombatManager : MonoBehaviour
     {
         GameObject newUnit = Instantiate(toCreate);
         UnitBase newBase = newUnit.GetComponent<UnitBase>();
-        while (isValidPlacement(pos))
+        int sanityCheck = 0;
+        while (!isValidPlacement(pos))
         {
             List<Vector3Int> adj = HexTileUtility.GetAdjacentTiles(pos, mainMap);
             foreach (Vector3Int val in adj)
             {
-                if (!isValidPlacement(val))
+                if (isValidPlacement(val))
                 {
                     pos = val;
                     break;
                 }
             }
-            if (!isValidPlacement(pos)) break;
+            if (isValidPlacement(pos)) break;
             pos = adj[Random.Range(0, adj.Count)];
+            sanityCheck++;
+            if (sanityCheck > 20) break;
         }
         newUnit.transform.position = mainMap.GetCellCenterWorld(pos);
         newBase.currentPosition = pos;
@@ -187,11 +190,11 @@ public class MainCombatManager : MonoBehaviour
 
     public bool isTilePassable(Vector3Int tile)
     {
-        return mainMap.GetTile<DataTile>(tile).data.isImpassable;
+        return !mainMap.GetTile<DataTile>(tile).data.isImpassable;
     }
 
     public bool isValidPlacement(Vector3Int tile)
     {
-        return isTileOccupied(tile) && isTilePassable(tile);
+        return !isTileOccupied(tile) && isTilePassable(tile);
     }
 }

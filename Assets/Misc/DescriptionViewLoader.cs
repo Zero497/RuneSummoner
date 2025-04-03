@@ -29,6 +29,7 @@ public static class DescriptionViewLoader
         else
         {
             targetTile = target;
+            if (!TurnController.controller.mainMap.HasTile(targetTile)) return;
             if (MainCombatManager.manager.isTileOccupied(target))
             {
                 if (SceneManager.GetSceneByName("UnitDescriptionView").isLoaded)
@@ -53,6 +54,10 @@ public static class DescriptionViewLoader
                 else
                 {
                     SceneManager.LoadScene("TileDescriptionView", LoadSceneMode.Additive);
+                }
+                if (SceneManager.GetSceneByName("UnitDescriptionView").isLoaded)
+                {
+                    SceneManager.UnloadSceneAsync("UnitDescriptionView");
                 }
             }
         }

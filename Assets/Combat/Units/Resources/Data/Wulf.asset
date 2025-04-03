@@ -10,37 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebdf6368fd91754bb2001620b47e7a4, type: 3}
-  m_Name: Golem
+  m_Name: Wulf
   m_EditorClassIdentifier: 
-  unitDescription: 
-  myElement: 2
-  myType: 2
-  summonCost: 200
-  health: 220
+  unitDescription: Wulf
+  myElement: 1
+  myType: 1
+  summonCost: 100
+  health: 150
   healthPerLevel: 0
-  initiative: 150
-  abilityPower: 10
+  initiative: 80
+  abilityPower: 5
   abilityPowerPerLevel: 0
   magicalAttack: 5
   magicalAttackPerLevel: 0
-  physicalAttack: 20
+  physicalAttack: 15
   physicalAttackPerLevel: 0
-  magicalDefence: 15
+  magicalDefence: 5
   magicalDefencePerLevel: 0
-  physicalDefence: 15
+  physicalDefence: 6
   physicalDefencePerLevel: 0
-  mana: 100
+  mana: 50
   manaPerLevel: 0
-  manaRegen: 30
+  manaRegen: 10
   manaRegenPerLevel: 0
-  sightRadius: 10
-  speed: 8
-  stamina: 500
+  sightRadius: 15
+  speed: 10
+  stamina: 300
   staminaPerLevel: 0
-  staminaRegen: 40
+  staminaRegen: 100
   staminaRegenPerLevel: 0
   abilities:
   - PhysicalMelee
-  portrait: {fileID: 21300000, guid: c1e153c81701ef64a9e20c65186b959e, type: 3}
+  portrait: {fileID: -8624979598703016730, guid: cd8a3e1bd83b75849a8cdeaf2423953b, type: 3}
   defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}
