@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//VALID IDS: bhysicalMelee, PhysicalRanged, MagicalMelee, MagicalRanged
 public class Attack : ActiveAbility
 {
     public override bool RunAction(SendData sentData)
@@ -47,7 +48,7 @@ public class Attack : ActiveAbility
         return null;
     }
 
-    private bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position)
+    protected virtual bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position)
     {
         UnitBase unitAtPosition = MainCombatManager.manager.getUnitAtPosition(position);
         if (unitAtPosition != null && validTarget(unitAtPosition.myTeam))
@@ -58,7 +59,7 @@ public class Attack : ActiveAbility
         return false;
     }
 
-    private void RunAttack(List<UnitBase> targets)
+    public void RunAttack(List<UnitBase> targets)
     {
         AttackMessageToTarget outgoingAttack = PrepareMessage();
         foreach (UnitBase unit in targets)
@@ -120,6 +121,7 @@ public class Attack : ActiveAbility
 
     public override void Initialize(SendData sendData)
     {
+        id = sendData.strData[0];
         source = sendData.unitData[0];
         abilityData = Resources.Load<AbilityData>("AttackData/"+sendData.strData[0]);
     }

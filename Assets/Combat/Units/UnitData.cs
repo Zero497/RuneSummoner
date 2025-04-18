@@ -50,7 +50,7 @@ public class UnitData : ScriptableObject
     public float staminaRegen;
     public float staminaRegenPerLevel;
     
-    public List<string> abilities;
+    public List<string> activeAbilities;
     
     public Sprite portrait;
 

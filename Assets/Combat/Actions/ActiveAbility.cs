@@ -5,4 +5,6 @@ using UnityEngine;
 public abstract class ActiveAbility : UnitAction
 {
     public UnitBase source;
+
+    public string id;
 }

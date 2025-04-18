@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Misc;
+using NUnit.Framework.Constraints;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -46,6 +47,8 @@ public class UnitBase : MonoBehaviour
     [NonSerialized]public float staminaRegen;
     
     [NonSerialized]public List<ActiveAbility> activeAbilities = new List<ActiveAbility>();
+
+    [NonSerialized] public List<PassiveAbility> PassiveAbilities = new List<PassiveAbility>();
 
     [NonSerialized]public float moveRemaining;
 
@@ -123,11 +126,11 @@ public class UnitBase : MonoBehaviour
         initiative = inBaseData.initiative;
         speed = inBaseData.speed;
         sightRadius = inBaseData.sightRadius;
-        Attack myBasicAttack = new Attack();
-        SendData send = new SendData(this);
-        send.AddStr(inBaseData.abilities[0]);
-        myBasicAttack.Initialize(send);
-        activeAbilities.Add(myBasicAttack);
+        foreach (string abilityID in inBaseData.activeAbilities)
+        {
+            ActiveAbility newAbility = AbilityFactory.getActiveAbility(abilityID, this);
+            activeAbilities.Add(newAbility);
+        }
         currentHealth = health;
         currentMana = mana;
         currentStamina = stamina;

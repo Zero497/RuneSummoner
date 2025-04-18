@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -9,8 +10,12 @@ public class MainCombatManager : MonoBehaviour
     public static MainCombatManager manager;
 
     public Tilemap mainMap;
+
+    public Transform abilityButtonParent;
+
+    public GameObject abilityButtonPrefab;
     
-    public List<AbilityButton> AbilityButtons;
+    private List<AbilityButton> AbilityButtons = new List<AbilityButton>();
     
     [NonSerialized]public List<UnitBase> allFriendly = new List<UnitBase>();
     
@@ -29,11 +34,21 @@ public class MainCombatManager : MonoBehaviour
 
     public void SendAbilities(List<ActiveAbility> abilities)
     {
+        while (AbilityButtons.Count < abilities.Count)
+        {
+            AddAbilityButton();
+        }
         for (int i = 0; i < abilities.Count; i++)
         {
             AbilityButtons[i].gameObject.SetActive(true);
             AbilityButtons[i].SetAbility(abilities[i]);
         }
+    }
+
+    private void AddAbilityButton()
+    {
+        GameObject button = Instantiate(abilityButtonPrefab, abilityButtonParent);
+        AbilityButtons.Add(button.GetComponent<AbilityButton>());
     }
 
     public void StartCombat()

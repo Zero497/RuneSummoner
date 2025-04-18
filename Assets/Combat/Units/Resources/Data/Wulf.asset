@@ -39,8 +39,9 @@ MonoBehaviour:
   staminaPerLevel: 0
   staminaRegen: 100
   staminaRegenPerLevel: 0
-  abilities:
+  activeAbilities:
   - PhysicalMelee
+  - BlitzPhysical
   portrait: {fileID: -8624979598703016730, guid: cd8a3e1bd83b75849a8cdeaf2423953b, type: 3}
   defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}

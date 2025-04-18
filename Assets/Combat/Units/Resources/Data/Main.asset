@@ -39,7 +39,7 @@ MonoBehaviour:
   staminaPerLevel: 0
   staminaRegen: 100
   staminaRegenPerLevel: 0
-  abilities:
+  activeAbilities:
   - PhysicalMelee
   portrait: {fileID: 21300000, guid: 9bd3b7bfa4d30594dba2b397b131519a, type: 3}
   defaultEntryState: {fileID: 0}

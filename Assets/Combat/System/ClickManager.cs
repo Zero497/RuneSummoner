@@ -71,8 +71,10 @@ public class ClickManager : MonoBehaviour
         }
         if(currentAction == null)
             currentAction = InferAction(1, clickPosition);
-        if(currentAction != null && currentAction.inProgress == false)
+        if (currentAction is { inProgress: false })
+        {
             currentAction.PrepAction();
+        }
         sinceLastClick = DateTime.Now;
     }
 
