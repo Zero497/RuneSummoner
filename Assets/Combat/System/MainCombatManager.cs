@@ -98,7 +98,7 @@ public class MainCombatManager : MonoBehaviour
         newBase.isFriendly = isFriendly;
         newBase.myTeam = team;
         newBase.Init(1);
-        if(team != 0) newBase.state = newBase.baseData.defaultEntryState;
+        if(team != 0) newBase.myAI = new FSM(newBase,newBase.baseData.defaultEntryState);
         if (isFriendly)
         {
             VisionManager.visionManager.UpdateVision(newBase);

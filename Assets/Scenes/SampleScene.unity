@@ -367,6 +367,7 @@ MonoBehaviour:
   golem: {fileID: 4000445952178753198, guid: 243fd85bf33593f4fb9bd7d0824b4ed2, type: 3}
   dummy: {fileID: 4851726857594656503, guid: 88a2adc69b1ef324393f0169eea53d71, type: 3}
   wulf: {fileID: 4000445952178753198, guid: 44ef1445fe8a92445a64ec0c2cf3d156, type: 3}
+  evilLizard: {fileID: 4000445952178753198, guid: 1c505f09ee9902540bd675725c1610d2, type: 3}
   mainMap: {fileID: 1126495592}
 --- !u!4 &124889901
 Transform:

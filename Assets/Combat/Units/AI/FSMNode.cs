@@ -4,35 +4,35 @@ using UnityEngine;
 public abstract class FSMNode : ScriptableObject
 {
     public List<FSMNode> transitionStates;
-    
-    public abstract void OnEnter();
 
-    public abstract void OnExit();
+    public abstract void OnEnter(UnitBase unit);
 
-    public abstract void OnTurnStarted();
+    public abstract void OnExit(UnitBase unit);
 
-    public FSMNode transition(string stateName)
+    public abstract void OnTurnStarted(UnitBase unit);
+
+    public FSMNode transition(string stateName, UnitBase unit)
     {
-        OnExit();
+        OnExit(unit);
         foreach (FSMNode node in transitionStates)
         {
             if (node.name.Equals(stateName))
             {
-                node.OnEnter();
+                node.OnEnter(unit);
                 return node;
             }
         }
         return null;
     }
 
-    public FSMNode transition(int index)
+    public FSMNode transition(int index, UnitBase unit)
     {
         if (index > transitionStates.Count)
         {
             return null;
         }
-        OnExit();
-        transitionStates[index].OnEnter();
+        OnExit(unit);
+        transitionStates[index].OnEnter(unit);
         return transitionStates[index];
     }
 }

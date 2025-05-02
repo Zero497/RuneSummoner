@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4395913073397412950}
   - component: {fileID: 7925908232581218532}
   m_Layer: 0
-  m_Name: Wulf
+  m_Name: Lizard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0.5697354, b: 0.9607843, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.07135868, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -100,4 +100,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f37bd03ce17f446b4cc29131689f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseData: {fileID: 11400000, guid: abb5a805673ab034aad8f3c90b86455b, type: 2}
+  baseData: {fileID: 11400000, guid: d5ac58e8ad846eb4cb67cd4dd68470a4, type: 2}

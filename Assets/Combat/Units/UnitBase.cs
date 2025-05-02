@@ -60,7 +60,7 @@ public class UnitBase : MonoBehaviour
     
     [NonSerialized]public int myTeam = 0;
 
-    [NonSerialized]public FSMNode state = null;
+    [NonSerialized]public FSM myAI = null;
 
     [NonSerialized]public bool forceMove;
     
@@ -96,7 +96,7 @@ public class UnitBase : MonoBehaviour
         myEvents.onTurnStarted.Invoke(this);
         if (myTeam != 0)
         {
-            state.OnTurnStarted();
+            myAI.OnTurnStarted();
         }
         else
         {

@@ -96,7 +96,7 @@ public class VisionManager : MonoBehaviour
         RevealInRadius(unit.myId, unit.baseData.sightRadius, unit.currentPosition);
     }
     
-    private List<Vector3Int> DjikstrasSightCheck(Vector3Int start, float sightRadius, bool ignoreSightBlocking = false)
+    public List<Vector3Int> DjikstrasSightCheck(Vector3Int start, float sightRadius, bool ignoreSightBlocking = false)
     {
         List<Vector3Int> viewableList = new List<Vector3Int>();
         List<HexTileUtility.DjikstrasNode> allInRange =
@@ -191,7 +191,7 @@ public class VisionManager : MonoBehaviour
     
 
     //checks if a target tile is in view of the viewer
-    private bool IsInView(Vector3Int target, Vector3Int viewer, List<Vector3Int> viewBlockers)
+    public bool IsInView(Vector3Int target, Vector3Int viewer, List<Vector3Int> viewBlockers)
     {
         foreach (Vector3Int blocker in viewBlockers)
         {

@@ -10,37 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebdf6368fd91754bb2001620b47e7a4, type: 3}
-  m_Name: Main
+  m_Name: EvilLizard
   m_EditorClassIdentifier: 
   unitDescription: 
   myElement: 1
   myType: 0
-  summonCost: 0
-  health: 100
-  healthPerLevel: 50
+  summonCost: 150
+  health: 200
+  healthPerLevel: 0
   initiative: 100
   abilityPower: 10
   abilityPowerPerLevel: 0
-  magicalAttack: 10
-  magicalAttackPerLevel: 10
-  physicalAttack: 10
-  physicalAttackPerLevel: 10
-  magicalDefence: 10
+  magicalAttack: 5
+  magicalAttackPerLevel: 0
+  physicalAttack: 15
+  physicalAttackPerLevel: 0
+  magicalDefence: 15
   magicalDefencePerLevel: 0
-  physicalDefence: 10
+  physicalDefence: 5
   physicalDefencePerLevel: 0
-  mana: 1000
-  manaPerLevel: 100
-  manaRegen: 200
-  manaRegenPerLevel: 20
-  sightRadius: 15
-  speed: 10
-  stamina: 200
+  mana: 100
+  manaPerLevel: 0
+  manaRegen: 50
+  manaRegenPerLevel: 0
+  sightRadius: 12
+  speed: 12
+  stamina: 150
   staminaPerLevel: 0
-  staminaRegen: 40
+  staminaRegen: 30
   staminaRegenPerLevel: 0
   activeAbilities:
-  - PhysicalMelee
-  portrait: {fileID: 21300000, guid: 9bd3b7bfa4d30594dba2b397b131519a, type: 3}
+  - MagicalMelee
+  portrait: {fileID: -8624979598703016730, guid: cd8a3e1bd83b75849a8cdeaf2423953b, type: 3}
   defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}

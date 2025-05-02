@@ -25,7 +25,7 @@ public class MoveController : MonoBehaviour
     }
 
     //call this before accessing Mcontrol methods. Creates movement overlay tiles and initializes tiles in movement range
-    public void InitMovement(UnitBase unit, bool useOverlay = true)
+    public List<HexTileUtility.DjikstrasNode> InitMovement(UnitBase unit, bool useOverlay = true)
     {
         OverlayManager.instance.ClearOverlays();
         allInRange = HexTileUtility.DjikstrasGetTilesInRange(mainMap, unit.currentPosition, unit.moveRemaining, 0, true);
@@ -34,16 +34,18 @@ public class MoveController : MonoBehaviour
             OverlayManager.instance.CreateOverlay(allInRange, movementOverlayTile);
         }
         curUnit = unit;
+        return allInRange;
     }
     
 
     public bool Move(Vector3Int target, out Coroutine routine, UnityAction<bool> onMoveStopped = null)
     {   
-        OverlayManager.instance.ClearOverlays();
         routine = null;
-        
+        if (!IsValidMove(target)) return false;
         if (curUnit != TurnController.controller.currentActor) return false;
         if (allInRange == null || !allInRange.Contains(new HexTileUtility.DjikstrasNode(curUnit.currentPosition))) return false;
+        OverlayManager.instance.ClearOverlays();
+        
         
         HexTileUtility.DjikstrasNode targetNode = allInRange.Find(node => node.location == target);
         
