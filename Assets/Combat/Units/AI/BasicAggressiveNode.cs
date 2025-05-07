@@ -38,7 +38,7 @@ public class BasicAggressiveNode : FSMNode
                         bestDist = nb; 
                         best = moveloc; 
                     }
-                    if (nb == bestDist)
+                    if (nb == bestDist && best.cost > moveloc.cost)
                     {
                         best = moveloc;
                     }
