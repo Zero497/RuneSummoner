@@ -24,26 +24,39 @@ public class BasicAggressiveNode : FSMNode
         List<HexTileUtility.DjikstrasNode> myMoveLocations = MoveController.mControl.InitMovement(unit, false);
         inSight =
             VisionManager.visionManager.DjikstrasSightCheck(unit.currentPosition, unit.sightRadius);
+        HexTileUtility.DjikstrasNode best = myMoveLocations[0];
+        int bestDist = 1000;
         foreach (UnitBase enUnit in MainCombatManager.manager.allFriendly)
         {
             if (inSight.Contains(enUnit.currentPosition))
             {
-                List<Vector3Int> adjacents = HexTileUtility.GetAdjacentTiles(enUnit.currentPosition);
-                foreach (Vector3Int adj in adjacents)
+                foreach (HexTileUtility.DjikstrasNode moveloc in myMoveLocations)
                 {
-                    if (MoveController.mControl.IsValidMove(adj))
+                    int nb = HexTileUtility.GetTileDistance(moveloc.location, enUnit.currentPosition);
+                    if (nb < bestDist)
                     {
-                        MoveController.mControl.Move(adj, out var routine, OnMoveStopped);
-                        Debug.Log("Moving to: "+adj);
-                        return;
+                        bestDist = nb; 
+                        best = moveloc; 
                     }
+                    if (nb == bestDist)
+                    {
+                        best = moveloc;
+                    }
+                    
                 }
             }
         }
 
-        int rand = UnityEngine.Random.Range(0, myMoveLocations.Count);
-        MoveController.mControl.Move(myMoveLocations[rand].location, out var co, OnMoveStopped);
-        Debug.Log("Moving to: "+myMoveLocations[rand].location);
+        if (bestDist < 1000)
+        {
+            MoveController.mControl.Move(best.location, out var co, OnMoveStopped);
+        }
+        else
+        {
+            int rand = UnityEngine.Random.Range(0, myMoveLocations.Count);
+            MoveController.mControl.Move(myMoveLocations[rand].location, out var co, OnMoveStopped);
+        }
+        
     }
 
     private void OnMoveStopped(bool reason)
@@ -51,6 +64,7 @@ public class BasicAggressiveNode : FSMNode
         if (!reason)
         {
             OnTurnStarted(curUnit);
+            return;
         }
         foreach (UnitBase enUnit in MainCombatManager.manager.allFriendly)
         {
@@ -61,8 +75,27 @@ public class BasicAggressiveNode : FSMNode
                 {
                     if (curUnit.currentPosition.Equals(adj))
                     {
-                        //TODO
+                        foreach (ActiveAbility ability in curUnit.activeAbilities)
+                        {
+                            bool ran = false;
+                            switch (ability.abilityData.targetType)
+                            {
+                                case AbilityData.TargetType.singleTargetEnemy:
+                                    SendData data = new SendData(enUnit.currentPosition);
+                                    ran = ability.RunAction(data);
+                                    break;
+                                default:
+                                    //TODO other types
+                                    break;
+                            }
+
+                            if (ran)
+                            {
+                                break;
+                            }
+                        }
                         MainCombatManager.manager.EndTurn();
+                        return;
                     }
                 }
             }

@@ -12,29 +12,34 @@ public class TurnController : MonoBehaviour
     public static TurnController controller;
     
     public Tilemap mainMap;
+
+    public GameObject endTurnButton; 
+        
     public UnitBase currentActor => _currentActor;
 
     public UnityEvent<UnitBase, float> turnPassed = new UnityEvent<UnitBase, float>();
 
     public TurnView view;
 
+    public Image curUnitIndicator;
+
     private UnitBase _currentActor;
 
-    private TimeQueue<(UnitBase, GameObject)> turnQueue = new TimeQueue<(UnitBase, GameObject)>();
+    private TimeQueue<UnitBase> turnQueue = new TimeQueue<UnitBase>();
     private void Awake()
     {
         controller = this;
     }
-    
-    public void AddToQueue(UnitBase add, bool repaint=true)
+
+    public void RemoveFromQueue(UnitBase toRemove, bool repaint=true)
     {
-        turnQueue.Add((add, null), add.initiative);
+        turnQueue.Remove(toRemove);
         if(repaint) TurnQueueRepaint();
     }
     
-    public void AddToQueue((UnitBase, GameObject) add, bool repaint=true)
+    public void AddToQueue(UnitBase add, bool repaint=true)
     {
-        turnQueue.Add(add, add.Item1.initiative);
+        turnQueue.Add(add, add.initiative);
         if(repaint) TurnQueueRepaint();
     }
 
@@ -42,7 +47,7 @@ public class TurnController : MonoBehaviour
     {
         UnitsInBattle.Sort(UnitBase.CompareByInitiative);
         UnitsInBattle.Reverse();
-        turnQueue = new TimeQueue<(UnitBase, GameObject)>();
+        turnQueue = new TimeQueue<UnitBase>();
         foreach (UnitBase unit in UnitsInBattle)
         {
             AddToQueue(unit, false);
@@ -53,17 +58,20 @@ public class TurnController : MonoBehaviour
 
     public void NextTurn()
     {
-        ((UnitBase, GameObject), float) val = turnQueue.AdvanceAndPop();
-        (UnitBase, GameObject) cur = val.Item1;
-        turnPassed.Invoke(cur.Item1, val.Item2);
-        _currentActor = cur.Item1;
-        cur.Item1.TurnStarted();
+        (UnitBase, float) val = turnQueue.AdvanceAndPop();
+        UnitBase cur = val.Item1;
+        if(cur.myTeam != 0) endTurnButton.SetActive(false);
+        else endTurnButton.SetActive(true);
+        curUnitIndicator.sprite = cur.baseData.portrait;
+        turnPassed.Invoke(cur, val.Item2);
+        _currentActor = cur;
+        cur.TurnStarted();
         AddToQueue(cur);
     }
 
     public void TurnQueueRepaint()
     {
-        List<TimeNode<(UnitBase,GameObject)>> queue = turnQueue.queue;
+        List<TimeNode<UnitBase>> queue = turnQueue.queue;
         view.Repaint(queue);
     }
 

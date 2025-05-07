@@ -21,14 +21,14 @@ public class AttackBlitz : Attack
         return base.RunAction(sentData);
     }
 
-    protected override bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position)
+    protected override bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position, float mod = 1)
     {
         UnitBase unitAtPosition = MainCombatManager.manager.getUnitAtPosition(position);
         Attack myAttack = getBasicAttack();
         if (unitAtPosition != null && validTarget(unitAtPosition.myTeam))
         {
             for(int i = 0; i<numAttacks; i++)
-                myAttack.RunAttack(new List<UnitBase>{unitAtPosition});
+                myAttack.RunAttack(new List<UnitBase>{unitAtPosition}, mod*0.5f);
             return true;
         }
         return false;

@@ -14,6 +14,10 @@ public class MainCombatManager : MonoBehaviour
     public Transform abilityButtonParent;
 
     public GameObject abilityButtonPrefab;
+
+    public GameObject winCanv;
+
+    public GameObject loseCanv;
     
     private List<AbilityButton> AbilityButtons = new List<AbilityButton>();
     
@@ -107,9 +111,31 @@ public class MainCombatManager : MonoBehaviour
         else
         {
             allEnemy.Add(newBase);
+            newBase.ConcealMe(newBase.currentPosition);
         }
         TurnController.controller.AddToQueue(newBase, repaint);
         return pos;
+    }
+
+    public void registerUnitDead(UnitBase unit)
+    {
+        if (unit.isFriendly)
+        {
+            allFriendly.Remove(unit);
+            if (allFriendly.Count == 0)
+            {
+                loseCanv.SetActive(true);
+            }
+        }
+        else
+        {
+            allEnemy.Remove(unit);
+            if (allEnemy.Count == 0)
+            {
+                winCanv.SetActive(true);
+            }
+        }
+        TurnController.controller.RemoveFromQueue(unit);
     }
     
     public List<UnitBase> getUnitsInRange(Vector3Int source, int range)

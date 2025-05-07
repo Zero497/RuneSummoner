@@ -11,6 +11,18 @@ public class TimeQueue<T>
         queue.Add(new TimeNode<T>(thing, timeToNext, priority));
         queue.Sort();
     }
+
+    public void Remove(T thing)
+    {
+        foreach (TimeNode<T> node in queue)
+        {
+            if (node.value.Equals(thing))
+            {
+                queue.Remove(node);
+                return;
+            }
+        }
+    }
     
     public (T, float) AdvanceAndPop()
     {

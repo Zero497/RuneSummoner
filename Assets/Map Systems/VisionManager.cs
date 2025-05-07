@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class VisionManager : MonoBehaviour
@@ -15,6 +16,10 @@ public class VisionManager : MonoBehaviour
     public Tilemap mainMap;
 
     public Tile hiddenTile;
+
+    public UnityEvent<Vector3Int> positionRevealed = new UnityEvent<Vector3Int>();
+
+    public UnityEvent<Vector3Int> positionConcealed = new UnityEvent<Vector3Int>();
 
     private Dictionary<Vector3Int, HashSet<String>> revealedPositions = new Dictionary<Vector3Int, HashSet<String>>();
 
@@ -32,14 +37,21 @@ public class VisionManager : MonoBehaviour
     //reveal the specified position
     public void RevealPosition(Vector3Int position)
     {
+        positionRevealed.Invoke(position);
         hiddenMap.SetTile(position, null);
     }
 
     //conceal the specified position
     public void ConcealPosition(Vector3Int position)
     {
+        positionConcealed.Invoke(position);
         revealedPositions.Remove(position);
         hiddenMap.SetTile(position, hiddenTile);
+    }
+
+    public HashSet<String> GetViewers(Vector3Int position)
+    {
+        return revealedPositions[position];
     }
 
     /*

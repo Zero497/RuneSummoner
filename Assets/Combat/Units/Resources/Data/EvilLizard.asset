@@ -33,14 +33,14 @@ MonoBehaviour:
   manaPerLevel: 0
   manaRegen: 50
   manaRegenPerLevel: 0
-  sightRadius: 12
+  sightRadius: 14
   speed: 12
   stamina: 150
   staminaPerLevel: 0
   staminaRegen: 30
   staminaRegenPerLevel: 0
-  activeAbilities:
+  baseActiveAbilities:
   - MagicalMelee
-  portrait: {fileID: -8624979598703016730, guid: cd8a3e1bd83b75849a8cdeaf2423953b, type: 3}
-  defaultEntryState: {fileID: 0}
+  portrait: {fileID: 21300000, guid: e470270a8a2232647acff7eea9a71258, type: 3}
+  defaultEntryState: {fileID: 11400000, guid: 756348ef929a638478432e7fa7c90801, type: 2}
   uniqueTree: {fileID: 0}

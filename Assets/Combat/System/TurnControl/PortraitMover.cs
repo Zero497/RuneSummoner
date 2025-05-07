@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class PortraitMover : MonoBehaviour
 {
+    public UnitBase myUnit;
+    
     private float targetTime;
 
     private float yieldTime = 0.05f;

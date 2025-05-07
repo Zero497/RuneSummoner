@@ -22,7 +22,7 @@ MonoBehaviour:
   description: Basic Physical Melee Attack
   damageType: 0
   element: 0
-  damage: 10
+  damage: 50
   effectToApplySelf: 
   effectToApplyTarget: 
   useUnitElement: 1

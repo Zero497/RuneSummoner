@@ -3,24 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//VALID IDS: bhysicalMelee, PhysicalRanged, MagicalMelee, MagicalRanged
+//VALID IDS: PhysicalMelee, PhysicalRanged, MagicalMelee, MagicalRanged
 public class Attack : ActiveAbility
 {
     public override bool RunAction(SendData sentData)
     {
         if (source.usedAbilityThisTurn) return false;
         bool ret = true;
-        if (!source.PayCost(this)) return false;
+        if (!source.PayCost(this, false)) return false;
+        float mod = 1;
+        if (sentData.floatData.Count > 0) mod = sentData.floatData[0];
         switch (abilityData.targetType)
         {
             case AbilityData.TargetType.singleTargetEnemy:
             case AbilityData.TargetType.singleTargetFriendly:
             case AbilityData.TargetType.singleTargetNeutral:
-                ret = RunSingleTarget(getValidTargets(), sentData.positionData[0]);
+                ret = RunSingleTarget(getValidTargets(), sentData.positionData[0], mod);
                 break;
         }
         if (ret)
         {
+            source.PayCost(this);
             source.usedAbilityThisTurn = true;
         }
         OverlayManager.instance.ClearOverlays();
@@ -48,27 +51,27 @@ public class Attack : ActiveAbility
         return null;
     }
 
-    protected virtual bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position)
+    protected virtual bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position, float mod=1)
     {
         UnitBase unitAtPosition = MainCombatManager.manager.getUnitAtPosition(position);
         if (unitAtPosition != null && validTarget(unitAtPosition.myTeam))
         {
-            RunAttack(new List<UnitBase>{unitAtPosition});
+            RunAttack(new List<UnitBase>{unitAtPosition}, mod);
             return true;
         }
         return false;
     }
 
-    public void RunAttack(List<UnitBase> targets)
+    public void RunAttack(List<UnitBase> targets, float mod = 1)
     {
-        AttackMessageToTarget outgoingAttack = PrepareMessage();
+        AttackMessageToTarget outgoingAttack = PrepareMessage(mod);
         foreach (UnitBase unit in targets)
         {
             unit.ReceiveAttack(outgoingAttack);
         }
     }
 
-    private AttackMessageToTarget PrepareMessage()
+    private AttackMessageToTarget PrepareMessage(float mod=1)
     {
         AttackMessageToTarget retval = new AttackMessageToTarget(abilityData as AttackData);
         if ((abilityData as AttackData).useUnitElement)
@@ -84,7 +87,7 @@ public class Attack : ActiveAbility
         {
             mult += source.physicalAttack / 100;
         }
-        retval.damage *= mult;
+        retval.damage *= mult * mod;
         source.ModifyOutgoingAttack(retval);
         return retval;
     }

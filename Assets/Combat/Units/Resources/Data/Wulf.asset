@@ -33,15 +33,15 @@ MonoBehaviour:
   manaPerLevel: 0
   manaRegen: 10
   manaRegenPerLevel: 0
-  sightRadius: 15
-  speed: 10
+  sightRadius: 16
+  speed: 12
   stamina: 300
   staminaPerLevel: 0
   staminaRegen: 100
   staminaRegenPerLevel: 0
-  activeAbilities:
+  baseActiveAbilities:
   - PhysicalMelee
   - BlitzPhysical
-  portrait: {fileID: -8624979598703016730, guid: cd8a3e1bd83b75849a8cdeaf2423953b, type: 3}
+  portrait: {fileID: 21300000, guid: 50704c5371b0bbc458201b61741fc486, type: 3}
   defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}

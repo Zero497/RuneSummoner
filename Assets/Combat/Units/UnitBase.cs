@@ -7,10 +7,19 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
-public class UnitBase : MonoBehaviour
+public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 {
     public UnitData baseData;
+
+    public SpriteRenderer mySprite;
+
+    public Image healthBar;
+
+    public Image manaBar;
+    
+    public Image stamBar;
 
     [NonSerialized]public bool usedAbilityThisTurn;
     
@@ -82,6 +91,13 @@ public class UnitBase : MonoBehaviour
         Init(1, baseData);
     }
 
+    private void updateBars()
+    {
+        healthBar.fillAmount = (currentHealth / health);
+        manaBar.fillAmount = (currentMana / mana);
+        stamBar.fillAmount = (currentStamina / stamina);
+    }
+
     public void TurnStarted()
     { 
         Init(1, baseData);
@@ -93,6 +109,7 @@ public class UnitBase : MonoBehaviour
         Float manaToRegen = new Float(manaRegen);
         myEvents.modManaRegen.Invoke(this, manaToRegen);
         currentMana = Mathf.Min(mana, currentMana + manaToRegen.flt);
+        updateBars();
         myEvents.onTurnStarted.Invoke(this);
         if (myTeam != 0)
         {
@@ -126,7 +143,7 @@ public class UnitBase : MonoBehaviour
         initiative = inBaseData.initiative;
         speed = inBaseData.speed;
         sightRadius = inBaseData.sightRadius;
-        foreach (string abilityID in inBaseData.activeAbilities)
+        foreach (string abilityID in inBaseData.baseActiveAbilities)
         {
             ActiveAbility newAbility = AbilityFactory.getActiveAbility(abilityID, this);
             activeAbilities.Add(newAbility);
@@ -135,9 +152,23 @@ public class UnitBase : MonoBehaviour
         currentMana = mana;
         currentStamina = stamina;
         initialized = true;
+        if (!isFriendly)
+        {
+            VisionManager.visionManager.positionConcealed.AddListener(ConcealMe);
+            VisionManager.visionManager.positionRevealed.AddListener(RevealMe);
+        }
     }
 
-    public bool PayCost(ActiveAbility ability)
+    private void OnDisable()
+    {
+        if (!isFriendly)
+        {
+            VisionManager.visionManager.positionConcealed.RemoveListener(ConcealMe);
+            VisionManager.visionManager.positionRevealed.RemoveListener(RevealMe);
+        }
+    }
+
+    public bool PayCost(ActiveAbility ability, bool payNow = true)
     {
         if (ability.abilityData.staminaCost > 0)
         {
@@ -147,8 +178,13 @@ public class UnitBase : MonoBehaviour
             {
                 return false;
             }
-            currentStamina -= cost.flt;
-            myEvents.onPayStam.Invoke(this, cost);
+
+            if (payNow)
+            {
+                currentStamina -= cost.flt;
+                myEvents.onPayStam.Invoke(this, cost);
+            }
+            
         }
         if (ability.abilityData.manaCost > 0)
         {
@@ -158,10 +194,15 @@ public class UnitBase : MonoBehaviour
             {
                 return false;
             }
-            currentMana -= cost.flt;
-            myEvents.onPayMana.Invoke(this, cost);
-        }
 
+            if (payNow)
+            {
+                currentMana -= cost.flt;
+                myEvents.onPayMana.Invoke(this, cost);
+            }
+            
+        }
+        if(payNow) updateBars();
         return true;
     }
 
@@ -181,6 +222,7 @@ public class UnitBase : MonoBehaviour
         if (attack.damage < 0)
             attack.damage = 0;
         currentHealth -= attack.damage;
+        updateBars();
         //TODO: apply effect on damage
         myEvents.onTakeDamage.Invoke(this, attack.damage);
         if (currentHealth <= 0)
@@ -197,6 +239,7 @@ public class UnitBase : MonoBehaviour
 
     public void Die()
     {
+        MainCombatManager.manager.registerUnitDead(this);
         Destroy(gameObject);
     }
     
@@ -210,10 +253,33 @@ public class UnitBase : MonoBehaviour
         return 0;
     }
 
+    public void RevealMe(Vector3Int position)
+    {
+        if (currentPosition.Equals(position))
+        {
+            mySprite.enabled = true;
+            mySprite.enabled = true;
+            healthBar.enabled = true;
+            manaBar.enabled = true;
+            stamBar.enabled = true;
+        }
+    }
+
+    public void ConcealMe(Vector3Int position)
+    {
+        if (currentPosition.Equals(position))
+        {
+            mySprite.enabled = false;
+            healthBar.enabled = false;
+            manaBar.enabled = false;
+            stamBar.enabled = false;
+        }
+    }
+
     public IEnumerator MoveUnit(HexTileUtility.DjikstrasNode target, Tilemap mainMap, UnityAction<bool> returnToCaller = null)
     {
         forceMove = false;
-        List<HexTileUtility.DjikstrasNode> allInRange = HexTileUtility.DjikstrasGetTilesInRange(mainMap, currentPosition, sightRadius, -1);
+        List<Vector3Int> allInRange = VisionManager.visionManager.DjikstrasSightCheck(currentPosition, sightRadius);
         while (true)
         {
             HexTileUtility.DjikstrasNode next = getNext(target);
@@ -239,27 +305,41 @@ public class UnitBase : MonoBehaviour
             }
             moveRemaining -= mainMap.GetTile<DataTile>(next.location).data.moveCost;
             currentPosition = next.location;
-            VisionManager.visionManager.UpdateVision(this);
-            List<HexTileUtility.DjikstrasNode> newInRange = HexTileUtility.DjikstrasGetTilesInRange(mainMap, currentPosition, sightRadius, -1);
+            if(isFriendly)
+                VisionManager.visionManager.UpdateVision(this);
+            else
+            {
+                if (VisionManager.visionManager.isRevealed(currentPosition))
+                {
+                    RevealMe(currentPosition);
+                }
+                else
+                {
+                    ConcealMe(currentPosition);
+                }
+            }
+            List<Vector3Int> newInRange = VisionManager.visionManager.DjikstrasSightCheck(currentPosition, sightRadius);
             List<UnitBase> compList;
             if (isFriendly) compList = MainCombatManager.manager.allEnemy;
             else compList = MainCombatManager.manager.allFriendly;
-            if (UnitInDiff(newInRange.diff(allInRange), compList))
+            if (UnitInDiff(newInRange.diff(allInRange), compList, isFriendly))
             {
                 if (returnToCaller != null) returnToCaller(false);
                 break;
             }
+
             allInRange = newInRange;
         }
     }
 
-    private bool UnitInDiff(List<HexTileUtility.DjikstrasNode> tiles, List<UnitBase> units)
+    private bool UnitInDiff(List<Vector3Int> tiles, List<UnitBase> units, bool sharedSight = true)
     {
         foreach (UnitBase unit in units)
         {
-            if (tiles.Contains(new HexTileUtility.DjikstrasNode(unit.currentPosition)))
+            if (tiles.Contains(unit.currentPosition))
             {
-                return true;
+                if(VisionManager.visionManager.GetViewers(unit.currentPosition).Count == 1 || !sharedSight)
+                    return true;
             }
         }
         return false;
@@ -298,4 +378,10 @@ public class UnitBase : MonoBehaviour
             { UnitData.Element.machine, 0.75f }
         }}
     };
+
+    public bool Equals(UnitBase other)
+    {
+        if (other == null) return false;
+        return other.myId.Equals(myId);
+    }
 }

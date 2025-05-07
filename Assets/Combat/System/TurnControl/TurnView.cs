@@ -13,6 +13,8 @@ public class TurnView : MonoBehaviour
 
     public static float maxTime => MaxTime;
 
+    private List<PortraitMover> movers = new List<PortraitMover>();
+
     private void Awake()
     {
         width = getRect(transform).rect.width;
@@ -47,26 +49,33 @@ public class TurnView : MonoBehaviour
         return t1 + (maxTime - t2);
     }
 
-    public void Repaint(List<TimeNode<(UnitBase, GameObject)>> queue)
+    public void Repaint(List<TimeNode<UnitBase>> queue)
     {
         MaxTime = queue[^1].time;
         UpdateBenchies(maxTime/4);
         //int curTime;
-        foreach (TimeNode<(UnitBase, GameObject)> node in queue)
+        foreach (TimeNode<UnitBase> node in queue)
         {
-            (UnitBase, GameObject) tup = node.value;
-            if (tup.Item2 == null)
+            UnitBase tup = node.value;
+            PortraitMover portActual = null;
+            foreach (PortraitMover port in movers)
             {
-                tup.Item2 = Instantiate(unitPortraitPrefab, transform);
-                tup.Item2.GetComponent<Image>().sprite = tup.Item1.baseData.portrait;
-                timeToPosition(getRect(tup.Item2.transform), node.time);
-                tup.Item2.GetComponent<PortraitMover>().init(node.time, MaxTime);
-                node.value.Item2 = tup.Item2;
+                if (port.myUnit.Equals(tup))
+                {
+                    port.MovePortrait(node.time, MaxTime);
+                    portActual = port;
+                    break;
+                }
             }
-            else
-            {
-                tup.Item2.GetComponent<PortraitMover>().MovePortrait(node.time, MaxTime);
-            }
+
+            if (portActual != null) continue;
+            GameObject portObj = Instantiate(unitPortraitPrefab, transform);
+            portObj.GetComponent<Image>().sprite = tup.baseData.portrait;
+            timeToPosition(getRect(portObj.transform), node.time);
+            portActual = portObj.GetComponent<PortraitMover>();
+            portActual.myUnit = tup;
+            movers.Add(portActual);
+            portActual.init(node.time, MaxTime);
         }
     }
 

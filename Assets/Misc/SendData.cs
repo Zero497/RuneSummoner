@@ -11,6 +11,8 @@ public class SendData
 
     public List<Vector3Int> positionData = new List<Vector3Int>();
 
+    public List<float> floatData = new List<float>();
+
     public SendData(string str)
     {
         strData.Add(str);
