@@ -40,7 +40,7 @@ public class UnitData : ScriptableObject
     public float manaRegen;
     public float manaRegenPerLevel;
     
-    public float sightRadius;
+    public int sightRadius;
 
     public float speed;
 

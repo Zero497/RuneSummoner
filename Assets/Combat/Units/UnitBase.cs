@@ -47,7 +47,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 
     [NonSerialized]public float manaRegen;
     
-    [NonSerialized]public float sightRadius;
+    [NonSerialized]public int sightRadius;
 
     [NonSerialized]public float speed;
 

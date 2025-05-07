@@ -16,14 +16,14 @@ MonoBehaviour:
   myElement: 2
   myType: 2
   summonCost: 200
-  health: 220
+  health: 200
   healthPerLevel: 0
   initiative: 150
   abilityPower: 10
   abilityPowerPerLevel: 0
   magicalAttack: 5
   magicalAttackPerLevel: 0
-  physicalAttack: 20
+  physicalAttack: 15
   physicalAttackPerLevel: 0
   magicalDefence: 15
   magicalDefencePerLevel: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
   manaRegenPerLevel: 0
   sightRadius: 10
   speed: 8
-  stamina: 500
+  stamina: 200
   staminaPerLevel: 0
   staminaRegen: 40
   staminaRegenPerLevel: 0

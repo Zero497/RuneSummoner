@@ -135,6 +135,7 @@ public class MainCombatManager : MonoBehaviour
                 winCanv.SetActive(true);
             }
         }
+        VisionManager.visionManager.ConcealInRadius(unit.myId, unit.sightRadius, unit.currentPosition);
         TurnController.controller.RemoveFromQueue(unit);
     }
     
