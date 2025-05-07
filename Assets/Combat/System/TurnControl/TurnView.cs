@@ -49,6 +49,19 @@ public class TurnView : MonoBehaviour
         return t1 + (maxTime - t2);
     }
 
+    public void RemoveUnit(UnitBase unit)
+    {
+        foreach (PortraitMover port in movers)
+        {
+            if (port.myUnit.Equals(unit))
+            {
+                movers.Remove(port);
+                Destroy(port.gameObject);
+                return;
+            }
+        }
+    }
+
     public void Repaint(List<TimeNode<UnitBase>> queue)
     {
         MaxTime = queue[^1].time;

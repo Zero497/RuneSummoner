@@ -34,6 +34,7 @@ public class TurnController : MonoBehaviour
     public void RemoveFromQueue(UnitBase toRemove, bool repaint=true)
     {
         turnQueue.Remove(toRemove);
+        view.RemoveUnit(toRemove);
         if(repaint) TurnQueueRepaint();
     }
     
