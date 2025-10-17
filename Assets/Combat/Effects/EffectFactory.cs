@@ -40,6 +40,25 @@ public static class EffectFactory
             case "spikes":
                 effect = new Spikes();
                 break;
+            /*
+        Expects:
+            Unit 0: unit to apply to
+            Unit 1: unit applying effect
+            String 0: effect name
+            Float 0: stacks to apply
+     */
+            case "marked":
+                effect = new Marked();
+                break;
+            /*
+       Expects:
+           Unit 0: unit to apply to
+           String 0: effect name
+           Float 0: stacks to apply
+    */
+            case "evade":
+                effect = new Evade();
+                break;
             default:
                 return null;
         }

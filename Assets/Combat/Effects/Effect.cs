@@ -23,6 +23,8 @@ public abstract class Effect : IEquatable<Effect>
     public EventPriorityWrapper<Effect> onStackDecayed = new EventPriorityWrapper<Effect>();
 
     public EventPriorityWrapper<Effect, int> onStackAddedOrRemoved = new EventPriorityWrapper<Effect, int>();
+    
+    public EventPriorityWrapper<Effect> onEffectRemoved = new EventPriorityWrapper<Effect>();
 
     /*
         Expects:
@@ -45,6 +47,7 @@ public abstract class Effect : IEquatable<Effect>
     {
         source.RemoveEffect(this);
         TurnController.controller.RemoveFromQueue(myQueueNumber);
+        onEffectRemoved.Invoke(this);
     }
 
     public virtual void Decay()

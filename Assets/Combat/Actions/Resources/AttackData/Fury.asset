@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afe2d2501eaff9445b0f73882d88eb00, type: 3}
   m_Name: Fury
   m_EditorClassIdentifier: 
-  abilityName: 
+  abilityName: fury
   isFree: 0
+  isReaction: 0
   staminaCost: 0
   manaCost: 0
-  range: 0
+  range: 1
   aoeRange: 0
   targetType: 0
-  description: 
+  description: Attack [Level]+2 times with your basic attack
   damageType: 0
   element: 0
   damage: 0

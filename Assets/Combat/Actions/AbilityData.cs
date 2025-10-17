@@ -9,6 +9,8 @@ public class AbilityData : ScriptableObject
     public string abilityName;
     
     public bool isFree;
+
+    public bool isReaction;
     
     public float staminaCost;
 

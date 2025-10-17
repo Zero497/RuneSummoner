@@ -131,6 +131,18 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         TurnController.controller.nextEventStarting.AddListener(Regen);
     }
 
+    public PassiveAbility GetPassive(SendData data)
+    {
+        foreach (PassiveAbility passive in passiveAbilities)
+        {
+            if (passive.Equals(data))
+            {
+                return passive;
+            }
+        }
+        return null;
+    }
+
     public void Regen(float time, TurnController.TimeWrapper n)
     {
         myCombatStats.RegenStamina(time);

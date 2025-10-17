@@ -31,28 +31,6 @@ public class Attack : ActiveAbility
         return ret;
     }
 
-    
-
-    public Func<int, bool> getValidTargets()
-    {
-        switch (abilityData.targetType)
-        {
-            case AbilityData.TargetType.singleTargetEnemy:
-            case AbilityData.TargetType.multiTargetEnemy:
-            case AbilityData.TargetType.aoeEnemyOnly:
-                return i => i != source.myTeam;
-            case AbilityData.TargetType.singleTargetFriendly:
-            case AbilityData.TargetType.multiTargetFriendly:
-            case AbilityData.TargetType.aoeFriendlyOnly:
-                return i => i == source.myTeam;
-            case AbilityData.TargetType.singleTargetNeutral:
-            case AbilityData.TargetType.multiTargetNeutral:
-            case AbilityData.TargetType.aoeNeutral:
-                return i => true; 
-        }
-        return null;
-    }
-
     protected virtual bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position, float mod=1)
     {
         UnitBase unitAtPosition = MainCombatManager.manager.getUnitAtPosition(position);
@@ -110,7 +88,7 @@ public class Attack : ActiveAbility
             OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, (abilityData as AttackData).range, 1),"AttackOverlay");
             prepped = true;
             ClickManager.clickManager.SetAction(this);
-            return false;
+            return true;
         }
         ClickManager.clickManager.SetAction(null);
         prepped = false;

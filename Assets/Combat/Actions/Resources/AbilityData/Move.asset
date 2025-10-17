@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fbf90c2c2c494c4fa33013ffff5b419, type: 3}
   m_Name: Move
   m_EditorClassIdentifier: 
-  abilityName: 
-  isFree: 0
+  abilityName: Move
+  isFree: 1
+  isReaction: 0
   staminaCost: 0
   manaCost: 0
   range: 0
   aoeRange: 0
-  targetType: 0
+  targetType: 9
   description: 

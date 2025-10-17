@@ -26,6 +26,11 @@ public abstract class PassiveAbility : IEquatable<PassiveAbility>
        level = (int) data.floatData[0];
    }
 
+   public int GetLevel()
+   {
+       return level;
+   }
+
    /*
         Expects:
             String 0: name of passive ability
@@ -120,29 +125,98 @@ public abstract class PassiveAbility : IEquatable<PassiveAbility>
            case "skirmisher":
                ability = new Skirmisher();
                break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "observer":
+               ability = new Observer();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "farseer":
+               ability = new Farseer();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "diversion":
+               ability = new Diversion();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "debilitatingmark":
+               ability = new DebilitatingMark();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "defensiveattacks":
+               ability = new DefensiveAttacks();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "lastingmark":
+               ability = new LastingMark();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "evasive":
+               ability = new Evasive();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "exposingevade":
+               ability = new ExposingEvade();
+               break;
            default:
                return null;
-       }
-       foreach (PassiveAbility passive in data.unitData[0].passiveAbilities)
-       {
-           if (passive.Equals(ability))
-           {
-               passive.IncrementLevel();
-               return null;
-           }
        }
        ability.Initialize(data);
        return ability;
    }
 
-   public virtual void IncrementLevel()
+   /*
+        Expects:
+            String 0: name of passive ability
+     */
+   public virtual bool Equals(SendData data)
    {
-       level++;
+       if (data == null) return false;
+       return data.strData[0].Equals(abilityName);
    }
 
    public virtual bool Equals(PassiveAbility other)
    {
        if (other == null) return false;
-       return abilityName.Equals(abilityName);
+       return abilityName.Equals(other.abilityName);
    }
 }

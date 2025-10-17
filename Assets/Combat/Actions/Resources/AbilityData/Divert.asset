@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fbf90c2c2c494c4fa33013ffff5b419, type: 3}
-  m_Name: Sprint
+  m_Name: Divert
   m_EditorClassIdentifier: 
-  abilityName: Sprint
+  abilityName: Divert
   isFree: 1
-  isReaction: 0
+  isReaction: 1
   staminaCost: 200
   manaCost: 0
   range: 0
   aoeRange: 0
-  targetType: 9
-  description: Increases Speed this turn
+  targetType: 0
+  description: 

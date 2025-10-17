@@ -25,6 +25,8 @@ public class MainCombatManager : MonoBehaviour
     
     [NonSerialized]public List<UnitBase> allEnemy = new List<UnitBase>();
 
+    public EventPriorityWrapper<UnitBase> onUnitAddedToCombat = new EventPriorityWrapper<UnitBase>();
+
     private void Awake()
     {
         if (manager != null)
@@ -118,6 +120,7 @@ public class MainCombatManager : MonoBehaviour
             VisionManager.visionManager.UpdateEnemyVision(newBase);
         }
         TurnController.controller.AddToQueue(newBase, repaint);
+        onUnitAddedToCombat.Invoke(newBase);
         return pos;
     }
 
