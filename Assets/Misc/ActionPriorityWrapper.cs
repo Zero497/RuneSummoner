@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class ActionPriorityWrapper<T> : IComparable<ActionPriorityWrapper<T>>
 {
-    public int priority;
+    public int priority = 64;
     
     public UnityAction<T> action;
     
@@ -20,7 +20,7 @@ public class ActionPriorityWrapper<T> : IComparable<ActionPriorityWrapper<T>>
 
 public class ActionPriorityWrapper<T0, T1> : IComparable<ActionPriorityWrapper<T0, T1>>
 {
-    public int priority;
+    public int priority = 64;
     
     public UnityAction<T0, T1> action;
     
@@ -34,7 +34,7 @@ public class ActionPriorityWrapper<T0, T1> : IComparable<ActionPriorityWrapper<T
 
 public class ActionPriorityWrapper<T0, T1, T2> : IComparable<ActionPriorityWrapper<T0, T1, T2>>
 {
-    public int priority;
+    public int priority = 64;
     
     public UnityAction<T0, T1, T2> action;
     

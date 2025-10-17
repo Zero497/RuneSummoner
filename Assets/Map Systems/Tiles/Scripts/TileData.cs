@@ -12,6 +12,8 @@ public class TileData : ScriptableObject
     public bool isImpassable;
     //whether this terrain blocks line of sight
     public bool lineOfSightBlocking;
+
+    public float sightCost = 1;
     
     public string description;
 
@@ -22,6 +24,9 @@ public class TileData : ScriptableObject
             case 0:
                 if (isImpassable) return float.PositiveInfinity;
                 return moveCost;
+            case 1:
+                if (lineOfSightBlocking) return float.PositiveInfinity;
+                return sightCost;
             default:
                 return 1;
         }

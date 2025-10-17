@@ -30,7 +30,9 @@ public class Attack : ActiveAbility
         ClickManager.clickManager.SetAction(null);
         return ret;
     }
+
     
+
     public Func<int, bool> getValidTargets()
     {
         switch (abilityData.targetType)
@@ -64,19 +66,26 @@ public class Attack : ActiveAbility
 
     public void RunAttack(List<UnitBase> targets, float mod = 1)
     {
-        AttackMessageToTarget outgoingAttack = PrepareMessage(mod);
         foreach (UnitBase unit in targets)
         {
+            AttackMessageToTarget outgoingAttack = PrepareMessage(unit, mod);
             unit.ReceiveAttack(outgoingAttack);
         }
     }
 
-    private AttackMessageToTarget PrepareMessage(float mod=1)
+    protected virtual float ApplyAbilityPower(float damage)
     {
-        AttackMessageToTarget retval = new AttackMessageToTarget(abilityData as AttackData);
+        return damage * (1 + 0.05f * source.abilityPower);
+    }
+
+    private AttackMessageToTarget PrepareMessage(UnitBase target, float mod=1)
+    {
+        AttackMessageToTarget retval = new AttackMessageToTarget(abilityData as AttackData, this);
+        retval.source = source;
+        retval.target = target;
         if ((abilityData as AttackData).useUnitElement)
         {
-            retval.element = source.myElement;
+            retval.element = source.baseData.defaultDamageElement;
         }
         float mult = 1;
         if (retval.damageType == AttackData.DamageType.Magic)
@@ -87,6 +96,7 @@ public class Attack : ActiveAbility
         {
             mult += source.physicalAttack / 100;
         }
+        retval.damage = ApplyAbilityPower(retval.damage);
         retval.damage *= mult * mod;
         source.ModifyOutgoingAttack(retval);
         return retval;
@@ -126,27 +136,37 @@ public class Attack : ActiveAbility
     {
         id = sendData.strData[0];
         source = sendData.unitData[0];
-        abilityData = Resources.Load<AbilityData>("AttackData/"+sendData.strData[0]);
+        abilityData = Resources.Load<AbilityData>("AttackData/"+sendData.strData[1]);
+        level = (int)sendData.floatData[0];
     }
 
     public class AttackMessageToTarget
     {
-        public AbilityData MyAbilityData;
+        public UnitBase source;
+
+        public UnitBase target;
+
+        public Attack sourceAttack;
     
         public AttackData.DamageType damageType;
     
         public UnitData.Element element;
 
+        public float baseDamage;
+
         public float damage;
     
-        public Effect effectToApplyTarget;
+        public List<string> effectsToApplyTarget;
 
-        public AttackMessageToTarget(AttackData defaultData)
+        public List<int> stacksToApply;
+
+        public AttackMessageToTarget(AttackData defaultData, Attack att)
         {
             damageType = defaultData.damageType;
             element = defaultData.element;
+            baseDamage = defaultData.damage;
             damage = defaultData.damage;
-            effectToApplyTarget = Effect.GetEffect(defaultData.effectToApplyTarget);
+            sourceAttack = att;
         }
     }
 }

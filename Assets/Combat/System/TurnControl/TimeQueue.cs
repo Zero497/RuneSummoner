@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeQueue<T>
+public class TimeQueue<T> where T : IEquatable<T>
 {
     public List<TimeNode<T>> queue = new List<TimeNode<T>>();
 

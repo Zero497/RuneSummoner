@@ -23,6 +23,13 @@ public class VisionManager : MonoBehaviour
 
     private Dictionary<Vector3Int, HashSet<String>> revealedPositions = new Dictionary<Vector3Int, HashSet<String>>();
 
+    private Dictionary<Vector3Int, HashSet<String>> positionsKnownToEnemy =
+        new Dictionary<Vector3Int, HashSet<string>>();
+
+    public Dictionary<UnitBase, HashSet<String>> visibleEnemyUnits = new Dictionary<UnitBase, HashSet<String>>();
+
+    public Dictionary<UnitBase, HashSet<String>> visibleFriendlyUnits = new Dictionary<UnitBase, HashSet<String>>();
+
     private void Awake()
     {
         if(visionManager != null) Destroy(visionManager.gameObject);
@@ -75,37 +82,130 @@ public class VisionManager : MonoBehaviour
     }
 
     //reveal all tiles in a specified radius around a target
-    public void RevealInRadius(String viewerID, float sightRadius, Vector3Int center)
+    public void RevealInRadius(UnitBase unit, float sightRadius, Vector3Int center)
     {
         List<Vector3Int> revealTiles = DjikstrasSightCheck(center, sightRadius);
         foreach (Vector3Int tile in revealTiles)
         {
             if(!revealedPositions.ContainsKey(tile))
                 revealedPositions.Add(tile, new HashSet<string>());
-            revealedPositions[tile].Add(viewerID);
+            revealedPositions[tile].Add(unit.myId);
             RevealPosition(tile);
+            foreach (UnitBase eUnit in MainCombatManager.manager.allEnemy)
+            {
+                if (tile == eUnit.currentPosition)
+                {
+                    if (!visibleEnemyUnits.ContainsKey(eUnit))
+                    {
+                        visibleEnemyUnits.Add(eUnit, new HashSet<string>{unit.myId});
+                    }
+                    else
+                    {
+                        visibleEnemyUnits[eUnit].Add(unit.myId);
+                    }
+                    eUnit.myEvents.onPositionRevealed.Invoke(eUnit, unit);
+                }
+            }
         }
     }
 
-    public void UpdateVision(UnitBase unit)
+    public void UpdateEnemyVision(UnitBase unit)
     {
-        List<Vector3Int> rmvList = new List<Vector3Int>();
+        List<Vector3Int> posTemp = new List<Vector3Int>();
+        foreach (KeyValuePair<Vector3Int, HashSet<String>> kvp in positionsKnownToEnemy)
+        {
+            if (kvp.Value.Contains(unit.myId))
+            {
+                posTemp.Add(kvp.Key);
+            }
+        }
+
+        foreach (Vector3Int pos in posTemp)
+        {
+            positionsKnownToEnemy[pos].Remove(unit.myId);
+            foreach (UnitBase fUnit in MainCombatManager.manager.allFriendly)
+            {
+                if (visibleFriendlyUnits.ContainsKey(fUnit))
+                {
+                    if (pos == fUnit.currentPosition && visibleFriendlyUnits[fUnit].Contains(unit.myId))
+                    {
+                        if (visibleFriendlyUnits[fUnit].Count == 1)
+                        {
+                            visibleFriendlyUnits.Remove(fUnit);
+                            fUnit.myEvents.onPositionConcealed.Invoke(fUnit);
+                        }
+                        else
+                        {
+                            visibleFriendlyUnits[fUnit].Remove(unit.myId);
+                        }
+                            
+                    }
+                }
+            }
+        }
+        List<Vector3Int> revealTiles = DjikstrasSightCheck(unit.currentPosition,unit.baseData.sightRadius);
+        foreach (Vector3Int tile in revealTiles)
+        {
+            if(!positionsKnownToEnemy.ContainsKey(tile))
+                positionsKnownToEnemy.Add(tile, new HashSet<string>());
+            positionsKnownToEnemy[tile].Add(unit.myId);
+            foreach (UnitBase fUnit in MainCombatManager.manager.allFriendly)
+            {
+                if (tile == fUnit.currentPosition)
+                {
+                    if (!visibleFriendlyUnits.ContainsKey(fUnit))
+                    {
+                        visibleFriendlyUnits.Add(fUnit, new HashSet<string>{unit.myId});
+                    }
+                    else
+                    {
+                        visibleFriendlyUnits[fUnit].Add(unit.myId);
+                    }
+                    fUnit.myEvents.onPositionRevealed.Invoke(fUnit, unit);
+                }
+            }
+        }
+    }
+
+    public void UpdateFriendlyVision(UnitBase unit)
+    {
+        List<Vector3Int> posTemp = new List<Vector3Int>();
         foreach (KeyValuePair<Vector3Int, HashSet<String>> kvp in revealedPositions)
         {
             if (kvp.Value.Contains(unit.myId))
             {
-                rmvList.Add(kvp.Key);
+                posTemp.Add(kvp.Key);
             }
         }
-        foreach (Vector3Int tile in rmvList)
+
+        foreach (Vector3Int pos in posTemp)
         {
-            revealedPositions[tile].Remove(unit.myId);
-            if (revealedPositions[tile].Count == 0)
+            revealedPositions[pos].Remove(unit.myId);
+            if (revealedPositions[pos].Count == 0)
             {
-                ConcealPosition(tile);
+                ConcealPosition(pos);
+                revealedPositions.Remove(pos);
+            }
+            foreach (UnitBase eUnit in MainCombatManager.manager.allEnemy)
+            {
+                if (visibleEnemyUnits.ContainsKey(eUnit))
+                {
+                    if (pos == eUnit.currentPosition && visibleEnemyUnits[eUnit].Contains(unit.myId))
+                    {
+                        if (visibleEnemyUnits[eUnit].Count == 1)
+                        {
+                            visibleEnemyUnits.Remove(eUnit);
+                            eUnit.myEvents.onPositionConcealed.Invoke(eUnit);
+                        }
+                        else
+                        {
+                            visibleEnemyUnits[eUnit].Remove(unit.myId);
+                        }
+                    }
+                }
             }
         }
-        RevealInRadius(unit.myId, unit.baseData.sightRadius, unit.currentPosition);
+        RevealInRadius(unit, unit.baseData.sightRadius, unit.currentPosition);
     }
     
     public List<Vector3Int> DjikstrasSightCheck(Vector3Int start, float sightRadius, bool ignoreSightBlocking = false)

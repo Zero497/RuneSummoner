@@ -28,7 +28,6 @@ public static class MapGenerator
         //how this tile should be generated in this map
         public GenerationType genType;
         /*how common this tile should be in this map.
-        only applies for non-filler tiles
         frequency of cluster and solitary should be low. 
         for these two, frequency indicates the likelihood a
         cluster/solitary tile set spawns at each coordinate*/

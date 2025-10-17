@@ -25,4 +25,18 @@ public class AttackData : AbilityData
         Magic,
         True
     }
+
+    public static DamageType strToDType(string str)
+    {
+        str = str.ToLower();
+        switch (str)
+        {
+            case "physical":
+                return DamageType.Physical;
+            case "magical":
+                return DamageType.Magic;
+        }
+
+        return DamageType.True;
+    }
 }

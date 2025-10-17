@@ -113,7 +113,7 @@ public class ClickManager : MonoBehaviour
             {
                 if (clickPosition == curActor.currentPosition)
                 {
-                    return new Move();
+                    return curActor.myMovement;
                 }
             }
         }
@@ -124,7 +124,7 @@ public class ClickManager : MonoBehaviour
                 MoveController.mControl.InitMovement(curActor, false);
                 if (MoveController.mControl.IsValidMove(clickPosition))
                 {
-                    currentAction = new Move();
+                    currentAction = curActor.myMovement;
                     currentAction.RunAction(new SendData(clickPosition));
                 }
             }

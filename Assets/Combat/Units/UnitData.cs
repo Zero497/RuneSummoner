@@ -15,40 +15,30 @@ public class UnitData : ScriptableObject
     public float summonCost;
     
     public float health;
-    public float healthPerLevel;
     
     public int initiative;
     
     public float abilityPower;
-    public float abilityPowerPerLevel;
 
     public float magicalAttack;
-    public float magicalAttackPerLevel;
     
     public float physicalAttack;
-    public float physicalAttackPerLevel;
     
     public float magicalDefence;
-    public float magicalDefencePerLevel;
     
     public float physicalDefence;
-    public float physicalDefencePerLevel;
 
     public float mana;
-    public float manaPerLevel;
 
     public float manaRegen;
-    public float manaRegenPerLevel;
     
     public int sightRadius;
 
-    public float speed;
+    public int speed;
 
     public float stamina;
-    public float staminaPerLevel;
     
     public float staminaRegen;
-    public float staminaRegenPerLevel;
     
     public List<string> baseActiveAbilities;
     
@@ -57,13 +47,30 @@ public class UnitData : ScriptableObject
     public FSMNode defaultEntryState;
 
     public UpgradeTreeNode uniqueTree;
+
+    public Element defaultDamageElement;
     
     public enum Element
     {
         none,
-        beast,
-        human,
-        machine,
+        beastial,
+        humanoid,
+        construct,
+    }
+
+    public Element strToElement(string str)
+    {
+        str = str.ToLower();
+        switch (str)
+        {
+            case "beastial":
+                return Element.beastial;
+            case "humanoid":
+                return Element.humanoid;
+            case "construct":
+                return Element.construct;
+        }
+        return Element.none;
     }
 
     public enum CombatType

@@ -62,14 +62,15 @@ public class TurnView : MonoBehaviour
         }
     }
 
-    public void Repaint(List<TimeNode<UnitBase>> queue)
+    public void Repaint(List<TimeNode<TurnController.TimeWrapper>> queue)
     {
         MaxTime = queue[^1].time;
         UpdateBenchies(maxTime/4);
         //int curTime;
-        foreach (TimeNode<UnitBase> node in queue)
+        foreach (TimeNode<TurnController.TimeWrapper> node in queue)
         {
-            UnitBase tup = node.value;
+            if(node.value.unit == null) continue;
+            UnitBase tup = node.value.unit;
             PortraitMover portActual = null;
             foreach (PortraitMover port in movers)
             {

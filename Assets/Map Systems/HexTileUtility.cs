@@ -8,6 +8,11 @@ using UnityEngine.Tilemaps;
 
 public static class HexTileUtility
 {
+    public static bool AreAdjacent(Vector3Int pos1, Vector3Int pos2)
+    {
+        return GetAdjacentTiles(pos1).Contains(pos2);
+    }
+    
     public static Vector3Int GetNearestTile(Vector3 worldPosition, Tilemap map)
     {
         var cellBounds = map.cellBounds;
@@ -147,6 +152,7 @@ public static class HexTileUtility
         }
     }
     
+    //typeIndex = 0 for movement, 
     public static List<DjikstrasNode> DjikstrasGetTilesInRange(Tilemap map, Vector3Int start, float energy, int typeIndex, bool excludeOccupiedTiles = false)
     {
         if (!map.HasTile(start)) return new List<DjikstrasNode>();

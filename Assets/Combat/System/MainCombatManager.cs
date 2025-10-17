@@ -44,8 +44,11 @@ public class MainCombatManager : MonoBehaviour
         }
         for (int i = 0; i < abilities.Count; i++)
         {
-            AbilityButtons[i].gameObject.SetActive(true);
-            AbilityButtons[i].SetAbility(abilities[i]);
+            if (abilities[i] != null)
+            {
+                AbilityButtons[i].gameObject.SetActive(true);
+                AbilityButtons[i].SetAbility(abilities[i]);
+            }
         }
     }
 
@@ -58,13 +61,13 @@ public class MainCombatManager : MonoBehaviour
     public void StartCombat()
     {
         TurnController.controller.TurnQueueRepaint();
-        TurnController.controller.NextTurn();
+        TurnController.controller.NextEvent();
     }
 
     public void EndTurn()
     {
         hideAbilities();
-        TurnController.controller.NextTurn();
+        TurnController.controller.NextEvent();
     }
 
     private void hideAbilities()
@@ -105,13 +108,14 @@ public class MainCombatManager : MonoBehaviour
         if(team != 0) newBase.myAI = new FSM(newBase,newBase.baseData.defaultEntryState);
         if (isFriendly)
         {
-            VisionManager.visionManager.UpdateVision(newBase);
+            VisionManager.visionManager.UpdateFriendlyVision(newBase);
             allFriendly.Add(newBase);
         }
         else
         {
             allEnemy.Add(newBase);
-            newBase.ConcealMe(newBase.currentPosition);
+            newBase.ConcealMe(newBase);
+            VisionManager.visionManager.UpdateEnemyVision(newBase);
         }
         TurnController.controller.AddToQueue(newBase, repaint);
         return pos;
@@ -135,7 +139,7 @@ public class MainCombatManager : MonoBehaviour
                 winCanv.SetActive(true);
             }
         }
-        VisionManager.visionManager.ConcealInRadius(unit.myId, unit.sightRadius, unit.currentPosition);
+        VisionManager.visionManager.ConcealInRadius(unit.myId, Mathf.FloorToInt(unit.sightRadius), unit.currentPosition);
         TurnController.controller.RemoveFromQueue(unit);
     }
     

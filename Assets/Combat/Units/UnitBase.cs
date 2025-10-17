@@ -11,77 +11,60 @@ using UnityEngine.UI;
 
 public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 {
+    //Inspector assignments
     public UnitData baseData;
-
     public SpriteRenderer mySprite;
-
     public Image healthBar;
-
     public Image manaBar;
-    
     public Image stamBar;
 
-    [NonSerialized]public bool usedAbilityThisTurn;
-    
+    //stats
     [NonSerialized]public UnitData.Element myElement;
-    
+    [NonSerialized]public int level;
     [NonSerialized]public float summonCost;
 
-    [NonSerialized]public int level;
+    [NonSerialized] public UnitCombatStats myCombatStats;
+    public float health => myCombatStats.getHealth();
+    public float initiative => myCombatStats.getInitiative();
+    public float abilityPower => myCombatStats.getAbilityPower();
+    public float magicalAttack => myCombatStats.getMagicalAttack();
+    public float physicalAttack => myCombatStats.getPhysicalAttack();
+    public float magicalDefence => myCombatStats.getMagicalDefense();
+    public float physicalDefence => myCombatStats.getPhysicalDefense();
+    public float mana => myCombatStats.getMana();
+    public float manaRegen => myCombatStats.getManaRegen();
+    public float sightRadius => myCombatStats.getSightRadius();
+    public float speed => myCombatStats.getSpeed();
+    public float stamina => myCombatStats.getStamina();
+    public float staminaRegen => myCombatStats.getStaminaRegen();
     
-    [NonSerialized]public float health;
+    public float currentHealth => myCombatStats.getCurrentHealth();
+    public float currentMana => myCombatStats.getCurrentMana();
+    public float currentStamina => myCombatStats.getCurrentStamina();
     
-    [NonSerialized]public int initiative;
-    
-    [NonSerialized]public float abilityPower;
-
-    [NonSerialized]public float magicalAttack;
-    
-    [NonSerialized]public float physicalAttack;
-    
-    [NonSerialized]public float magicalDefence;
-    
-    [NonSerialized]public float physicalDefence;
-
-    [NonSerialized]public float mana;
-
-    [NonSerialized]public float manaRegen;
-    
-    [NonSerialized]public int sightRadius;
-
-    [NonSerialized]public float speed;
-
-    [NonSerialized]public float stamina;
-    
-    [NonSerialized]public float staminaRegen;
-    
+    //abilities and effects
     [NonSerialized]public List<ActiveAbility> activeAbilities = new List<ActiveAbility>();
-
-    [NonSerialized] public List<PassiveAbility> PassiveAbilities = new List<PassiveAbility>();
-
+    [NonSerialized]public List<PassiveAbility> passiveAbilities = new List<PassiveAbility>();
+    [NonSerialized] public List<Effect> activeEffects = new List<Effect>();
+    [NonSerialized] public Move myMovement;
+    
+    //tracking data
+    [NonSerialized]public bool usedAbilityThisTurn;
     [NonSerialized]public float moveRemaining;
-
     [NonSerialized]public Vector3Int currentPosition;
     
+    //identifying data
     [NonSerialized]public string myId;
-
     [NonSerialized]public bool isFriendly;
-    
     [NonSerialized]public int myTeam = 0;
 
+    //other
     [NonSerialized]public FSM myAI = null;
-
     [NonSerialized]public bool forceMove;
-    
-    [NonSerialized]public float currentHealth;
-    
-    [NonSerialized]public float currentMana;
-    
-    [NonSerialized]public float currentStamina;
-
-    public UnitEvents myEvents = new UnitEvents();
-    
     private bool initialized = false;
+    
+    //events
+    public UnitEvents myEvents = new UnitEvents();
 
     //number of seconds to reach destination (from 1 tile to another)
     private static float moveSpeed = 0.2f;
@@ -103,12 +86,6 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         Init(1, baseData);
         usedAbilityThisTurn = false;
         moveRemaining = speed;
-        Float stamToRegen = new Float(staminaRegen);
-        myEvents.modStamRegen.Invoke(this, stamToRegen);
-        currentStamina = Mathf.Min(stamina, currentStamina + stamToRegen.flt);
-        Float manaToRegen = new Float(manaRegen);
-        myEvents.modManaRegen.Invoke(this, manaToRegen);
-        currentMana = Mathf.Min(mana, currentMana + manaToRegen.flt);
         updateBars();
         myEvents.onTurnStarted.Invoke(this);
         if (myTeam != 0)
@@ -127,52 +104,49 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         if (initialized) return;
         baseData = inBaseData;
         level = inputlevel;
-        inputlevel -= 1;
         myElement = inBaseData.myElement;
         summonCost = inBaseData.summonCost;
-        health = inBaseData.health + inBaseData.healthPerLevel * inputlevel;
-        abilityPower = inBaseData.abilityPower + inBaseData.abilityPowerPerLevel * inputlevel;
-        magicalAttack = inBaseData.magicalAttack + inBaseData.magicalAttackPerLevel * inputlevel;
-        physicalAttack = inBaseData.physicalAttack + inBaseData.physicalAttackPerLevel * inputlevel;
-        magicalDefence = inBaseData.magicalDefence + inBaseData.magicalDefencePerLevel * inputlevel;
-        physicalDefence = inBaseData.physicalDefence + inBaseData.physicalDefencePerLevel * inputlevel;
-        mana = inBaseData.mana + inBaseData.manaPerLevel * inputlevel;
-        manaRegen = inBaseData.manaRegen + inBaseData.manaRegenPerLevel * inputlevel;
-        stamina = inBaseData.stamina + inBaseData.staminaPerLevel * inputlevel;
-        staminaRegen = inBaseData.staminaRegen + inBaseData.staminaRegenPerLevel * inputlevel;
-        initiative = inBaseData.initiative;
-        speed = inBaseData.speed;
-        sightRadius = inBaseData.sightRadius;
+        myCombatStats = new UnitCombatStats(inBaseData, inputlevel, myEvents, this);
+        myMovement = new Move();
+        SendData data = new SendData(this);
+        data.AddStr("move");
+        data.AddStr("move");
         foreach (string abilityID in inBaseData.baseActiveAbilities)
         {
             ActiveAbility newAbility = AbilityFactory.getActiveAbility(abilityID, this);
             activeAbilities.Add(newAbility);
         }
-        currentHealth = health;
-        currentMana = mana;
-        currentStamina = stamina;
         initialized = true;
         if (!isFriendly)
         {
-            VisionManager.visionManager.positionConcealed.AddListener(ConcealMe);
-            VisionManager.visionManager.positionRevealed.AddListener(RevealMe);
+            ActionPriorityWrapper<UnitBase> conceal = new ActionPriorityWrapper<UnitBase>();
+            conceal.priority = 32;
+            conceal.action = ConcealMe;
+            ActionPriorityWrapper<UnitBase, UnitBase> reveal = new ActionPriorityWrapper<UnitBase, UnitBase>();
+            reveal.priority = 32;
+            reveal.action = RevealMe;
+            myEvents.onPositionConcealed.Subscribe(conceal);
+            myEvents.onPositionRevealed.Subscribe(reveal);
         }
+        TurnController.controller.nextEventStarting.AddListener(Regen);
+    }
+
+    public void Regen(float time, TurnController.TimeWrapper n)
+    {
+        myCombatStats.RegenStamina(time);
+        myCombatStats.RegenMana(time);
     }
 
     private void OnDisable()
     {
-        if (!isFriendly)
-        {
-            VisionManager.visionManager.positionConcealed.RemoveListener(ConcealMe);
-            VisionManager.visionManager.positionRevealed.RemoveListener(RevealMe);
-        }
+        TurnController.controller.nextEventStarting.RemoveListener(Regen);
     }
 
     public bool PayCost(ActiveAbility ability, bool payNow = true)
     {
         if (ability.abilityData.staminaCost > 0)
         {
-            Float cost = new Float(ability.abilityData.staminaCost);
+            Float cost = ability.GetStaminaCost();
             myEvents.modStamCost.Invoke(this, ability, cost);
             if (cost.flt > currentStamina)
             {
@@ -181,14 +155,14 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 
             if (payNow)
             {
-                currentStamina -= cost.flt;
+                myCombatStats.AddCurrentStamina(-cost.flt);
                 myEvents.onPayStam.Invoke(this, cost);
             }
             
         }
         if (ability.abilityData.manaCost > 0)
         {
-            Float cost = new Float(ability.abilityData.manaCost);
+            Float cost = ability.GetManaCost();
             myEvents.modManaCost.Invoke(this, ability, cost);
             if (cost.flt > currentMana)
             {
@@ -197,7 +171,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 
             if (payNow)
             {
-                currentMana -= cost.flt;
+                myCombatStats.AddCurrentMana(-cost.flt);
                 myEvents.onPayMana.Invoke(this, cost);
             }
             
@@ -206,9 +180,27 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         return true;
     }
 
+    public void TakeDamage(AttackData.DamageType dtype, UnitData.Element element, float damage)
+    {
+        damage *= typeMatchups[myElement][element];
+        //TODO: effects for certain type matchups
+        if (dtype == AttackData.DamageType.Physical)
+        {
+            damage -= physicalDefence;
+        }
+        else if (dtype == AttackData.DamageType.Magic)
+        {
+            damage -= magicalDefence;
+        }
+        if (damage < 0)
+            damage = 0;
+        myCombatStats.AddCurrentHealth(damage);
+    }
+
     public void ReceiveAttack(Attack.AttackMessageToTarget attack)
     {
-        attack.damage *= typeMatchups[myElement][attack.element];
+        if(attack.element != UnitData.Element.none)
+            attack.damage *= typeMatchups[myElement][attack.element];
         //TODO: effects for certain type matchups
         myEvents.onAttacked.Invoke(this, attack);
         if (attack.damageType == AttackData.DamageType.Physical)
@@ -221,15 +213,69 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         }
         if (attack.damage < 0)
             attack.damage = 0;
-        currentHealth -= attack.damage;
+        myCombatStats.AddCurrentHealth(attack.damage);
+        if (attack.effectsToApplyTarget != null)
+        {
+            for(int i = 0; i<attack.effectsToApplyTarget.Count; i++)
+            {
+                activeEffects.Add(EffectFactory.GetEffect(attack.effectsToApplyTarget[i], this, attack.stacksToApply[i]));
+            }
+        }
         updateBars();
-        //TODO: apply effect on damage
-        myEvents.onTakeDamage.Invoke(this, attack.damage);
+        
+        
         if (currentHealth <= 0)
         {
             myEvents.onDeath.Invoke(this);
             Die();
         }
+    }
+
+    public void RemoveEffect(SendData data)
+    {
+        foreach (Effect effect in activeEffects)
+        {
+            if (effect.Equals(data))
+            {
+                effect.RemoveEffect();
+            }
+        }
+    }
+
+    public void RemoveEffect(Effect toRemove)
+    {
+        activeEffects.Remove(toRemove);
+    }
+
+    public Effect AddEffect(Effect effect)
+    {
+        foreach (Effect activeEffect in activeEffects)
+        {
+            if (activeEffect.MergeEffects(effect))
+            {
+                myEvents.onEffectApplied.Invoke(this, activeEffect, effect.getStacks());
+                return activeEffect;
+            }
+        }
+        myEvents.onEffectApplied.Invoke(this, effect, effect.getStacks()); 
+        activeEffects.Add(effect);
+        return effect;
+    }
+
+    public Effect AddEffect(SendData data)
+    {
+        foreach (Effect activeEffect in activeEffects)
+        {
+            if (activeEffect.MergeEffects(data))
+            {
+                myEvents.onEffectApplied.Invoke(this, activeEffect, (int) data.floatData[0]);
+                return activeEffect;
+            }
+        }
+        Effect newEffect = EffectFactory.GetEffect(data);
+        myEvents.onEffectApplied.Invoke(this, newEffect, (int) data.floatData[0]); 
+        activeEffects.Add(newEffect);
+        return newEffect;
     }
 
     public void ModifyOutgoingAttack(Attack.AttackMessageToTarget attack)
@@ -253,33 +299,28 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         return 0;
     }
 
-    public void RevealMe(Vector3Int position)
+    public void RevealMe(UnitBase me, UnitBase revealer)
     {
-        if (currentPosition.Equals(position))
-        {
-            mySprite.enabled = true;
-            mySprite.enabled = true;
-            healthBar.enabled = true;
-            manaBar.enabled = true;
-            stamBar.enabled = true;
-        }
+        mySprite.enabled = true;
+        mySprite.enabled = true;
+        healthBar.enabled = true;
+        manaBar.enabled = true;
+        stamBar.enabled = true;
     }
 
-    public void ConcealMe(Vector3Int position)
+    public void ConcealMe(UnitBase me)
     {
-        if (currentPosition.Equals(position))
-        {
-            mySprite.enabled = false;
-            healthBar.enabled = false;
-            manaBar.enabled = false;
-            stamBar.enabled = false;
-        }
+        mySprite.enabled = false;
+        healthBar.enabled = false;
+        manaBar.enabled = false;
+        stamBar.enabled = false;
     }
 
     public IEnumerator MoveUnit(HexTileUtility.DjikstrasNode target, Tilemap mainMap, UnityAction<bool> returnToCaller = null)
     {
         forceMove = false;
         List<Vector3Int> allInRange = VisionManager.visionManager.DjikstrasSightCheck(currentPosition, sightRadius);
+        myEvents.onMoveStart.Invoke(this, target);
         while (true)
         {
             HexTileUtility.DjikstrasNode next = getNext(target);
@@ -306,17 +347,10 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
             moveRemaining -= mainMap.GetTile<DataTile>(next.location).data.moveCost;
             currentPosition = next.location;
             if(isFriendly)
-                VisionManager.visionManager.UpdateVision(this);
+                VisionManager.visionManager.UpdateFriendlyVision(this);
             else
             {
-                if (VisionManager.visionManager.isRevealed(currentPosition))
-                {
-                    RevealMe(currentPosition);
-                }
-                else
-                {
-                    ConcealMe(currentPosition);
-                }
+                VisionManager.visionManager.UpdateEnemyVision(this);
             }
             List<Vector3Int> newInRange = VisionManager.visionManager.DjikstrasSightCheck(currentPosition, sightRadius);
             List<UnitBase> compList;
@@ -330,6 +364,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 
             allInRange = newInRange;
         }
+        myEvents.onMoveEnd.Invoke(this, target);
     }
 
     private bool UnitInDiff(List<Vector3Int> tiles, List<UnitBase> units, bool sharedSight = true)
@@ -359,23 +394,23 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
     
     private static Dictionary<UnitData.Element, Dictionary<UnitData.Element, float>> typeMatchups = new Dictionary<UnitData.Element, Dictionary<UnitData.Element, float>>
     {
-        {UnitData.Element.beast, new Dictionary<UnitData.Element, float>()
+        {UnitData.Element.beastial, new Dictionary<UnitData.Element, float>()
         {
-            { UnitData.Element.beast, 1.25f },
-            { UnitData.Element.human, 1.25f },
-            { UnitData.Element.machine, 1f }
+            { UnitData.Element.beastial, 1.25f },
+            { UnitData.Element.humanoid, 1.25f },
+            { UnitData.Element.construct, 1f }
         }},
-        {UnitData.Element.human, new Dictionary<UnitData.Element, float>()
+        {UnitData.Element.humanoid, new Dictionary<UnitData.Element, float>()
         {
-            { UnitData.Element.beast, 0.75f },
-            { UnitData.Element.human, 1.25f },
-            { UnitData.Element.machine, 1f }
+            { UnitData.Element.beastial, 0.75f },
+            { UnitData.Element.humanoid, 1.25f },
+            { UnitData.Element.construct, 1f }
         }},
-        {UnitData.Element.machine, new Dictionary<UnitData.Element, float>()
+        {UnitData.Element.construct, new Dictionary<UnitData.Element, float>()
         {
-            { UnitData.Element.beast, 0.75f },
-            { UnitData.Element.human, 1f },
-            { UnitData.Element.machine, 0.75f }
+            { UnitData.Element.beastial, 0.75f },
+            { UnitData.Element.humanoid, 1f },
+            { UnitData.Element.construct, 0.75f }
         }}
     };
 
