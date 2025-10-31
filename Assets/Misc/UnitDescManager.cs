@@ -64,8 +64,8 @@ public class UnitDescManager : MonoBehaviour
         {
             team.text = "Allegiance: Team "+target.myTeam;
         }
-        element.text = "Type: "+target.myElement.ToString();
-        combatType.text = "Specialization: "+target.baseData.myType.ToString();
+        element.text = "Type: "+target.MyUnitType.ToString();
+        combatType.text = "Specialization: "+target.baseData.myCombatType.ToString();
         level.text = "Level: "+target.level;
         health.text = "Health: "+target.currentHealth+"/"+target.health;
         mana.text = "Mana: "+target.currentMana+"/"+target.mana;

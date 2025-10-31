@@ -23,6 +23,14 @@ public class PhysMagStatChange : Effect
         base.Initialize(data);
         statToModify = data.strData[1];
         mod = data.floatData[1];
+        if (mod > 0)
+        {
+            isBuff = true;
+        }
+        else
+        {
+            isBuff = false;
+        }
         OnStacksChanged(stacks);
         myAction = new ActionPriorityWrapper<Effect, int>();
         myAction.priority = 4;
@@ -77,6 +85,19 @@ public class PhysMagStatChange : Effect
         return false;
     }
 
+    public override void AddStacks(int addStacks)
+    {
+        base.AddStacks(addStacks);
+        if(stacks == 0)
+            RemoveEffect();
+        else if (stacks < 0)
+        {
+            mod *= -1;
+            stacks *= -1;
+            isBuff = !isBuff;
+        }
+    }
+
     /*
         Expects:
             String 0: effect name
@@ -96,10 +117,6 @@ public class PhysMagStatChange : Effect
             {
                 AddStacks(-(int)data.floatData[0]);
             }
-            if(stacks == 0)
-                RemoveEffect();
-            else if (stacks < 0)
-                mod *= -1;
             return true;
         }
 
@@ -119,10 +136,6 @@ public class PhysMagStatChange : Effect
             {
                 AddStacks(-(int)effect.getStacks());
             }
-            if(stacks == 0)
-                RemoveEffect();
-            else if (stacks < 0)
-                mod *= -1;
             return true;
         }
 

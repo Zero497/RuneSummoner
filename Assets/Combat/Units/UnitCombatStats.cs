@@ -5,6 +5,7 @@ public class UnitCombatStats
     private UnitData baseStats;
     private UnitEvents myEvents;
     private UnitBase myUnit;
+    private StatGrades grades;
     private int level;
     
     private float health;
@@ -16,43 +17,75 @@ public class UnitCombatStats
     private float physicalDefense;
     private float mana;
     private float manaRegen;
-    private float sightRadius;
-    private float speed;
     private float stamina;
     private float staminaRegen;
+    private float sightRadius;
+    private float speed;
+    
     
     private float currentHealth;
     private float currentMana;
     private float currentStamina;
 
-    private EventPriorityWrapper<UnitBase, string, float> onStatChanged =
+    public EventPriorityWrapper<UnitBase, string, float> onStatChanged =
         new EventPriorityWrapper<UnitBase, string, float>(); 
 
-    public UnitCombatStats(UnitData inBaseData, int inputlevel, UnitEvents events, UnitBase myUnit)
+    public UnitCombatStats(UnitData inBaseData, UnitSimple unit, UnitEvents events, UnitBase myUnit)
     {
         myEvents = events;
         baseStats = inBaseData;
-        level = inputlevel;
-
-        float multLevel = (level - 1)*0.1f;
+        level = unit.level;
+        this.myUnit = myUnit;
+        grades = unit.statGrades;
         
-        health = inBaseData.health + inBaseData.health * multLevel;
-        abilityPower = inBaseData.abilityPower + inBaseData.abilityPower * multLevel;
-        magicalAttack = inBaseData.magicalAttack + inBaseData.magicalAttack * multLevel;
-        physicalAttack = inBaseData.physicalAttack + inBaseData.physicalAttack * multLevel;
-        magicalDefense = inBaseData.magicalDefence + inBaseData.magicalDefence * multLevel;
-        physicalDefense = inBaseData.physicalDefence + inBaseData.physicalDefence *multLevel;
-        mana = inBaseData.mana + inBaseData.mana * multLevel;
-        manaRegen = inBaseData.manaRegen + inBaseData.manaRegen * multLevel;
-        stamina = inBaseData.stamina + inBaseData.stamina * multLevel;
-        staminaRegen = inBaseData.staminaRegen + inBaseData.staminaRegen * multLevel;
-        initiative = inBaseData.initiative;
-        speed = inBaseData.speed;
-        sightRadius = inBaseData.sightRadius;
+        SetStatsByGradeAndLevel();
         
         currentHealth = health;
         currentMana = mana;
         currentStamina = stamina;
+    }
+
+    public float GetActualBase(float dataBase, UnitData.Grade grade)
+    {
+        float gradePercent = GradeToStatPercentage(grade);
+        return dataBase * gradePercent + dataBase * gradePercent * 0.1f * (level - 1);
+    }
+    
+    public void SetStatsByGradeAndLevel()
+    {
+        health = GetActualBase(baseStats.health, grades.healthGrade);
+        initiative = baseStats.initiative;
+        abilityPower = GetActualBase(baseStats.abilityPower, grades.abilityPowerGrade);
+        magicalAttack = GetActualBase(baseStats.magicalAttack, grades.magicalAttackGrade);
+        physicalAttack = GetActualBase(baseStats.physicalAttack, grades.physicalAttackGrade);
+        magicalDefense = GetActualBase(baseStats.magicalDefence, grades.magicalDefenseGrade);
+        mana = GetActualBase(baseStats.mana, grades.manaGrade);
+        manaRegen = GetActualBase(baseStats.manaRegen, grades.manaRegenGrade);
+        stamina = GetActualBase(baseStats.stamina, grades.stamainaGrade);
+        staminaRegen = GetActualBase(baseStats.staminaRegen, grades.staminaRegenGrade);
+        sightRadius = baseStats.sightRadius;
+        speed = baseStats.speed;
+    }
+
+    public float GradeToStatPercentage(UnitData.Grade grade)
+    {
+        switch (grade)
+        {
+            case UnitData.Grade.poor:
+                return 0.9f;
+            case UnitData.Grade.common:
+                return 0.95f;
+            case UnitData.Grade.normal:
+                return 1;
+            case UnitData.Grade.rare:
+                return 1.05f;
+            case UnitData.Grade.epic:
+                return 1.1f;
+            case UnitData.Grade.legendary:
+                return 1.15f;
+            default:
+                return 1;
+        }
     }
 
     public float GetStat(string statName, bool getBase = false)
@@ -159,61 +192,61 @@ public class UnitCombatStats
 
     public float getHealth(bool getBase = false)
     {
-        if(getBase) return baseStats.health + baseStats.health * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.health, grades.healthGrade);
         return health;
     }
     
     public float getAbilityPower(bool getBase = false)
     {
-        if(getBase) return baseStats.abilityPower + baseStats.abilityPower * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.abilityPower, grades.abilityPowerGrade);
         return abilityPower;
     }
 
     public float getMagicalAttack(bool getBase = false)
     {
-        if(getBase) return baseStats.magicalAttack + baseStats.magicalAttack * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.magicalAttack, grades.magicalAttackGrade);
         return magicalAttack;
     }
     
     public float getPhysicalAttack(bool getBase = false)
     {
-        if(getBase) return baseStats.physicalAttack + baseStats.physicalAttack * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.physicalAttack, grades.physicalAttackGrade);
         return physicalAttack;
     }
     
     public float getMagicalDefense(bool getBase = false)
     {
-        if(getBase) return baseStats.magicalDefence + baseStats.magicalDefence * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.magicalDefence, grades.magicalDefenseGrade);;
         return magicalDefense;
     }
     
     public float getPhysicalDefense(bool getBase = false)
     {
-        if(getBase) return baseStats.physicalDefence + baseStats.physicalDefence * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.physicalDefence, grades.physicalDefenseGrade);
         return physicalDefense;
     }
     
     public float getMana(bool getBase = false)
     {
-        if(getBase) return baseStats.mana + baseStats.mana * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.mana, grades.manaGrade);;
         return mana;
     }
     
     public float getManaRegen(bool getBase = false)
     {
-        if(getBase) return baseStats.manaRegen + baseStats.manaRegen * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.manaRegen, grades.manaRegenGrade);
         return manaRegen;
     }
     
     public float getStamina(bool getBase = false)
     {
-        if(getBase) return baseStats.stamina + baseStats.stamina * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.stamina, grades.stamainaGrade);
         return stamina;
     }
     
     public float getStaminaRegen(bool getBase = false)
     {
-        if(getBase) return baseStats.staminaRegen + baseStats.staminaRegen * 0.1f * level-1;
+        if(getBase) return GetActualBase(baseStats.staminaRegen, grades.staminaRegenGrade);
         return staminaRegen;
     }
     
@@ -255,6 +288,7 @@ public class UnitCombatStats
         Float stamToRegen = new Float(staminaRegen*timePassed);
         myEvents.modStamRegen.Invoke(myUnit, stamToRegen);
         currentStamina = Mathf.Min(stamina, currentStamina + stamToRegen.flt);
+        myEvents.onStamRegen.Invoke(myUnit, stamToRegen.flt);
     }
 
     public void RegenMana(float timePassed)
@@ -262,6 +296,7 @@ public class UnitCombatStats
         Float manaToRegen = new Float(manaRegen*timePassed);
         myEvents.modManaRegen.Invoke(myUnit, manaToRegen);
         currentMana = Mathf.Min(mana, currentMana + manaToRegen.flt);
+        myEvents.onManaRegen.Invoke(myUnit, manaToRegen.flt);
     }
 
     public void AddCurrentStamina(float add)
@@ -282,6 +317,16 @@ public class UnitCombatStats
         currentHealth = Mathf.Min(health, currentHealth);
         if(add < 0)
             myEvents.onTakeDamage.Invoke(myUnit, add);
+        else
+        {
+            myEvents.onRegainHealth.Invoke(myUnit, add);
+        }
+    }
+
+    //Special bypass, use with caution
+    public void SetCurrentHealth(float set)
+    {
+        currentHealth = set;
     }
 
     public void AddHealth(float add, bool addCurr = true)

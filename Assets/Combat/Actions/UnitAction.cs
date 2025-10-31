@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-public abstract class UnitAction
+public abstract class UnitAction : IEquatable<UnitAction>
 {
     public AbilityData abilityData;
     
@@ -44,6 +44,11 @@ public abstract class UnitAction
         return abilityData.range;
     }
 
+    public virtual float GetAOERange(bool getBase = false)
+    {
+        return abilityData.aoeRange;
+    }
+
     public virtual Float GetStaminaCost(bool getBase = false)
     {
         return new Float(abilityData.staminaCost);
@@ -65,5 +70,17 @@ public abstract class UnitAction
         id = sendData.strData[0];
         source = sendData.unitData[0];
         abilityData = Resources.Load<AbilityData>("AbilityData/"+sendData.strData[1]);
+    }
+
+    public bool Equals(UnitAction other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return id.Equals(other.id);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(abilityData, OnActionComplete, inProgress, prepped, id, source);
     }
 }

@@ -14,7 +14,7 @@ public abstract class Effect : IEquatable<Effect>
 
     protected int stacks;
 
-    protected int myQueueNumber;
+    protected int myQueueNumber = -1;
 
     private string _effectName;
 
@@ -25,6 +25,8 @@ public abstract class Effect : IEquatable<Effect>
     public EventPriorityWrapper<Effect, int> onStackAddedOrRemoved = new EventPriorityWrapper<Effect, int>();
     
     public EventPriorityWrapper<Effect> onEffectRemoved = new EventPriorityWrapper<Effect>();
+
+    public bool isBuff;
 
     /*
         Expects:
@@ -46,7 +48,8 @@ public abstract class Effect : IEquatable<Effect>
     public virtual void RemoveEffect()
     {
         source.RemoveEffect(this);
-        TurnController.controller.RemoveFromQueue(myQueueNumber);
+        if(myQueueNumber > 0)
+            TurnController.controller.RemoveFromQueue(myQueueNumber);
         onEffectRemoved.Invoke(this);
     }
 
@@ -103,11 +106,11 @@ public abstract class Effect : IEquatable<Effect>
         return false;
     }
 
-    public virtual void AddStacks(int stacks)
+    public virtual void AddStacks(int addStacks)
     {
-        this.stacks += stacks;
-        onStackAddedOrRemoved.Invoke(this, stacks);
-        if (this.stacks <= 0)
+        stacks += addStacks;
+        onStackAddedOrRemoved.Invoke(this, addStacks);
+        if (stacks <= 0)
         {
             RemoveEffect();
         }
@@ -127,5 +130,10 @@ public abstract class Effect : IEquatable<Effect>
     {
         if (data == null) return false;
         return data.strData[0].Equals(effectName);
+    }
+
+    public UnitBase GetSource()
+    {
+        return source;
     }
 }

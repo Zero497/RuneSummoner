@@ -70,7 +70,7 @@ public class Spikes : Effect
     {
         if (HexTileUtility.AreAdjacent(myUnit.currentPosition, attack.source.currentPosition))
         {
-            attack.source.TakeDamage((AttackData.DamageType) dtype, (UnitData.Element) element, stacks);
+            attack.source.TakeDamage((AttackData.DamageType) dtype, (AttackData.Element) element, stacks);
         }
     }
 }

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Physical Melee Attack
   isFree: 0
+  isReaction: 0
   staminaCost: 50
   manaCost: 0
   range: 1
@@ -21,9 +22,11 @@ MonoBehaviour:
   targetType: 0
   description: Basic Physical Melee Attack
   damageType: 0
-  element: 0
-  damage: 50
-  effectToApplySelf: 
-  effectToApplyTarget: 
+  damageElement: 0
+  damage: 30
+  effectsToApplySelf: []
+  baseStacksToApplyToSelf: 
+  effectsToApplyTarget: []
+  baseStacksToApplyToTarget: 
   useUnitElement: 1
   useWeaponElement: 0

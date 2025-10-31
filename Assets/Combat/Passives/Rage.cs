@@ -37,6 +37,12 @@ public class Rage : PassiveAbility
             magAUp.AddStr("magicalattack");
             magAUp.AddFloat(1);
             myUnit.RemoveEffect(magAUp);
+            if (source.GetPassive(new SendData("rageboost")) != null)
+            {
+                SendData apUp = new SendData("apup");
+                apUp.AddFloat(1);
+                myUnit.RemoveEffect(apUp);
+            }
         }
         else
         {
@@ -59,5 +65,13 @@ public class Rage : PassiveAbility
         magAUp.AddFloat(5*level);
         magAUp.AddFloat(1);
         myUnit.AddEffect(magAUp);
+        PassiveAbility rb = source.GetPassive(new SendData("rageboost"));
+        if (rb != null)
+        {
+            SendData apUp = new SendData("apup");
+            apUp.AddFloat(2*rb.GetLevel());
+            apUp.AddFloat(1);
+            myUnit.AddEffect(apUp);
+        }
     }
 }

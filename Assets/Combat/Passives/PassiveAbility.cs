@@ -197,6 +197,105 @@ public abstract class PassiveAbility : IEquatable<PassiveAbility>
            case "exposingevade":
                ability = new ExposingEvade();
                break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "mechanical":
+               ability = new Mechanical();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "clockworkstrikes":
+               ability = new ClockworkStrikes();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "clockworkdefenses":
+               ability = new ClockworkDefenses();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "laststand":
+               ability = new LastStand();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "guardian":
+               ability = new Guardian();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "tauntextension":
+               ability = new TauntExtension();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "hyperadapted":
+               ability = new HyperAdapted();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "rageboost":
+               ability = new RageBoost();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "berserker":
+               ability = new Berserker();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "entrenched":
+               ability = new Entrenched();
+               break;
+           /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+           case "lumbering":
+               ability = new Lumbering();
+               break;
            default:
                return null;
        }

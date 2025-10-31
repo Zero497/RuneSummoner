@@ -20,6 +20,11 @@ public class Attack : ActiveAbility
             case AbilityData.TargetType.singleTargetNeutral:
                 ret = RunSingleTarget(getValidTargets(), sentData.positionData[0], mod);
                 break;
+            case AbilityData.TargetType.aoeNeutral:
+            case AbilityData.TargetType.aoeEnemyOnly:
+            case AbilityData.TargetType.aoeFriendlyOnly:
+                ret = RunAOE(getValidTargets(), sentData.positionData[0], mod);
+                break;
         }
         if (ret)
         {
@@ -29,6 +34,27 @@ public class Attack : ActiveAbility
         OverlayManager.instance.ClearOverlays();
         ClickManager.clickManager.SetAction(null);
         return ret;
+    }
+
+    protected virtual bool RunAOE(Func<int, bool> validTarget, Vector3Int position, float mod = 1)
+    {
+        List<UnitBase> targets = new List<UnitBase>();
+        foreach (UnitBase unit in MainCombatManager.manager.allEnemy)
+        {
+            if (validTarget(unit.myTeam) && HexTileUtility.GetTileDistance(position, unit.currentPosition) < GetAOERange())
+            {
+                targets.Add(unit);
+            }
+        }
+        foreach (UnitBase unit in MainCombatManager.manager.allFriendly)
+        {
+            if (validTarget(unit.myTeam) && HexTileUtility.GetTileDistance(position, unit.currentPosition) < GetAOERange())
+            {
+                targets.Add(unit);
+            }
+        }
+        RunAttack(targets, mod);
+        return targets.Count > 0;
     }
 
     protected virtual bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position, float mod=1)
@@ -49,21 +75,36 @@ public class Attack : ActiveAbility
             AttackMessageToTarget outgoingAttack = PrepareMessage(unit, mod);
             unit.ReceiveAttack(outgoingAttack);
         }
+        ApplyEffectsToSelf();
     }
 
-    protected virtual float ApplyAbilityPower(float damage)
+    protected virtual void ApplyEffectsToSelf()
     {
-        return damage * (1 + 0.05f * source.abilityPower);
+        AttackData myAData = abilityData as AttackData;
+        if (myAData.effectsToApplySelf != null)
+        {
+            for (int i = 0; i < myAData.effectsToApplySelf.Count; i++)
+            {
+                SendData data = new SendData(myAData.effectsToApplySelf[i]);
+                data.AddFloat(myAData.baseStacksToApplyToSelf[i]);
+                source.AddEffect(data);
+            }
+        }
     }
 
-    private AttackMessageToTarget PrepareMessage(UnitBase target, float mod=1)
+    protected virtual float AbilityPowerBonus(float damage)
+    {
+        return damage * (0.05f * source.abilityPower);
+    }
+
+    protected virtual AttackMessageToTarget PrepareMessage(UnitBase target, float mod=1)
     {
         AttackMessageToTarget retval = new AttackMessageToTarget(abilityData as AttackData, this);
         retval.source = source;
         retval.target = target;
         if ((abilityData as AttackData).useUnitElement)
         {
-            retval.element = source.baseData.defaultDamageElement;
+            retval.damageElement = source.baseData.DefaultDamageElement;
         }
         float mult = 1;
         if (retval.damageType == AttackData.DamageType.Magic)
@@ -74,7 +115,10 @@ public class Attack : ActiveAbility
         {
             mult += source.physicalAttack / 100;
         }
-        retval.damage = ApplyAbilityPower(retval.damage);
+        float abilityPowerBonus = AbilityPowerBonus(retval.baseDamage);
+        retval.baseDamage += abilityPowerBonus;
+        retval.damage += abilityPowerBonus;
+        retval.baseDamage *= mult * mod;
         retval.damage *= mult * mod;
         source.ModifyOutgoingAttack(retval);
         return retval;
@@ -85,7 +129,7 @@ public class Attack : ActiveAbility
         OverlayManager.instance.ClearOverlays();
         if (!prepped)
         {
-            OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, (abilityData as AttackData).range, 1),"AttackOverlay");
+            OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, GetRange(), 1),"AttackOverlay");
             prepped = true;
             ClickManager.clickManager.SetAction(this);
             return true;
@@ -128,7 +172,7 @@ public class Attack : ActiveAbility
     
         public AttackData.DamageType damageType;
     
-        public UnitData.Element element;
+        public AttackData.Element damageElement;
 
         public float baseDamage;
 
@@ -141,9 +185,11 @@ public class Attack : ActiveAbility
         public AttackMessageToTarget(AttackData defaultData, Attack att)
         {
             damageType = defaultData.damageType;
-            element = defaultData.element;
+            damageElement = defaultData.damageElement;
             baseDamage = defaultData.damage;
             damage = defaultData.damage;
+            effectsToApplyTarget = new List<string>(defaultData.effectsToApplyTarget);
+            stacksToApply = new List<int>(defaultData.baseStacksToApplyToTarget);
             sourceAttack = att;
         }
     }

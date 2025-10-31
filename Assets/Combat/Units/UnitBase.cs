@@ -19,7 +19,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
     public Image stamBar;
 
     //stats
-    [NonSerialized]public UnitData.Element myElement;
+    [NonSerialized]public UnitData.UnitType MyUnitType;
     [NonSerialized]public int level;
     [NonSerialized]public float summonCost;
 
@@ -57,9 +57,12 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
     [NonSerialized]public string myId;
     [NonSerialized]public bool isFriendly;
     [NonSerialized]public int myTeam = 0;
+    
+    //AI
+    [NonSerialized]public FSM myAI = null;
+    [NonSerialized]public Dictionary<UnitBase, float> threatDict;
 
     //other
-    [NonSerialized]public FSM myAI = null;
     [NonSerialized]public bool forceMove;
     private bool initialized = false;
     
@@ -69,11 +72,6 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
     //number of seconds to reach destination (from 1 tile to another)
     private static float moveSpeed = 0.2f;
 
-    private void Start()
-    {
-        Init(1, baseData);
-    }
-
     private void updateBars()
     {
         healthBar.fillAmount = (currentHealth / health);
@@ -82,8 +80,14 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
     }
 
     public void TurnStarted()
-    { 
-        Init(1, baseData);
+    {
+        if (!initialized)
+        {
+            Debug.Log("Uninitialized unit attempted to start turn!");
+            Destroy(gameObject);
+            TurnController.controller.NextEvent();
+            return;
+        }
         usedAbilityThisTurn = false;
         moveRemaining = speed;
         updateBars();
@@ -98,23 +102,42 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         }
     }
 
-    public void Init(int inputlevel, UnitData inBaseData=null /*, TODO: EquipmentData */)
+    public int CompareThreat(UnitBase u1, UnitBase u2)
+    {
+        if (isFriendly) return 2;
+        if (!threatDict.ContainsKey(u1))
+        {
+            if (!threatDict.ContainsKey(u2)) return 0;
+            return -1;
+        }
+        if (!threatDict.ContainsKey(u2)) return 1;
+        return threatDict[u1].CompareTo(threatDict[u2]);
+    }
+
+    public void Init(UnitSimple unit, UnitData inBaseData=null /*, TODO: EquipmentData */)
     {
         if (inBaseData == null) inBaseData = baseData;
         if (initialized) return;
         baseData = inBaseData;
-        level = inputlevel;
-        myElement = inBaseData.myElement;
+        level = unit.level;
+        MyUnitType = inBaseData.myUnitType;
         summonCost = inBaseData.summonCost;
-        myCombatStats = new UnitCombatStats(inBaseData, inputlevel, myEvents, this);
+        myCombatStats = new UnitCombatStats(inBaseData, unit, myEvents, this);
         myMovement = new Move();
         SendData data = new SendData(this);
-        data.AddStr("move");
-        data.AddStr("move");
+        data.AddFloat(1);
+        data.AddStr("");
         foreach (string abilityID in inBaseData.baseActiveAbilities)
         {
-            ActiveAbility newAbility = AbilityFactory.getActiveAbility(abilityID, this);
+            data.strData[0] = abilityID;
+            ActiveAbility newAbility = ActiveAbility.GetActiveAbility(data);
             activeAbilities.Add(newAbility);
+        }
+        foreach (string abilityID in inBaseData.basePassiveAbilities)
+        {
+            data.strData[0] = abilityID;
+            PassiveAbility newAbility = PassiveAbility.GetPassive(data);
+            passiveAbilities.Add(newAbility);
         }
         initialized = true;
         if (!isFriendly)
@@ -127,8 +150,13 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
             reveal.action = RevealMe;
             myEvents.onPositionConcealed.Subscribe(conceal);
             myEvents.onPositionRevealed.Subscribe(reveal);
+            threatDict = new Dictionary<UnitBase, float>();
         }
         TurnController.controller.nextEventStarting.AddListener(Regen);
+        if (!isFriendly)
+        {
+            TurnController.controller.nextEventStarting.AddListener(ReduceThreat);
+        }
     }
 
     public PassiveAbility GetPassive(SendData data)
@@ -143,6 +171,16 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         return null;
     }
 
+    private void ReduceThreat(float time, TurnController.TimeWrapper n)
+    {
+        foreach (UnitBase key in threatDict.Keys)
+        {
+            threatDict[key] -= time * 0.4f;
+            if (threatDict[key] < 0)
+                threatDict[key] = 0;
+        }
+    }
+
     public void Regen(float time, TurnController.TimeWrapper n)
     {
         myCombatStats.RegenStamina(time);
@@ -154,12 +192,41 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         TurnController.controller.nextEventStarting.RemoveListener(Regen);
     }
 
+    public bool PayCost(float cost, bool isStaminaCost, bool payNow = true)
+    {
+        Float finalCost = new Float(cost);
+        if (isStaminaCost)
+        {
+            myEvents.modStamCost.Invoke(this, cost, finalCost);
+            if (finalCost.flt > currentStamina)
+                return false;
+            if (payNow)
+            {
+                myCombatStats.AddCurrentStamina(-finalCost.flt);
+                myEvents.onPayStam.Invoke(this, finalCost);
+            }
+        }
+        else
+        {
+            myEvents.modManaCost.Invoke(this, cost, finalCost);
+            if (finalCost.flt > currentMana)
+                return false;
+            if (payNow)
+            {
+                myCombatStats.AddCurrentMana(-finalCost.flt);
+                myEvents.onPayMana.Invoke(this, finalCost);
+            }
+        }
+        if(payNow) updateBars();
+        return true;
+    }
+
     public bool PayCost(ActiveAbility ability, bool payNow = true)
     {
         if (ability.abilityData.staminaCost > 0)
         {
             Float cost = ability.GetStaminaCost();
-            myEvents.modStamCost.Invoke(this, ability, cost);
+            myEvents.modStamCost.Invoke(this, ability.GetStaminaCost().flt, cost);
             if (cost.flt > currentStamina)
             {
                 return false;
@@ -175,7 +242,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         if (ability.abilityData.manaCost > 0)
         {
             Float cost = ability.GetManaCost();
-            myEvents.modManaCost.Invoke(this, ability, cost);
+            myEvents.modManaCost.Invoke(this, ability.GetManaCost().flt, cost);
             if (cost.flt > currentMana)
             {
                 return false;
@@ -192,29 +259,32 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         return true;
     }
 
-    public void TakeDamage(AttackData.DamageType dtype, UnitData.Element element, float damage)
+    public void TakeDamage(AttackData.DamageType dtype, AttackData.Element dElement, float damage)
     {
-        damage *= typeMatchups[myElement][element];
+        Float finalDamage = new Float(damage);
+        myEvents.modifyIncomingDamageBeforeDef.Invoke(this, finalDamage.flt, finalDamage);
+        finalDamage.flt *= typeMatchups[MyUnitType][dElement];
         //TODO: effects for certain type matchups
         if (dtype == AttackData.DamageType.Physical)
         {
-            damage -= physicalDefence;
+            finalDamage.flt -= physicalDefence;
         }
         else if (dtype == AttackData.DamageType.Magic)
         {
-            damage -= magicalDefence;
+            finalDamage.flt -= magicalDefence;
         }
-        if (damage < 0)
-            damage = 0;
-        myCombatStats.AddCurrentHealth(damage);
+        myEvents.modifyIncomingDamageAfterDef.Invoke(this, finalDamage.flt, finalDamage);
+        if (finalDamage.flt < 0)
+            finalDamage.flt = 0;
+        myCombatStats.AddCurrentHealth(-finalDamage.flt);
     }
 
     public void ReceiveAttack(Attack.AttackMessageToTarget attack)
     {
-        if(attack.element != UnitData.Element.none)
-            attack.damage *= typeMatchups[myElement][attack.element];
-        //TODO: effects for certain type matchups
         myEvents.onAttacked.Invoke(this, attack);
+        if(attack.damageElement != AttackData.Element.neutral)
+            attack.damage *= typeMatchups[MyUnitType][attack.damageElement];
+        //TODO: effects for certain type matchups
         if (attack.damageType == AttackData.DamageType.Physical)
         {
             attack.damage -= physicalDefence;
@@ -225,12 +295,23 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         }
         if (attack.damage < 0)
             attack.damage = 0;
+        if (!isFriendly)
+        {
+            if (threatDict.ContainsKey(attack.source))
+            {
+                threatDict[attack.source] += attack.damage;
+            }
+            else
+            {
+                threatDict.Add(attack.source, attack.damage);
+            }
+        }
         myCombatStats.AddCurrentHealth(attack.damage);
         if (attack.effectsToApplyTarget != null)
         {
             for(int i = 0; i<attack.effectsToApplyTarget.Count; i++)
             {
-                activeEffects.Add(EffectFactory.GetEffect(attack.effectsToApplyTarget[i], this, attack.stacksToApply[i]));
+                AddEffect(EffectFactory.GetEffect(attack.effectsToApplyTarget[i], this, attack.stacksToApply[i]));
             }
         }
         updateBars();
@@ -238,7 +319,6 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         
         if (currentHealth <= 0)
         {
-            myEvents.onDeath.Invoke(this);
             Die();
         }
     }
@@ -254,13 +334,25 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         }
     }
 
+    //called by effects only
     public void RemoveEffect(Effect toRemove)
     {
-        activeEffects.Remove(toRemove);
+        if (activeEffects.Remove(toRemove))
+        {
+            myEvents.onEffectRemoved.Invoke(this, toRemove);
+        }
+        
     }
 
     public Effect AddEffect(Effect effect)
     {
+        if (!effect.GetSource().Equals(this))
+        {
+            Debug.Log("attempted to send effect to unit with bad source");
+            return null;
+        }
+        myEvents.modifyIncomingEffect.Invoke(this, effect, effect.getStacks());
+        if (effect.getStacks() == 0) return effect;
         foreach (Effect activeEffect in activeEffects)
         {
             if (activeEffect.MergeEffects(effect))
@@ -276,6 +368,14 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 
     public Effect AddEffect(SendData data)
     {
+        if (data.unitData.Count > 0)
+        {
+            data.unitData[0] = this;
+        }
+        else
+        {
+            data.AddUnit(this);
+        }
         foreach (Effect activeEffect in activeEffects)
         {
             if (activeEffect.MergeEffects(data))
@@ -297,8 +397,20 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 
     public void Die()
     {
-        MainCombatManager.manager.registerUnitDead(this);
-        Destroy(gameObject);
+        LastStand ls = GetPassive(new SendData("laststand")) as LastStand;
+        if (ls != null && ls.HasUsesRemaining())
+        {
+            ls.ReplaceDeath();
+        }
+        else
+        {
+            myEvents.onDeath.Invoke(this);
+            TurnController.controller.nextEventStarting.RemoveListener(Regen);
+            if(!isFriendly)
+                TurnController.controller.nextEventStarting.RemoveListener(ReduceThreat);
+            MainCombatManager.manager.registerUnitDead(this);
+            Destroy(gameObject);
+        }
     }
     
     public static int CompareByInitiative(UnitBase item1, UnitBase item2)
@@ -404,25 +516,40 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         return ret;
     }
     
-    private static Dictionary<UnitData.Element, Dictionary<UnitData.Element, float>> typeMatchups = new Dictionary<UnitData.Element, Dictionary<UnitData.Element, float>>
+    private static Dictionary<UnitData.UnitType, Dictionary<AttackData.Element, float>> typeMatchups = new Dictionary<UnitData.UnitType, Dictionary<AttackData.Element, float>>
     {
-        {UnitData.Element.beastial, new Dictionary<UnitData.Element, float>()
+        {UnitData.UnitType.beastial, new Dictionary<AttackData.Element, float>()
         {
-            { UnitData.Element.beastial, 1.25f },
-            { UnitData.Element.humanoid, 1.25f },
-            { UnitData.Element.construct, 1f }
+            { AttackData.Element.neutral, 1f },
+            { AttackData.Element.aero, 1f },
+            { AttackData.Element.aqua, 1f },
+            { AttackData.Element.decay, 1f },
+            { AttackData.Element.electro, 1f },
+            { AttackData.Element.poison, 1f },
+            { AttackData.Element.pyro, 1f },
+            { AttackData.Element.terra, 1f }
         }},
-        {UnitData.Element.humanoid, new Dictionary<UnitData.Element, float>()
+        {UnitData.UnitType.humanoid, new Dictionary<AttackData.Element, float>()
         {
-            { UnitData.Element.beastial, 0.75f },
-            { UnitData.Element.humanoid, 1.25f },
-            { UnitData.Element.construct, 1f }
+            { AttackData.Element.neutral, 1f },
+            { AttackData.Element.aero, 1f },
+            { AttackData.Element.aqua, 1f },
+            { AttackData.Element.decay, 1f },
+            { AttackData.Element.electro, 1f },
+            { AttackData.Element.poison, 1f },
+            { AttackData.Element.pyro, 1f },
+            { AttackData.Element.terra, 1f }
         }},
-        {UnitData.Element.construct, new Dictionary<UnitData.Element, float>()
+        {UnitData.UnitType.construct, new Dictionary<AttackData.Element, float>()
         {
-            { UnitData.Element.beastial, 0.75f },
-            { UnitData.Element.humanoid, 1f },
-            { UnitData.Element.construct, 0.75f }
+            { AttackData.Element.neutral, 1f },
+            { AttackData.Element.aero, 1f },
+            { AttackData.Element.aqua, 1f },
+            { AttackData.Element.decay, 1f },
+            { AttackData.Element.electro, 1f },
+            { AttackData.Element.poison, 1f },
+            { AttackData.Element.pyro, 1f },
+            { AttackData.Element.terra, 1f }
         }}
     };
 

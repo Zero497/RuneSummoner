@@ -18,6 +18,8 @@ public class MainCombatManager : MonoBehaviour
     public GameObject winCanv;
 
     public GameObject loseCanv;
+
+    public GameObject blankUnitPrefab;
     
     private List<AbilityButton> AbilityButtons = new List<AbilityButton>();
     
@@ -79,11 +81,14 @@ public class MainCombatManager : MonoBehaviour
             abilityButton.gameObject.SetActive(false);
         }
     }
-
-    public Vector3Int CreateUnit(GameObject toCreate, Vector3Int pos, string id, bool repaint = true, bool isFriendly = true, int team = 0)
+    
+    public Vector3Int CreateUnit(UnitSimple simple, Vector3Int pos, string id, bool repaint = true, bool isFriendly = true, int team = 0)
     {
-        GameObject newUnit = Instantiate(toCreate);
+        UnitData data = UnitData.GetUnitData(simple.name);
+        GameObject newUnit = Instantiate(blankUnitPrefab);
         UnitBase newBase = newUnit.GetComponent<UnitBase>();
+        newUnit.GetComponent<SpriteRenderer>().sprite = data.UnitSprite;
+        newUnit.transform.position = mainMap.GetCellCenterWorld(pos);
         int sanityCheck = 0;
         while (!isValidPlacement(pos))
         {
@@ -99,14 +104,17 @@ public class MainCombatManager : MonoBehaviour
             if (isValidPlacement(pos)) break;
             pos = adj[Random.Range(0, adj.Count)];
             sanityCheck++;
-            if (sanityCheck > 20) break;
+            if (sanityCheck > 20)
+            {
+                Debug.Log("Unit placement failed!");
+                break;
+            }
         }
-        newUnit.transform.position = mainMap.GetCellCenterWorld(pos);
         newBase.currentPosition = pos;
         newBase.myId = id;
         newBase.isFriendly = isFriendly;
         newBase.myTeam = team;
-        newBase.Init(1);
+        newBase.Init(simple, data);
         if(team != 0) newBase.myAI = new FSM(newBase,newBase.baseData.defaultEntryState);
         if (isFriendly)
         {

@@ -23,7 +23,7 @@ public class Adaptable : PassiveAbility
         resData.AddStr("resistant");
         resData.AddFloat(4*level);
         resData.AddFloat(-1);
-        resData.AddFloat((int) attack.element);
+        resData.AddFloat((int) attack.damageElement);
         myUnit.AddEffect(resData);
     }
 }

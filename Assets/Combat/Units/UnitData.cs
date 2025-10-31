@@ -8,9 +8,9 @@ public class UnitData : ScriptableObject
 {
     public string unitDescription;
     
-    public Element myElement;
+    public UnitType myUnitType;
 
-    public CombatType myType;
+    [FormerlySerializedAs("myType")] public CombatType myCombatType;
     
     public float summonCost;
     
@@ -41,53 +41,102 @@ public class UnitData : ScriptableObject
     public float staminaRegen;
     
     public List<string> baseActiveAbilities;
+
+    public List<string> basePassiveAbilities;
     
     public Sprite portrait;
+
+    public Sprite UnitSprite;
 
     public FSMNode defaultEntryState;
 
     public UpgradeTreeNode uniqueTree;
 
-    public Element defaultDamageElement;
+    public AttackData.Element DefaultDamageElement;
+
+    public Grade myGrade;
+
+    public enum Grade
+    {
+        poor,
+        common,
+        normal,
+        rare,
+        epic,
+        legendary
+    }
     
-    public enum Element
+    public enum UnitType
     {
         none,
+        aetheric,
+        angelic,
         beastial,
-        humanoid,
         construct,
+        demonic,
+        draconic,
+        aero,
+        aqua,
+        cryo,
+        electro,
+        pyro,
+        terra,
+        humanoid,
+        undead
     }
 
-    public Element strToElement(string str)
+    public UnitType strToElement(string str)
     {
         str = str.ToLower();
         switch (str)
         {
             case "beastial":
-                return Element.beastial;
-            case "humanoid":
-                return Element.humanoid;
+                return UnitType.beastial;
+            case "aetheric":
+                return UnitType.aetheric;
+            case "angelic":
+                return UnitType.angelic;
             case "construct":
-                return Element.construct;
+                return UnitType.construct;
+            case "demonic":
+                return UnitType.demonic;
+            case "draconic":
+                return UnitType.draconic;
+            case "aero":
+                return UnitType.aero;
+            case "aqua":
+                return UnitType.aqua;
+            case "cryo":
+                return UnitType.cryo;
+            case "electro":
+                return UnitType.electro;
+            case "pyro":
+                return UnitType.pyro;
+            case "terra":
+                return UnitType.terra;
+            case "humanoid":
+                return UnitType.humanoid;
+            case "undead":
+                return UnitType.undead;
         }
-        return Element.none;
+        return UnitType.none;
     }
 
     public enum CombatType
     {
         balanced,
-        fastAttack,
+        scout,
         tank
     }
 
     public UpgradeTreeNode GetElementTree()
     {
-        return Resources.Load<UpgradeTreeNode>("ElementTrees/"+myElement.ToString());
+        return Resources.Load<UpgradeTreeNode>("ElementTrees/"+myUnitType.ToString());
     }
 
     public UpgradeTreeNode GetCombatTree()
     {
-        return Resources.Load<UpgradeTreeNode>("CombatTrees/" + myType.ToString());
+        return Resources.Load<UpgradeTreeNode>("CombatTrees/" + myCombatType.ToString());
     }
 
     public static int CompareByInitiative(UnitData item1, UnitData item2)

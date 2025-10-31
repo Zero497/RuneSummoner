@@ -44,4 +44,132 @@ public abstract class ActiveAbility : UnitAction
         }
         return null;
     }
+
+    public static ActiveAbility GetActiveAbility(SendData data)
+    {
+        if (data.strData[0] == null) return null;
+        string abilityName = data.strData[0];
+        ActiveAbility ability;
+        AbilityData abilityData = Resources.Load<AbilityData>(data.strData[0]);
+        abilityName = abilityName.ToLower();
+        switch (abilityName)
+        {
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "block":
+                ability = new Block();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "coreoverdraw":
+                ability = new CoreOverdraw();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "diver":
+                ability = new Divert();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "dodge":
+                ability = new Dodge();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "electricshroud":
+                ability = new ElectricShroud();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "mark":
+                ability = new Mark();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "sprint":
+                ability = new Sprint();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "taunt":
+                ability = new Taunt();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "coreoverload":
+                ability = new CoreOverload();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "exposecore":
+                ability = new ExposeCore();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "fury":
+                ability = new Fury();
+                break;
+            /*
+        Expects:
+            String 0: name of passive ability
+            Unit 0: unit to apply to
+            Float 0: level of ability
+     */
+            case "physicalmelee":
+            case "physicalranged":
+            case "magicalmelee":
+            case "magicalranged":
+                ability = new Attack();
+                break;
+            default:
+                return null;
+        }
+        ability.abilityData = abilityData;
+        ability.Initialize(data);
+        return ability;
+    }
 }

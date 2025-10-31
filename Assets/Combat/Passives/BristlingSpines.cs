@@ -19,7 +19,7 @@ public class BristlingSpines : PassiveAbility
         d2.AddStr("spikes");
         d2.AddFloat(Mathf.FloorToInt(source.physicalDefence*0.5f*level));
         d2.AddFloat((int) AttackData.DamageType.Physical);
-        d2.AddFloat((int) source.baseData.defaultDamageElement);
+        d2.AddFloat((int) source.baseData.DefaultDamageElement);
         myEffect.Initialize(d2);
         source.AddEffect(myEffect);
         onPhysicalDefenseChanged = new ActionPriorityWrapper<UnitBase, string, float>();

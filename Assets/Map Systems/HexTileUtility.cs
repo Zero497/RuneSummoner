@@ -123,6 +123,12 @@ public static class HexTileUtility
             return cost + parent.getCost();
         }
 
+        public int CountNodesInPath()
+        {
+            if (parent == null) return 1;
+            return 1 + parent.CountNodesInPath();
+        }
+
 
         public int CompareTo(DjikstrasNode other)
         {

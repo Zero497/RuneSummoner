@@ -85,7 +85,7 @@ public class Resistant : Effect
 
     private void ModifyAttack(UnitBase myUnit, Attack.AttackMessageToTarget attack)
     {
-        if ((dtype == -1 || dtype == (int)attack.damageType) && (dElement == -1 || dElement == (int)attack.element))
+        if ((dtype == -1 || dtype == (int)attack.damageType) && (dElement == -1 || dElement == (int)attack.damageElement))
         {
             float def;
             if (attack.damageType == AttackData.DamageType.Physical)

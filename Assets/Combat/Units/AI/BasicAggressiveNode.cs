@@ -24,26 +24,35 @@ public class BasicAggressiveNode : FSMNode
         List<HexTileUtility.DjikstrasNode> myMoveLocations = MoveController.mControl.InitMovement(unit, false);
         inSight =
             VisionManager.visionManager.DjikstrasSightCheck(unit.currentPosition, unit.sightRadius);
+        UnitBase targUnit = null;
         HexTileUtility.DjikstrasNode best = myMoveLocations[0];
         int bestDist = 1000;
         foreach (UnitBase enUnit in MainCombatManager.manager.allFriendly)
         {
             if (inSight.Contains(enUnit.currentPosition))
             {
+                int tempBest = 1000;
+                HexTileUtility.DjikstrasNode tempBestNode = null;
                 foreach (HexTileUtility.DjikstrasNode moveloc in myMoveLocations)
                 {
                     int nb = HexTileUtility.GetTileDistance(moveloc.location, enUnit.currentPosition);
-                    if (nb < bestDist)
+                    if (nb < tempBest)
                     {
-                        bestDist = nb; 
-                        best = moveloc; 
+                            tempBest = nb; 
+                            tempBestNode = moveloc; 
                     }
-                    if (nb == bestDist && best.cost > moveloc.cost)
+                    if (nb == tempBest && tempBestNode.cost > moveloc.cost)
                     {
-                        best = moveloc;
+                            tempBestNode = moveloc;
                     }
-                    
                 }
+                if (targUnit == null || tempBest < bestDist || curUnit.CompareThreat(targUnit, enUnit) < 0)
+                {
+                    bestDist = tempBest;
+                    best = tempBestNode;
+                    targUnit = enUnit;
+                }
+                
             }
         }
 
@@ -66,6 +75,8 @@ public class BasicAggressiveNode : FSMNode
             OnTurnStarted(curUnit);
             return;
         }
+
+        UnitBase targUnit = null;
         foreach (UnitBase enUnit in MainCombatManager.manager.allFriendly)
         {
             if (inSight.Contains(enUnit.currentPosition))
@@ -75,28 +86,31 @@ public class BasicAggressiveNode : FSMNode
                 {
                     if (curUnit.currentPosition.Equals(adj))
                     {
-                        foreach (ActiveAbility ability in curUnit.activeAbilities)
-                        {
-                            bool ran = false;
-                            switch (ability.abilityData.targetType)
-                            {
-                                case AbilityData.TargetType.singleTargetEnemy:
-                                    SendData data = new SendData(enUnit.currentPosition);
-                                    ran = ability.RunAction(data);
-                                    break;
-                                default:
-                                    //TODO other types
-                                    break;
-                            }
-
-                            if (ran)
-                            {
-                                break;
-                            }
-                        }
-                        MainCombatManager.manager.EndTurn();
-                        return;
+                        if (targUnit == null || curUnit.CompareThreat(targUnit, enUnit) < 0)
+                            targUnit = enUnit;
                     }
+                }
+            }
+        }
+        if (targUnit != null)
+        {
+            foreach (ActiveAbility ability in curUnit.activeAbilities)
+            {
+                bool ran = false;
+                switch (ability.abilityData.targetType)
+                {
+                    case AbilityData.TargetType.singleTargetEnemy:
+                        SendData data = new SendData(targUnit.currentPosition);
+                        ran = ability.RunAction(data);
+                        break;
+                    default:
+                        //TODO other types
+                        break;
+                }
+
+                if (ran)
+                {
+                    break;
                 }
             }
         }

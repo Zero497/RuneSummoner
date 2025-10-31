@@ -20,6 +20,7 @@ public static class EffectFactory
         {
             case "resistant":
                 effect = new Resistant();
+                effect.isBuff = true;
                 break;
             case "physicalattackup":
             case "physicalattackdown":
@@ -39,6 +40,7 @@ public static class EffectFactory
                 break;
             case "spikes":
                 effect = new Spikes();
+                effect.isBuff = true;
                 break;
             /*
         Expects:
@@ -49,6 +51,7 @@ public static class EffectFactory
      */
             case "marked":
                 effect = new Marked();
+                effect.isBuff = false;
                 break;
             /*
        Expects:
@@ -58,6 +61,50 @@ public static class EffectFactory
     */
             case "evade":
                 effect = new Evade();
+                effect.isBuff = true;
+                break;
+            /*
+       Expects:
+           Unit 0: unit to apply to
+           String 0: effect name
+           Float 0: stacks to apply
+    */
+            case "vulnerable":
+                effect = new Vulnerable();
+                effect.isBuff = false;
+                break;
+            /*
+       Expects:
+           Unit 0: unit to apply to
+           String 0: effect name
+           Float 0: stacks to apply
+    */
+            case "shocked":
+                effect = new Shocked();
+                effect.isBuff = false;
+                break;
+            /*
+       Expects:
+           Unit 0: unit to apply to
+           String 0: effect name
+           Float 0: stacks to apply
+    */
+            case "invulnerable":
+                effect = new Invulnerable();
+                effect.isBuff = true;
+                break;
+            /*
+       Expects:
+           Unit 0: unit to apply to
+           String 0: effect name
+           Float 0: stacks to apply
+           Float 1: 1 for mod up, -1 for mod down
+    */
+            case "apup":
+            case "apdown":
+            case "abilitypowerup":
+            case "abilitypowerdown":
+                effect = new APUp();
                 break;
             default:
                 return null;

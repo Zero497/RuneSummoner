@@ -13,34 +13,28 @@ MonoBehaviour:
   m_Name: Main
   m_EditorClassIdentifier: 
   unitDescription: 
-  myElement: 1
-  myType: 0
-  summonCost: 0
+  myUnitType: 13
+  myCombatType: 0
+  summonCost: 300
   health: 100
-  healthPerLevel: 50
   initiative: 100
   abilityPower: 10
-  abilityPowerPerLevel: 0
   magicalAttack: 10
-  magicalAttackPerLevel: 10
   physicalAttack: 10
-  physicalAttackPerLevel: 10
   magicalDefence: 10
-  magicalDefencePerLevel: 0
   physicalDefence: 10
-  physicalDefencePerLevel: 0
-  mana: 1000
-  manaPerLevel: 100
-  manaRegen: 200
-  manaRegenPerLevel: 20
-  sightRadius: 15
-  speed: 10
-  stamina: 200
-  staminaPerLevel: 0
-  staminaRegen: 40
-  staminaRegenPerLevel: 0
+  mana: 500
+  manaRegen: 6
+  sightRadius: 8
+  speed: 4
+  stamina: 500
+  staminaRegen: 6
   baseActiveAbilities:
   - PhysicalMelee
+  basePassiveAbilities: []
   portrait: {fileID: 21300000, guid: bd74762aae3a3c641ac19ce9bc740ba1, type: 3}
+  UnitSprite: {fileID: 0}
   defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}
+  DefaultDamageElement: 0
+  myGrade: 2
