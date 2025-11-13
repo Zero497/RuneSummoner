@@ -23,7 +23,7 @@ MonoBehaviour:
   description: Basic Magical Melee Attack
   damageType: 1
   damageElement: 0
-  damage: 30
+  damage: 20
   effectsToApplySelf: []
   baseStacksToApplyToSelf: 
   effectsToApplyTarget: []

@@ -120,6 +120,10 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         if (initialized) return;
         baseData = inBaseData;
         level = unit.level;
+        if (unit.id != null)
+        {
+            myId = unit.id;
+        }
         MyUnitType = inBaseData.myUnitType;
         summonCost = inBaseData.summonCost;
         myCombatStats = new UnitCombatStats(inBaseData, unit, myEvents, this);
