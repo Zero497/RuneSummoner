@@ -10,30 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ebdf6368fd91754bb2001620b47e7a4, type: 3}
-  m_Name: Player
+  m_Name: Golem
   m_EditorClassIdentifier: 
-  unitDescription: 
-  myUnitType: 13
-  myCombatType: 0
-  summonCost: 300
-  health: 100
-  initiative: 100
-  abilityPower: 10
-  magicalAttack: 10
-  physicalAttack: 10
-  magicalDefence: 10
-  physicalDefence: 10
-  mana: 500
-  manaRegen: 6
-  sightRadius: 8
+  unitDescription: 'A large construct of hardened stone wielding a stone spear and
+    shield. '
+  myUnitType: 4
+  myCombatType: 2
+  summonCost: 200
+  health: 245
+  initiative: 150
+  abilityPower: 15
+  magicalAttack: 5
+  physicalAttack: 25
+  magicalDefence: 15
+  physicalDefence: 18
+  mana: 200
+  manaRegen: 3
+  sightRadius: 6
   speed: 4
-  stamina: 500
+  stamina: 400
   staminaRegen: 6
   baseActiveAbilities:
   - PhysicalMelee
   basePassiveAbilities: []
-  portrait: {fileID: 21300000, guid: bd74762aae3a3c641ac19ce9bc740ba1, type: 3}
-  UnitSprite: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 0f2ca02a65246a84aa9c46b51cf97c96, type: 3}
+  UnitSprite: {fileID: 21300000, guid: 0f2ca02a65246a84aa9c46b51cf97c96, type: 3}
   defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}
   DefaultDamageElement: 0

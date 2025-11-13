@@ -9,6 +9,7 @@ public class LaunchSaveButton : MonoBehaviour
     public void OnClick()
     {
         SaveHandler.setSavePath(slotName);
+        SaveHandler.Load();
         SceneManager.LoadScene("MainScene");
     }
 }

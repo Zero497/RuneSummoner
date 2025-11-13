@@ -8,6 +8,8 @@ public class SavesButton : MonoBehaviour
     
     public GameObject savesObject;
 
+    public Transform savesContent;
+
     public GameObject saveButtonPrefab;
 
     public GameObject backButton;
@@ -21,7 +23,7 @@ public class SavesButton : MonoBehaviour
         mainObject.SetActive(false);
         savesObject.SetActive(true);
         backButton.SetActive(true);
-        Instantiate(topText, savesObject.transform);
+        Instantiate(topText, savesContent);
         string[] files = Directory.GetDirectories(Application.persistentDataPath);
         foreach (string file in files)
         {
@@ -30,10 +32,10 @@ public class SavesButton : MonoBehaviour
             {
                 continue;
             }
-            GameObject newButton = Instantiate(saveButtonPrefab, savesObject.transform);
+            GameObject newButton = Instantiate(saveButtonPrefab, savesContent);
             newButton.GetComponent<LaunchSaveButton>().slotName = slot;
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = slot;
         }
-        Instantiate(newGameButton, savesObject.transform);
+        Instantiate(newGameButton, savesContent);
     }
 }

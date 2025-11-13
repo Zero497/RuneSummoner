@@ -418,6 +418,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1467707115851475177}
   - component: {fileID: 6243671040146025889}
+  - component: {fileID: 2164961559459130233}
   m_Layer: 5
   m_Name: StatFitter
   m_TagString: Untagged
@@ -473,6 +474,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2164961559459130233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6165186765015241525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d38de7abba2c54ab1ee394eb97e09d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myStat: 0
+  value: {fileID: 7719826584328775843}
+  grade: {fileID: 875745387457293593}
+  gradeUpButton: {fileID: 388979696179591435}
 --- !u!1 &6278453845911434187
 GameObject:
   m_ObjectHideFlags: 0

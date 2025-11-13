@@ -174,6 +174,7 @@ public static class SaveHandler
         writeMetaFile(path, currentVersion);
         setSavePath(path);
         newGame.Invoke(path);
+        Load();
     }
 
     public static void VersionConversion(string fileVersion, string path)

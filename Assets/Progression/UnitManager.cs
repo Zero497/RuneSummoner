@@ -47,6 +47,7 @@ public static class UnitManager
 
     private static void Load(string path)
     {
+        playerUnits = new List<UnitSimple>();
         Directory.CreateDirectory(Application.persistentDataPath+"/"+path+"/units");
         string[] files = Directory.GetFiles(Application.persistentDataPath + "/" + path + "/units");
         foreach (string file in files)

@@ -51,6 +51,12 @@ public class UnitCombatStats
         return dataBase * gradePercent + dataBase * gradePercent * 0.1f * (level - 1);
     }
     
+    public static float GetActualBase(float dataBase, UnitData.Grade grade, int level)
+    {
+        float gradePercent = GradeToStatPercentage(grade);
+        return dataBase * gradePercent + dataBase * gradePercent * 0.1f * (level - 1);
+    }
+    
     public void SetStatsByGradeAndLevel()
     {
         health = GetActualBase(baseStats.health, grades.healthGrade);
@@ -67,7 +73,7 @@ public class UnitCombatStats
         speed = baseStats.speed;
     }
 
-    public float GradeToStatPercentage(UnitData.Grade grade)
+    public static float GradeToStatPercentage(UnitData.Grade grade)
     {
         switch (grade)
         {

@@ -56,6 +56,61 @@ public class UnitData : ScriptableObject
 
     public Grade myGrade;
 
+    public float GetStatValue(Stat stat)
+    {
+        switch (stat)
+        {
+            case Stat.health:
+                return health;
+            case Stat.initiative:
+                return initiative;
+            case Stat.mana:
+                return mana;
+            case Stat.speed:
+                return speed;
+            case Stat.stamina:
+                return stamina;
+            case Stat.abilityPower:
+                return abilityPower;
+            case Stat.magicalAttack:
+                return magicalAttack;
+            case Stat.magicalDefense:
+                return magicalDefence;
+            case Stat.manaRegen:
+                return manaRegen;
+            case Stat.physicalAttack:
+                return physicalAttack;
+            case Stat.physicalDefense:
+                return physicalDefence;
+            case Stat.sightRadius:
+                return sightRadius;
+            case Stat.staminaRegen:
+                return staminaRegen;
+            default:
+                return 0;
+        }
+    }
+
+    public enum Stat
+    {
+        health,
+        currentHealth,
+        mana,
+        currentMana,
+        manaRegen,
+        stamina,
+        currentStamina,
+        staminaRegen,
+        abilityPower,
+        physicalAttack,
+        physicalDefense,
+        magicalAttack,
+        magicalDefense,
+        initiative,
+        speed,
+        sightRadius
+    }
+
     public enum Grade
     {
         poor,
@@ -64,6 +119,42 @@ public class UnitData : ScriptableObject
         rare,
         epic,
         legendary
+    }
+
+    public static string GradeToColorString(Grade grade)
+    {
+        string word = "";
+        string color = "";
+        switch (grade)
+        {
+            case Grade.poor:
+                word = "Poor";
+                color = "6B6B6B";
+                break;
+            case Grade.common:
+                word = "Common";
+                color = "D9DCE3";
+                break;
+            case Grade.normal:
+                word = "Normal";
+                color = "4FB36A";
+                break;
+            case Grade.rare:
+                word = "Rare";
+                color = "3A7BFF";
+                break;
+            case Grade.epic:
+                word = "Epic";
+                color = "A25CFF";
+                break;
+            case Grade.legendary:
+                word = "Legendary";
+                color = "FF9A1F";
+                break;
+            default:
+                return "";
+        }
+        return "<color=#"+color+">"+word+"</color>";
     }
     
     public enum UnitType

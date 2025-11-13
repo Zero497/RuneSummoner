@@ -33,8 +33,8 @@ MonoBehaviour:
   baseActiveAbilities:
   - PhysicalMelee
   basePassiveAbilities: []
-  portrait: {fileID: 0}
-  UnitSprite: {fileID: 0}
+  portrait: {fileID: 4592195683352871208, guid: 787ff3ca856200f49ade68a2a5229709, type: 3}
+  UnitSprite: {fileID: 4592195683352871208, guid: 787ff3ca856200f49ade68a2a5229709, type: 3}
   defaultEntryState: {fileID: 0}
   uniqueTree: {fileID: 0}
   DefaultDamageElement: 0

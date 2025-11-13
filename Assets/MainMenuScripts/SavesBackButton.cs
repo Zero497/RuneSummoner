@@ -6,11 +6,13 @@ public class SavesBackButton : MonoBehaviour
     
     public GameObject savesObject;
 
+    public Transform savesContent;
+
     public GameObject backButton;
     
     public void OnClick()
     {
-        foreach (Transform child in savesObject.transform)
+        foreach (Transform child in savesContent)
         {
             Destroy(child.gameObject);
         }
