@@ -7,7 +7,7 @@ public class Stealth : PassiveAbility
     /*
         Expects:
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 1: level of ability
      */
     public override void Initialize(SendData data)
     {
@@ -16,6 +16,11 @@ public class Stealth : PassiveAbility
         onRevealed.priority = 80;
         onRevealed.action = OnRevealed;
         source.myEvents.onPositionRevealed.Subscribe(onRevealed);
+    }
+    
+    public override string GetAbilityName()
+    {
+        return "stealth";
     }
     
     private void OnRevealed(UnitBase myUnit, UnitBase revealer)

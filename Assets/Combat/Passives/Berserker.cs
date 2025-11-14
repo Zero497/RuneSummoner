@@ -21,6 +21,11 @@ public class Berserker : PassiveAbility
         onRegainedHealth.action = OnRegainedHealth;
         source.myEvents.onRegainHealth.Subscribe(onRegainedHealth);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Berserker";
+    }
 
     private void OnRegainedHealth(UnitBase myUnit, float heal)
     {

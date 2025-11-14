@@ -129,17 +129,17 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         myCombatStats = new UnitCombatStats(inBaseData, unit, myEvents, this);
         myMovement = new Move();
         SendData data = new SendData(this);
-        data.AddFloat(1);
-        data.AddStr("");
-        foreach (string abilityID in inBaseData.baseActiveAbilities)
+        data.AddInt(1);
+        data.AddInt(1);
+        foreach (int abilityID in inBaseData.baseActiveAbilities)
         {
-            data.strData[0] = abilityID;
+            data.intData[0] = abilityID;
             ActiveAbility newAbility = ActiveAbility.GetActiveAbility(data);
             activeAbilities.Add(newAbility);
         }
-        foreach (string abilityID in inBaseData.basePassiveAbilities)
+        foreach (int abilityID in inBaseData.basePassiveAbilities)
         {
-            data.strData[0] = abilityID;
+            data.intData[0] = abilityID;
             PassiveAbility newAbility = PassiveAbility.GetPassive(data);
             passiveAbilities.Add(newAbility);
         }
@@ -401,7 +401,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 
     public void Die()
     {
-        LastStand ls = GetPassive(new SendData("laststand")) as LastStand;
+        LastStand ls = GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.lastStand)) as LastStand;
         if (ls != null && ls.HasUsesRemaining())
         {
             ls.ReplaceDeath();

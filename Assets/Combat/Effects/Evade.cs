@@ -32,7 +32,7 @@ public class Evade : Effect
             action = OnTurnStarted
         };
         source.myEvents.onTurnStarted.Subscribe(onTurnStarted);
-        hasExposingEvade = source.GetPassive(new SendData("exposingevade")) != null;
+        hasExposingEvade = source.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.exposingEvade)) != null;
     }
 
     public override void RemoveEffect()
@@ -61,7 +61,7 @@ public class Evade : Effect
             attack.effectsToApplyTarget = new List<string>();
             if (hasExposingEvade)
             {
-                int level = source.GetPassive(new SendData("exposingevade")).GetLevel();
+                int level = source.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.exposingEvade)).GetLevel();
                 SendData markData = new SendData(attack.source);
                 markData.AddUnit(source);
                 markData.AddStr("marked");

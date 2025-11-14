@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fbf90c2c2c494c4fa33013ffff5b419, type: 3}
+  m_Name: Core OverdrawM
+  m_EditorClassIdentifier: 
+  abilityName: Core Overdraw
+  isFree: 1
+  isReaction: 0
+  staminaCost: 120
+  manaCost: 0
+  range: 0
+  aoeRange: 0
+  targetType: 9
+  description: The user overdraws from their core, losing health and mana or stamina
+    to gain the other resource.
+  icon: {fileID: -9132662241362606665, guid: b856ae02388faae469e66ef483185d42, type: 3}

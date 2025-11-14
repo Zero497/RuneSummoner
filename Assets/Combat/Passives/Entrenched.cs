@@ -22,6 +22,11 @@ public class Entrenched : PassiveAbility
         onTurnStart.action = OnTurnStart;
         source.myEvents.onTurnStarted.Subscribe(onTurnStart);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Entrenched";
+    }
 
     private void OnMoveEnd(UnitBase myUnit, HexTileUtility.DjikstrasNode node)
     {

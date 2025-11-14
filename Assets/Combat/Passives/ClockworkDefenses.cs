@@ -20,6 +20,11 @@ public class ClockworkDefenses : PassiveAbility
         onTakeDamage.action = OnTakeDamage;
         source.myEvents.onTakeDamage.Subscribe(onTakeDamage);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Clockwork Defenses";
+    }
 
     private void OnTakeDamage(UnitBase myUnit, float damage)
     {

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb2a9c1e632e5e459ef8215c1da14a4, type: 3}
+  m_Name: Charge
+  m_EditorClassIdentifier: 
+  icon: {fileID: 7043984996573275655, guid: 0a2498fcb1239e24c8c4250fbe4c14af, type: 3}
+  description: This unit is adept at wielding momentum, dealing extra damage when
+    attacking after running straight at the target.

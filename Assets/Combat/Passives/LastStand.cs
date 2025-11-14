@@ -18,6 +18,11 @@ public class LastStand : PassiveAbility
         onTurnEnd.action = OnTurnEnd;
         source.myEvents.onTurnEnded.Subscribe(onTurnEnd);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Last Stand";
+    }
 
     public bool HasUsesRemaining()
     {

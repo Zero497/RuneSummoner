@@ -18,6 +18,11 @@ public class Dodge : ActiveAbility
         return new Float(abilityData.staminaCost - abilityData.staminaCost * source.abilityPower * 0.01f);
     }
 
+    public override string GetID()
+    {
+        return "Dodge";
+    }
+
     public override bool PrepAction()
     {
         RunAction(new SendData(""));
@@ -25,11 +30,6 @@ public class Dodge : ActiveAbility
     }
 
     public override bool RushCompletion()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override string GetDescription()
     {
         throw new System.NotImplementedException();
     }

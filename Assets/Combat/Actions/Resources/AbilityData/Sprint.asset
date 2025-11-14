@@ -20,4 +20,5 @@ MonoBehaviour:
   range: 0
   aoeRange: 0
   targetType: 9
-  description: Increases Speed this turn
+  description: The user sprints, increasing their Speed this turn.
+  icon: {fileID: -7703584424226310029, guid: 39b3d7a4bfc26c94fa28cb4d809b47c1, type: 3}

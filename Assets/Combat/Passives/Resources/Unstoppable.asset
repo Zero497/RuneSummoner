@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb2a9c1e632e5e459ef8215c1da14a4, type: 3}
+  m_Name: Unstoppable
+  m_EditorClassIdentifier: 
+  icon: {fileID: -5532294121950807659, guid: d8f6e00958b9cd449bc4a5a6a7a634d6, type: 3}
+  description: This unit's charge cannot be stopped! It gains defensive power the
+    further it charges.

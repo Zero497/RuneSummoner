@@ -40,9 +40,9 @@ public class UnitData : ScriptableObject
     
     public float staminaRegen;
     
-    public List<string> baseActiveAbilities;
+    public List<ActiveAbility.ActiveAbilityDes> baseActiveAbilities;
 
-    public List<string> basePassiveAbilities;
+    public List<PassiveAbility.PassiveAbilityDes> basePassiveAbilities;
     
     public Sprite portrait;
 
@@ -50,7 +50,7 @@ public class UnitData : ScriptableObject
 
     public FSMNode defaultEntryState;
 
-    public UpgradeTreeNode uniqueTree;
+    public UpgradeTreeNode superRoot;
 
     public AttackData.Element DefaultDamageElement;
 
@@ -222,12 +222,17 @@ public class UnitData : ScriptableObject
 
     public UpgradeTreeNode GetElementTree()
     {
-        return Resources.Load<UpgradeTreeNode>("ElementTrees/"+myUnitType.ToString());
+        return Resources.Load<UpgradeTreeNode>("ElementTrees/"+myUnitType.ToString()+"R");
     }
 
     public UpgradeTreeNode GetCombatTree()
     {
-        return Resources.Load<UpgradeTreeNode>("CombatTrees/" + myCombatType.ToString());
+        return Resources.Load<UpgradeTreeNode>("CombatTrees/" + myCombatType.ToString()+"R");
+    }
+    
+    public UpgradeTreeNode GetUniqueTree()
+    {
+        return Resources.Load<UpgradeTreeNode>("UnitTrees/" + name.ToString()+"R");
     }
 
     public static int CompareByInitiative(UnitData item1, UnitData item2)

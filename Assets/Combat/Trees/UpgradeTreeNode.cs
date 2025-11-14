@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "TreeNode", menuName = "UpgradeTreeNode")]
 public class UpgradeTreeNode : ScriptableObject
 {
-    public List<string> activeGrant;
+    public List<ActiveAbility.ActiveAbilityDes> activeGrant;
     
-    public List<string> passiveGrant;
+    public List<PassiveAbility.PassiveAbilityDes> passiveGrant;
 
     public List<UpgradeTreeNode> branches;
 }

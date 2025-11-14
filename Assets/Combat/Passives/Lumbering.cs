@@ -22,6 +22,11 @@ public class Lumbering : PassiveAbility
         onTurnStart.action = OnTurnStart;
         source.myEvents.onTurnStarted.Subscribe(onTurnStart);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Lumbering";
+    }
 
     private void OnMoveEnd(UnitBase myUnit, HexTileUtility.DjikstrasNode node)
     {

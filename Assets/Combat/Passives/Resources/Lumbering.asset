@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb2a9c1e632e5e459ef8215c1da14a4, type: 3}
+  m_Name: Lumbering
+  m_EditorClassIdentifier: 
+  icon: {fileID: -4949180827310432777, guid: 7ef0317ab88ee4448a3c196ba1ba4919, type: 3}
+  description: This unit is slow but powerful, dealing more damage the less it has
+    to move.

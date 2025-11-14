@@ -2,6 +2,17 @@ using UnityEngine;
 
 public class CoreOverdraw : ActiveAbility
 {
+    public override void Initialize(SendData sendData)
+    {
+        base.Initialize(sendData);
+        abilityData = Resources.Load<AbilityData>("AbilityData/Core OverdrawM");
+    }
+
+    public override string GetID()
+    {
+        return "Core Overdraw";
+    }
+
     public override bool RunAction(SendData actionData)
     {
         if (!source.PayCost(this)) return false;
@@ -24,11 +35,6 @@ public class CoreOverdraw : ActiveAbility
     }
 
     public override bool RushCompletion()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override string GetDescription()
     {
         throw new System.NotImplementedException();
     }

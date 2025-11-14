@@ -26,6 +26,11 @@ public class BristlingSpines : PassiveAbility
         onPhysicalDefenseChanged.priority = 80;
         onPhysicalDefenseChanged.action = OnPhysicalDefenseChanged;
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Bristling Spines";
+    }
 
     private void OnPhysicalDefenseChanged(UnitBase myUnit, string statChanged, float change)
     {

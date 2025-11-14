@@ -14,4 +14,9 @@ public class SkirmisherMove : Move
         MoveController.mControl.InitMovement(TurnController.controller.currentActor, TurnController.controller.currentActor.isFriendly);
         return true;
     }
+
+    public override string GetID()
+    {
+        return "Skirmisher Move";
+    }
 }

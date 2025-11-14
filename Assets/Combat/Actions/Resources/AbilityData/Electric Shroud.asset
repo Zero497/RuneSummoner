@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fbf90c2c2c494c4fa33013ffff5b419, type: 3}
+  m_Name: Electric Shroud
+  m_EditorClassIdentifier: 
+  abilityName: Electric Shroud
+  isFree: 1
+  isReaction: 0
+  staminaCost: 0
+  manaCost: 50
+  range: 0
+  aoeRange: 0
+  targetType: 9
+  description: The user surrounds themselves in electrical energy, dealing magical
+    electro damage to melee attackers.
+  icon: {fileID: 1825217043304347438, guid: caff8a46af14d3b4387d7b9a752ae885, type: 3}

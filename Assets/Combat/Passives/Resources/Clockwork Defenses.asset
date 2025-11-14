@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb2a9c1e632e5e459ef8215c1da14a4, type: 3}
+  m_Name: Clockwork Defenses
+  m_EditorClassIdentifier: 
+  icon: {fileID: 3554445970662323660, guid: da158436b0916e942911c93cf35cc67c, type: 3}
+  description: This unit takes time to adapt to combat, gaining defensive power for
+    each turn it takes damage.

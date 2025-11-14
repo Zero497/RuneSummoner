@@ -5,25 +5,63 @@ using UnityEngine;
 
 public abstract class PassiveAbility : IEquatable<PassiveAbility>
 {
-   protected string _abilityName;
-   
    protected UnitBase source;
 
    protected int level;
 
-   public string abilityName => _abilityName;
+   protected PassiveAbilityDes _myDes;
+
+   public string abilityName => GetAbilityName();
+
+   public PassiveAbilityDes myDes => _myDes;
+
+   public abstract string GetAbilityName();
+
+   public enum PassiveAbilityDes
+   {
+       adaptable,
+       ambush,
+       berserker,
+       bristlingSpines,
+       charge,
+       clockworkDefenses,
+       clockworkStrikes,
+       debilitatingMark,
+       defensiveAttacks,
+       diversion,
+       entrenched,
+       evasive,
+       exposingEvade,
+       farseer,
+       guardian,
+       hyperAdapted,
+       lastingMark,
+       lastStand,
+       lumbering,
+       mechanical,
+       observer,
+       openingAssault,
+       skirmisher,
+       stealth,
+       rage,
+       rageBoost,
+       resilient,
+       tauntExtension,
+       unstoppable
+   }
 
    /*
         Expects:
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: ability des
+            Int 1: level of ability
      */
    public virtual void Initialize(SendData data)
-   { 
-       _abilityName = data.strData[0];
+   {
+       _myDes = (PassiveAbilityDes) data.intData[0];
        source = data.unitData[0];
        source.passiveAbilities.Add(this);
-       level = (int) data.floatData[0];
+       level = data.intData[1];
    }
 
    public int GetLevel()
@@ -33,268 +71,276 @@ public abstract class PassiveAbility : IEquatable<PassiveAbility>
 
    /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
+            Int 0: des of passive ability  
      */
    public static PassiveAbility GetPassive(SendData data)
    {
-       if (data.strData[0] == null) return null;
-       string abilityName = data.strData[0];
+       if (data.intData[0] < 0) return null;
+       PassiveAbilityDes des = (PassiveAbilityDes)data.intData[0];
        PassiveAbility ability;
-       abilityName = abilityName.ToLower();
-       switch (abilityName)
+       switch (des)
        {
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "charge":
+           case PassiveAbilityDes.charge:
                ability = new Charge();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "adaptable":
+           case PassiveAbilityDes.adaptable:
                ability = new Adaptable();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "bristlingspines":
+           case PassiveAbilityDes.bristlingSpines:
                ability = new BristlingSpines();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "rage":
+           case PassiveAbilityDes.rage:
                ability = new Rage();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "unstoppable":
+           case PassiveAbilityDes.unstoppable:
                ability = new Unstoppable();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "stealth":
+           case PassiveAbilityDes.stealth:
                ability = new Stealth();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "ambush":
+           case PassiveAbilityDes.ambush:
                ability = new Ambush();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "openingassault":
+           case PassiveAbilityDes.openingAssault:
                ability = new OpeningAssault();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "skirmisher":
+           case PassiveAbilityDes.skirmisher:
                ability = new Skirmisher();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "observer":
+           case PassiveAbilityDes.observer:
                ability = new Observer();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "farseer":
+           case PassiveAbilityDes.farseer:
                ability = new Farseer();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "diversion":
+           case PassiveAbilityDes.diversion:
                ability = new Diversion();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "debilitatingmark":
+           case PassiveAbilityDes.debilitatingMark:
                ability = new DebilitatingMark();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "defensiveattacks":
+           case PassiveAbilityDes.defensiveAttacks:
                ability = new DefensiveAttacks();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "lastingmark":
+           case PassiveAbilityDes.lastingMark:
                ability = new LastingMark();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "evasive":
+           case PassiveAbilityDes.evasive:
                ability = new Evasive();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "exposingevade":
+           case PassiveAbilityDes.exposingEvade:
                ability = new ExposingEvade();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "mechanical":
+           case PassiveAbilityDes.mechanical:
                ability = new Mechanical();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "clockworkstrikes":
+           case PassiveAbilityDes.clockworkStrikes:
                ability = new ClockworkStrikes();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "clockworkdefenses":
+           case PassiveAbilityDes.clockworkDefenses:
                ability = new ClockworkDefenses();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "laststand":
+           case PassiveAbilityDes.lastStand:
                ability = new LastStand();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "guardian":
+           case PassiveAbilityDes.guardian:
                ability = new Guardian();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "tauntextension":
+           case PassiveAbilityDes.tauntExtension:
                ability = new TauntExtension();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "hyperadapted":
+           case PassiveAbilityDes.hyperAdapted:
                ability = new HyperAdapted();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "rageboost":
+           case PassiveAbilityDes.rageBoost:
                ability = new RageBoost();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "berserker":
+           case PassiveAbilityDes.berserker:
                ability = new Berserker();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "entrenched":
+           case PassiveAbilityDes.entrenched:
                ability = new Entrenched();
                break;
            /*
         Expects:
-            String 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 0: des of passive ability
+            Int 1: level of ability
      */
-           case "lumbering":
+           case PassiveAbilityDes.lumbering:
                ability = new Lumbering();
+               break;
+           /*
+        Expects:
+            Unit 0: unit to apply to
+            Int 0: des of passive ability
+            Int 1: level of ability
+     */
+           case PassiveAbilityDes.resilient:
+               ability = new Resilient();
                break;
            default:
                return null;
@@ -305,12 +351,12 @@ public abstract class PassiveAbility : IEquatable<PassiveAbility>
 
    /*
         Expects:
-            String 0: name of passive ability
+            Int 0: des of passive ability
      */
    public virtual bool Equals(SendData data)
    {
        if (data == null) return false;
-       return data.strData[0].Equals(abilityName);
+       return data.intData[0] == (int)myDes;
    }
 
    public virtual bool Equals(PassiveAbility other)

@@ -17,9 +17,11 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
 
     public int availableUpgradePoints;
 
-    public List<string> activeAbilities;
+    [NonSerialized]public Dictionary<ActiveAbility.ActiveAbilityDes, int> activeAbilities;
 
-    public List<string> passiveAbilities;
+    [NonSerialized]public Dictionary<PassiveAbility.PassiveAbilityDes, int> passiveAbilities;
+
+    public List<string> acquiredUpgrades;
 
     public StatGrades statGrades;
 
@@ -38,8 +40,8 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
     public UnitSimple()
     {
         statGrades = new StatGrades();
-        activeAbilities = new List<string>();
-        passiveAbilities = new List<string>();
+        activeAbilities = new Dictionary<ActiveAbility.ActiveAbilityDes, int>();
+        passiveAbilities = new Dictionary<PassiveAbility.PassiveAbilityDes, int>();
     }
 
     public UnitSimple(string name, string id, int level, StatGrades statGrades)
@@ -49,8 +51,65 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
         this.id = id;
         this.level = level;
         this.statGrades = statGrades;
-        activeAbilities = new List<string>();
-        passiveAbilities = new List<string>();
+        activeAbilities = new Dictionary<ActiveAbility.ActiveAbilityDes, int>();
+        passiveAbilities = new Dictionary<PassiveAbility.PassiveAbilityDes, int>();
+        UnitData myData = GetMyUnitData();
+        if (myData.superRoot != null)
+        {
+            for (int i = 0; i < myData.superRoot.branches.Count; i++)
+            {
+                acquiredUpgrades.Add(i.ToString());
+            }
+        }
+    }
+
+    public void InitAbilities()
+    {
+        UnitData myData = GetMyUnitData();
+        foreach (ActiveAbility.ActiveAbilityDes active in myData.baseActiveAbilities)
+        {
+            activeAbilities.Add(active, 1);
+        }
+        foreach (PassiveAbility.PassiveAbilityDes passive in myData.basePassiveAbilities)
+        {
+            passiveAbilities.Add(passive, 1);
+        }
+        foreach (string upgradeStr in acquiredUpgrades)
+        {
+            char[] chars = upgradeStr.ToCharArray();
+            UpgradeTreeNode node = myData.superRoot;
+            for (int i = 0; i < chars.Length; i++)
+            {
+                int ind = int.Parse(chars[i].ToString());
+                if (node.branches.Count <= ind)
+                {
+                    Debug.LogError("Unit got invalid upgrade string");
+                }
+                node = node.branches[ind];
+            }
+            foreach (ActiveAbility.ActiveAbilityDes active in node.activeGrant)
+            {
+                if (activeAbilities.ContainsKey(active))
+                {
+                    activeAbilities[active]++;
+                }
+                else
+                {
+                    activeAbilities.Add(active, 1);
+                }
+            }
+            foreach (PassiveAbility.PassiveAbilityDes passive in node.passiveGrant)
+            {
+                if (passiveAbilities.ContainsKey(passive))
+                {
+                    passiveAbilities[passive]++;
+                }
+                else
+                {
+                    passiveAbilities.Add(passive, 1);
+                }
+            }
+        }
     }
 
     public UnitData GetMyUnitData()

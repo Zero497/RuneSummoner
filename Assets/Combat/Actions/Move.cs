@@ -29,9 +29,9 @@ public class Move : UnitAction
         return true;
     }
 
-    public override string GetDescription()
+    public override string GetID()
     {
-        return "";
+        return "Move";
     }
 
     protected void OnMoveStopped(bool reason)

@@ -33,12 +33,17 @@ public class Taunt : ActiveAbility
 
     public override float GetAOERange(bool getBase = false)
     {
-        TauntExtension te = source.GetPassive(new SendData("tauntextension")) as TauntExtension;
+        TauntExtension te = source.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.tauntExtension)) as TauntExtension;
         if (te != null)
         {
             return base.GetAOERange(getBase) + Mathf.Floor(source.abilityPower/20.0f)+level-1+3*te.GetLevel();
         }
         return base.GetAOERange(getBase) + Mathf.Floor(source.abilityPower/20.0f)+level-1;
+    }
+
+    public override string GetID()
+    {
+        return "Taunt";
     }
 
 
@@ -58,11 +63,6 @@ public class Taunt : ActiveAbility
     }
 
     public override bool RushCompletion()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override string GetDescription()
     {
         throw new System.NotImplementedException();
     }

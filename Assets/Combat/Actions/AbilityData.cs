@@ -24,7 +24,7 @@ public class AbilityData : ScriptableObject
     
     public string description;
 
-    
+    public Sprite icon;
     
     public enum TargetType
     {

@@ -13,7 +13,7 @@ public class Ambush : PassiveAbility
     /*
         Expects:
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 1: level of ability
      */
     public override void Initialize(SendData data)
     {
@@ -26,6 +26,11 @@ public class Ambush : PassiveAbility
         onAttack.priority = 48;
         onAttack.action = OnAttack;
         source.myEvents.applyToOutgoingAttack.Subscribe(onAttack);
+    }
+    
+    public override string GetAbilityName()
+    {
+        return "Ambush";
     }
 
     private void OnAttack(UnitBase myUnit, Attack.AttackMessageToTarget attack)

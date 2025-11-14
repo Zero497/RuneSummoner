@@ -15,7 +15,7 @@ public abstract class UnitAction : IEquatable<UnitAction>
 
     public bool prepped = false;
 
-    public string id;
+    public string id => GetID();
 
     public UnitBase source;
     
@@ -25,8 +25,6 @@ public abstract class UnitAction : IEquatable<UnitAction>
     public abstract bool PrepAction();
 
     public abstract bool RushCompletion();
-    
-    public abstract string GetDescription();
 
     public static UnitAction GetAction(string actionName)
     {
@@ -62,14 +60,11 @@ public abstract class UnitAction : IEquatable<UnitAction>
     /*
      Expects:
         Unit 0: unit to apply to
-        String 0: id of action
-        String 1: ability scriptable object to get
     */
     public virtual void Initialize(SendData sendData)
     {
-        id = sendData.strData[0];
         source = sendData.unitData[0];
-        abilityData = Resources.Load<AbilityData>("AbilityData/"+sendData.strData[1]);
+        abilityData = Resources.Load<AbilityData>("AbilityData/"+GetID());
     }
 
     public bool Equals(UnitAction other)
@@ -83,4 +78,6 @@ public abstract class UnitAction : IEquatable<UnitAction>
     {
         return HashCode.Combine(abilityData, OnActionComplete, inProgress, prepped, id, source);
     }
+
+    public abstract string GetID();
 }

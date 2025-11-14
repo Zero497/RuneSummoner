@@ -20,4 +20,5 @@ MonoBehaviour:
   range: 100
   aoeRange: 0
   targetType: 0
-  description: Apply Marked to an enemy
+  description: The user applies Marked to an enemy
+  icon: {fileID: -2529804286022096062, guid: 964933cd4a1ca6c4e90e3de41d4ec0f8, type: 3}

@@ -16,7 +16,12 @@ public class ElectricShroud : ActiveAbility
         onTurnStarted.action = OnTurnStarted;
         source.myEvents.onTurnStarted.Subscribe(onTurnStarted);
     }
-    
+
+    public override string GetID()
+    {
+        return "Electric Shroud";
+    }
+
     public override bool RunAction(SendData actionData)
     {
         if (!source.PayCost(this)) return false;
@@ -54,11 +59,6 @@ public class ElectricShroud : ActiveAbility
     }
 
     public override bool RushCompletion()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override string GetDescription()
     {
         throw new System.NotImplementedException();
     }

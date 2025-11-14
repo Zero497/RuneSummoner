@@ -15,7 +15,7 @@ public class OpeningAssault : PassiveAbility
     /*
         Expects:
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 1: level of ability
      */
     public override void Initialize(SendData data)
     {
@@ -28,6 +28,11 @@ public class OpeningAssault : PassiveAbility
         onTurnEnd.priority = 16;
         onTurnEnd.action = OnTurnEnd;
         source.myEvents.onTurnEnded.Subscribe(onTurnEnd);
+    }
+    
+    public override string GetAbilityName()
+    {
+        return "Opening Assault";
     }
 
     private void OnTurnEnd(UnitBase myUnit)

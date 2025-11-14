@@ -20,4 +20,5 @@ MonoBehaviour:
   range: 0
   aoeRange: 3
   targetType: 6
-  description: 
+  description: The user raises their Threat against targets.
+  icon: {fileID: 1315353878313917114, guid: 09c20c0fcb9ad7d47978b8a4334337c8, type: 3}

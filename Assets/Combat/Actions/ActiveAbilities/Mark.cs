@@ -50,8 +50,8 @@ public class Mark : ActiveAbility
         throw new System.NotImplementedException();
     }
 
-    public override string GetDescription()
+    public override string GetID()
     {
-        throw new System.NotImplementedException();
+        return "Mark";
     }
 }

@@ -12,6 +12,11 @@ public class Diversion : PassiveAbility
         onAttack.action = OnAttack;
         source.myEvents.applyToOutgoingAttack.Subscribe(onAttack);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Diversion";
+    }
 
     private void OnAttack(UnitBase myUnit, Attack.AttackMessageToTarget attack)
     {

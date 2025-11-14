@@ -17,17 +17,17 @@ public class Sprint : ActiveAbility
         return new Float(Mathf.Max(base.GetStaminaCost(getBase).flt*(1.2f-0.2f*level), 0));
     }
 
+    public override string GetID()
+    {
+        return "Sprint";
+    }
+
     public override bool PrepAction()
     {
         throw new System.NotImplementedException();
     }
 
     public override bool RushCompletion()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override string GetDescription()
     {
         throw new System.NotImplementedException();
     }

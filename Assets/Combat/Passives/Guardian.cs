@@ -32,6 +32,11 @@ public class Guardian : PassiveAbility
         onUnitAddedToCombat.action = OnUnitAddedToCombat;
         MainCombatManager.manager.onUnitAddedToCombat.Subscribe(onUnitAddedToCombat);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Guardian";
+    }
 
     private void OnUnitAddedToCombat(UnitBase newUnit)
     {

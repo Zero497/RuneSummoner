@@ -44,7 +44,7 @@ public class Marked : Effect
         onHit.priority = 32;
         onHit.action = OnHit;
         source.myEvents.onAttacked.Subscribe(onHit);
-        applierHasDebilitating = source.GetPassive(new SendData("debilitatingmark")) != null;
+        applierHasDebilitating = source.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.debilitatingMark)) != null;
         if (applierHasDebilitating)
         {
             onAttack = new ActionPriorityWrapper<UnitBase, Attack.AttackMessageToTarget>();
@@ -52,14 +52,14 @@ public class Marked : Effect
             onAttack.action = OnAttack;
             source.myEvents.applyToOutgoingAttack.Subscribe(onAttack);
         }
-        applierHasLasting = source.GetPassive(new SendData("lastingmark")) != null;
+        applierHasLasting = source.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.lastingMark)) != null;
     }
 
     private void OnAttack(UnitBase myUnit, Attack.AttackMessageToTarget attack)
     {
         if (applierHasDebilitating)
         {
-            PassiveAbility deb = source.GetPassive(new SendData("debilitatingmark"));
+            PassiveAbility deb = source.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.debilitatingMark));
             attack.damage -= attack.baseDamage * 0.25f * deb.GetLevel();
         }
     }

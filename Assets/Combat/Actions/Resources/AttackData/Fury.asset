@@ -20,11 +20,14 @@ MonoBehaviour:
   range: 1
   aoeRange: 0
   targetType: 0
-  description: Attack [Level]+2 times with your basic attack
+  description: The user launches a flurry of basic attacks at the enemy.
+  icon: {fileID: 6683301645952268882, guid: 3e6c4a2e6a41ddf458e3f3db55960d38, type: 3}
   damageType: 0
-  element: 0
+  damageElement: 0
   damage: 0
-  effectToApplySelf: 
-  effectToApplyTarget: 
+  effectsToApplySelf: []
+  baseStacksToApplyToSelf: 
+  effectsToApplyTarget: []
+  baseStacksToApplyToTarget: 
   useUnitElement: 0
   useWeaponElement: 0

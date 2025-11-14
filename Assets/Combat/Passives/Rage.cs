@@ -11,7 +11,7 @@ public class Rage : PassiveAbility
     /*
         Expects:
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 1: level of ability
      */
     public override void Initialize(SendData data)
     {
@@ -23,6 +23,11 @@ public class Rage : PassiveAbility
         onTurnStarted = new ActionPriorityWrapper<UnitBase>();
         onTurnStarted.priority = 32;
         onTurnStarted.action = OnTurnStarted;
+    }
+    
+    public override string GetAbilityName()
+    {
+        return "Rage";
     }
 
     private void OnTurnStarted(UnitBase myUnit)
@@ -37,7 +42,7 @@ public class Rage : PassiveAbility
             magAUp.AddStr("magicalattack");
             magAUp.AddFloat(1);
             myUnit.RemoveEffect(magAUp);
-            if (source.GetPassive(new SendData("rageboost")) != null)
+            if (source.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.rageBoost)) != null)
             {
                 SendData apUp = new SendData("apup");
                 apUp.AddFloat(1);
@@ -65,7 +70,7 @@ public class Rage : PassiveAbility
         magAUp.AddFloat(5*level);
         magAUp.AddFloat(1);
         myUnit.AddEffect(magAUp);
-        PassiveAbility rb = source.GetPassive(new SendData("rageboost"));
+        PassiveAbility rb = source.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.rageBoost));
         if (rb != null)
         {
             SendData apUp = new SendData("apup");

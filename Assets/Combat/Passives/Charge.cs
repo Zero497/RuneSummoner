@@ -12,6 +12,12 @@ public class Charge : PassiveAbility
 
     private ActionPriorityWrapper<UnitBase, Attack.AttackMessageToTarget> onAttack;
     
+    
+    public override string GetAbilityName()
+    {
+        return "Charge";
+    }
+
     /*
         Expects:
             Unit 0: unit to apply to

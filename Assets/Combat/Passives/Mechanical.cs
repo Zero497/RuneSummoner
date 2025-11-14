@@ -6,9 +6,9 @@ public class Mechanical : PassiveAbility
 
     /*
         Expects:
-            String 0: name of passive ability
+            Int 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 1: level of ability
      */
     public override void Initialize(SendData data)
     {
@@ -17,6 +17,11 @@ public class Mechanical : PassiveAbility
         onEffectIncoming.priority = 1;
         onEffectIncoming.action = OnEffectIncoming;
         source.myEvents.modifyIncomingEffect.Subscribe(onEffectIncoming);
+    }
+    
+    public override string GetAbilityName()
+    {
+        return "Mechanical";
     }
 
     private void OnEffectIncoming(UnitBase myUnit, Effect incomingEffect, int stacks)

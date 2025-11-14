@@ -13,9 +13,9 @@ public class ClockworkStrikes : PassiveAbility
 
     /*
         Expects:
-            String 0: name of passive ability
+            Int 0: name of passive ability
             Unit 0: unit to apply to
-            Float 0: level of ability
+            Int 1: level of ability
      */
     public override void Initialize(SendData data)
     {
@@ -28,6 +28,11 @@ public class ClockworkStrikes : PassiveAbility
         onTurnEnd.priority = 72;
         onTurnEnd.action = OnTurnEnd;
         source.myEvents.onTurnEnded.Subscribe(onTurnEnd);
+    }
+    
+    public override string GetAbilityName()
+    {
+        return "Clockwork Strikes";
     }
 
     private void OnTurnEnd(UnitBase myUnit)

@@ -20,4 +20,6 @@ MonoBehaviour:
   range: 0
   aoeRange: 0
   targetType: 0
-  description: 
+  description: The user diverts the attention of enemies, causing them to gain Marked
+    stacks when attacked by an ally.
+  icon: {fileID: 4943681723778783922, guid: e64bec7a7abe3934db736b221ad74d3c, type: 3}

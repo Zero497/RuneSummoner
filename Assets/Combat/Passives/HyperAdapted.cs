@@ -13,6 +13,11 @@ public class HyperAdapted : PassiveAbility
         onEffectApplied.action = OnEffectApplied;
         source.myEvents.onEffectApplied.Subscribe(onEffectApplied);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Hyper-Adapted";
+    }
 
     private void OnEffectApplied(UnitBase myUnit, Effect appEffect, int stacks)
     {

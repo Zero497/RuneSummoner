@@ -16,6 +16,11 @@ public class Adaptable : PassiveAbility
         myAction.action = AddResistance;
         base.Initialize(data);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Adaptable";
+    }
 
     private void AddResistance(UnitBase myUnit, Attack.AttackMessageToTarget attack)
     {

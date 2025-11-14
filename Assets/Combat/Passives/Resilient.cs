@@ -7,4 +7,9 @@ public class Resilient : PassiveAbility
         base.Initialize(data);
         source.myCombatStats.AddPhysicalDefense(source.myCombatStats.getPhysicalDefense(true)*0.5f*level);
     }
+    
+    public override string GetAbilityName()
+    {
+        return "Resilient";
+    }
 }

@@ -6,6 +6,8 @@ using UnityEngine;
 //VALID IDS: PhysicalMelee, PhysicalRanged, MagicalMelee, MagicalRanged
 public class Attack : ActiveAbility
 {
+    private ActiveAbility _activeAbilityImplementation;
+
     public override bool RunAction(SendData sentData)
     {
         if (source.usedAbilityThisTurn) return false;
@@ -144,11 +146,6 @@ public class Attack : ActiveAbility
         return true;
     }
 
-    public override string GetDescription()
-    {
-        throw new System.NotImplementedException();
-    }
-
     private string ParseDescription(string description)
     {
         throw new System.NotImplementedException();
@@ -156,10 +153,32 @@ public class Attack : ActiveAbility
 
     public override void Initialize(SendData sendData)
     {
-        id = sendData.strData[0];
         source = sendData.unitData[0];
-        abilityData = Resources.Load<AbilityData>("AttackData/"+sendData.strData[1]);
-        level = (int)sendData.floatData[0];
+        abilityData = Resources.Load<AbilityData>("AttackData/"+GetID());
+        level = sendData.intData[1];
+    }
+
+    public override string GetID()
+    {
+        switch (myDes)
+        {
+            case ActiveAbilityDes.magicalMelee:
+                return "Magical Melee";
+            case ActiveAbilityDes.fury:
+                return "Fury";
+            case ActiveAbilityDes.coreOverload:
+                return "Core Overload";
+            case ActiveAbilityDes.exposeCore:
+                return "Expose Core";
+            case ActiveAbilityDes.magicalRanged:
+                return "Magical Ranged";
+            case ActiveAbilityDes.physicalMelee:
+                return "Physical Melee";
+            case ActiveAbilityDes.physicalRanged:
+                return "Physical Ranged";
+            default:
+                return "Attack";
+        }
     }
 
     public class AttackMessageToTarget

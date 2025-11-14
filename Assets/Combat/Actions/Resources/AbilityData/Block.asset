@@ -20,4 +20,5 @@ MonoBehaviour:
   range: 0
   aoeRange: 0
   targetType: 9
-  description: 
+  description: The user blocks an incoming attack at the cost of stamina
+  icon: {fileID: 2537882373423050008, guid: d9784c8f564d3a84eaa00141c2a828ae, type: 3}

@@ -53,11 +53,6 @@ public class Divert : ActiveAbility
         throw new System.NotImplementedException();
     }
 
-    public override string GetDescription()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void Initialize(SendData sendData)
     {
         base.Initialize(sendData);
@@ -94,5 +89,10 @@ public class Divert : ActiveAbility
             action = OnUnitAddedToCombat
         };
         MainCombatManager.manager.onUnitAddedToCombat.Subscribe(onUnitAddedToCombat);
+    }
+
+    public override string GetID()
+    {
+        return "Divert";
     }
 }

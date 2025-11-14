@@ -20,4 +20,6 @@ MonoBehaviour:
   range: 0
   aoeRange: 0
   targetType: 9
-  description: Gain evade until your next turn
+  description: The user focuses on evaision, gaining Evade stacks until their next
+    turn
+  icon: {fileID: -4693932192084691647, guid: 398914fe1223ada4292cb400ada4e5d8, type: 3}

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddbf313835d87d543abe40b73d1ab64e, type: 3}
+  m_Name: ScoutR
+  m_EditorClassIdentifier: 
+  activeGrant: 
+  passiveGrant: 08000000
+  branches:
+  - {fileID: 11400000, guid: 36adef4b9dd7e0a4e9058ec46b2bca4d, type: 2}
+  - {fileID: 11400000, guid: 232608f533743fb418f730e35dfa25f5, type: 2}
+  - {fileID: 11400000, guid: 612a9c23f8e27e0418a8c90520bb4a9f, type: 2}

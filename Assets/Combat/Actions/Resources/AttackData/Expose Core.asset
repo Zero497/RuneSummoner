@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afe2d2501eaff9445b0f73882d88eb00, type: 3}
+  m_Name: Expose Core
+  m_EditorClassIdentifier: 
+  abilityName: Expose Core
+  isFree: 0
+  isReaction: 0
+  staminaCost: 0
+  manaCost: 90
+  range: 4
+  aoeRange: 0
+  targetType: 0
+  description: The user launches a lightning bolt from their core, dealing electro
+    damage.
+  icon: {fileID: -1514505442984709429, guid: 63a2dd964c1d4b245be69eb34a0d53c2, type: 3}
+  damageType: 1
+  damageElement: 5
+  damage: 30
+  effectsToApplySelf:
+  - vulnerable
+  baseStacksToApplyToSelf: 03000000
+  effectsToApplyTarget:
+  - shocked
+  baseStacksToApplyToTarget: 05000000
+  useUnitElement: 0
+  useWeaponElement: 0

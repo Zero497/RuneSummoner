@@ -13,6 +13,11 @@ public class Block : Reaction
         source.myEvents.onAttacked.Subscribe(onAttacked);
     }
 
+    public override string GetID()
+    {
+        return "Block";
+    }
+
     private void OnAttacked(UnitBase myUnit, Attack.AttackMessageToTarget attack)
     {
         if (isActive)
@@ -36,11 +41,6 @@ public class Block : Reaction
     }
 
     public override bool RushCompletion()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override string GetDescription()
     {
         throw new System.NotImplementedException();
     }
