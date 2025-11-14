@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,9 +18,9 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
 
     public int availableUpgradePoints;
 
-    [NonSerialized]public Dictionary<ActiveAbility.ActiveAbilityDes, int> activeAbilities;
+    [XmlIgnore][NonSerialized]public Dictionary<ActiveAbility.ActiveAbilityDes, int> activeAbilities;
 
-    [NonSerialized]public Dictionary<PassiveAbility.PassiveAbilityDes, int> passiveAbilities;
+    [XmlIgnore][NonSerialized]public Dictionary<PassiveAbility.PassiveAbilityDes, int> passiveAbilities;
 
     public List<string> acquiredUpgrades;
 
