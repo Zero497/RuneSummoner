@@ -89,4 +89,13 @@ public class Unstoppable : PassiveAbility
 
         mostRecentLine = newLine;
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Unstoppable\n";
+        ret += 
+            "At the end of this Unit’s turn, it gains "+(2*level)+" (2 base) stacks of Physical Defense Up and Magical Defense Up for each tile it moved in a straight line before ending its turn.\n";
+        ret += "Level Effect: +2 Physical Defense Up and Magical Defense Up per Level.\n";
+        return ret;
+    }
 }

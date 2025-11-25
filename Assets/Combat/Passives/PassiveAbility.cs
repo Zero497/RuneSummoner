@@ -69,6 +69,102 @@ public abstract class PassiveAbility : IEquatable<PassiveAbility>
        return level;
    }
 
+   public static string GetPassiveFullText(PassiveAbilityDes des, UnitSimple unit, int level)
+   {
+       UnitData unitData = Resources.Load<UnitData>(unit.name);
+       float abilityPower =
+           UnitCombatStats.GetActualBase(unitData.abilityPower, unit.statGrades.abilityPowerGrade, unit.level);
+       string ret = "";
+       switch (des)
+       {
+           case PassiveAbilityDes.adaptable:
+               ret = Adaptable.GetFullText(level);
+               break;
+           case PassiveAbilityDes.ambush:
+               ret = Ambush.GetFullText(level);
+               break;
+           case PassiveAbilityDes.berserker:
+               ret = Berserker.GetFullText(level);
+               break;
+           case PassiveAbilityDes.bristlingSpines:
+               ret = BristlingSpines.GetFullText(level, unitData.DefaultDamageElement);
+               break;
+           case PassiveAbilityDes.charge:
+               ret = Charge.GetFullText(level);
+               break;
+           case PassiveAbilityDes.clockworkDefenses:
+               ret = ClockworkDefenses.GetFullText(level);
+               break;
+           case PassiveAbilityDes.clockworkStrikes:
+               ret = ClockworkStrikes.GetFullText(level);
+               break;
+           case PassiveAbilityDes.debilitatingMark:
+               ret = DebilitatingMark.GetFullText(level);
+               break;
+           case PassiveAbilityDes.defensiveAttacks:
+               ret = DefensiveAttacks.GetFullText(level);
+               break;
+           case PassiveAbilityDes.diversion:
+               ret = Diversion.GetFullText(level);
+               break;
+           case PassiveAbilityDes.entrenched:
+               ret = Entrenched.GetFullText(level);
+               break;
+           case PassiveAbilityDes.evasive:
+               ret = Evasive.GetFullText(level);
+               break;
+           case PassiveAbilityDes.exposingEvade:
+               ret = ExposingEvade.GetFullText(level);
+               break;
+           case PassiveAbilityDes.farseer:
+               ret = Farseer.GetFullText(level);
+               break;
+           case PassiveAbilityDes.guardian:
+               ret = Guardian.GetFullText(level);
+               break;
+           case PassiveAbilityDes.hyperAdapted:
+               ret = HyperAdapted.GetFullText(level);
+               break;
+           case PassiveAbilityDes.lastingMark:
+               ret = LastingMark.GetFullText(level);
+               break;
+           case PassiveAbilityDes.lastStand:
+               ret = LastStand.GetFullText(level);
+               break;
+           case PassiveAbilityDes.lumbering:
+               ret = Lumbering.GetFullText(level);
+               break;
+           case PassiveAbilityDes.mechanical:
+               ret = Mechanical.GetFullText(level);
+               break;
+           case PassiveAbilityDes.observer:
+               ret = Observer.GetFullText(level);
+               break;
+           case PassiveAbilityDes.openingAssault:
+               ret = OpeningAssault.GetFullText(level);
+               break;
+           case PassiveAbilityDes.rage:
+               ret = Rage.GetFullText(level);
+               break;
+           case PassiveAbilityDes.rageBoost:
+               ret = RageBoost.GetFullText(level);
+               break;
+           case PassiveAbilityDes.resilient:
+               ret = Resilient.GetFullText(level);
+               break;
+           case PassiveAbilityDes.skirmisher:
+               ret = Skirmisher.GetFullText(level);
+               break;
+           case PassiveAbilityDes.tauntExtension:
+               ret = TauntExtension.GetFullText(level);
+               break;
+           case PassiveAbilityDes.unstoppable:
+               ret = Unstoppable.GetFullText(level);
+               break;
+       }
+       return ret;
+   }
+
    /*
         Expects:
             Unit 0: unit to apply to

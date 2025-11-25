@@ -67,4 +67,12 @@ public class Berserker : PassiveAbility
         source.myCombatStats.AddManaRegen(source.myCombatStats.getManaRegen(true)*mod*0.5f*level);
         isActive = change;
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Berserker\n";
+        ret += "Description: While this Unit has less than 40% max Health remaining, its Ability Power, Physical Attack, Magical Attack, Stamina Regeneration, and Mana Regeneration are all increased by "+(50*level)+"% (50% base).\n";
+        ret += "Level Effect: +50% increase to Ability Power, Physical Attack, Magical Attack, Stamina Regeneration, and Mana Regeneration per Level.\n";
+        return ret;
+    }
 }

@@ -33,4 +33,22 @@ public class Dodge : ActiveAbility
     {
         throw new System.NotImplementedException();
     }
+
+    public static AbilityText GetAbilityText(int level, float abilityPower)
+    {
+        AbilityText ret = new AbilityText();
+        AbilityData abData = Resources.Load<AbilityData>("AbilityData/Dodge");
+        ret.name = "Dodge";
+        ret.desc = abData.description;
+        ret.abilityType = "Support";
+        ret.range = "Self";
+        float temp = abData.staminaCost*(1-0.01f*abilityPower);
+        ret.cost = temp + " ("+abData.staminaCost+" base) Stamina";
+        ret.targetType = "Self";
+        ret.special =
+            "Grants "+(6+4*level)+" (10 base) stacks of Evade.";
+        ret.apEffect = "-1% Stamina Cost per AP";
+        ret.levelEffect = "+4 Stacks of Evade per Level";
+        return ret;
+    }
 }

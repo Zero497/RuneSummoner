@@ -54,4 +54,21 @@ public class Mark : ActiveAbility
     {
         return "Mark";
     }
+    
+    public static AbilityText GetAbilityText(int level, float abilityPower)
+    {
+        AbilityText ret = new AbilityText();
+        AbilityData abData = Resources.Load<AbilityData>("AbilityData/Mark");
+        ret.name = "Mark";
+        ret.desc = abData.description;
+        ret.abilityType = "Debuff";
+        ret.range = "Sight";
+        ret.cost = abData.staminaCost+" Stamina";
+        ret.targetType = "Single Enemy";
+        ret.special =
+            "The target gains Marked "+(1+2*level)+" (3 base).";
+        ret.apEffect = "None.";
+        ret.levelEffect = "+2 stacks of Marked per Level.";
+        return ret;
+    }
 }

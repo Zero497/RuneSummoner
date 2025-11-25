@@ -43,13 +43,13 @@ public class CoreOverload : Attack
         float mult = 1;
         if (retval.damageType == AttackData.DamageType.Magic)
         {
-            mult += source.magicalAttack / 100;
+            mult += source.magicalAttack * 3 / 100;
         }
         else if (retval.damageType == AttackData.DamageType.Physical)
         {
-            mult += source.physicalAttack / 100;
+            mult += source.physicalAttack * 3/ 100;
         }
-        retval.baseDamage = (0.5f + 0.25f * level) * manaToBePaid;
+        retval.baseDamage =  (0.5f + 0.25f * level)* manaToBePaid;
         retval.damage = retval.baseDamage;
         retval.baseDamage *= mult * mod;
         retval.damage *= mult * mod;
@@ -70,5 +70,26 @@ public class CoreOverload : Attack
         ClickManager.clickManager.SetAction(null);
         prepped = false;
         return false;
+    }
+
+    public static AbilityText GetAbilityText(int level, float abilityPower, float magicalAttack)
+    {
+        AbilityText ret = new AbilityText();
+        AbilityData abData = Resources.Load<AbilityData>("AttackData/Core Overload");
+        ret.isAttack = true;
+        ret.isAOE = true;
+        ret.name = "Core Overload";
+        ret.desc = abData.description;
+        ret.abilityType = "Attack";
+        ret.range = "Self";
+        float temp = (0.5f + 0.25f * level)*(1+0.03f*magicalAttack);
+        ret.damage = temp + "(0.5 base) Magical Electro per Mana Spent";
+        ret.cost = "100% current Mana";
+        ret.targetType = "AOE All";
+        ret.aoeRange = (abData.aoeRange + Mathf.FloorToInt(abilityPower / 20))+" ("+abData.aoeRange+" base)";
+        ret.special = "This Unit Dies";
+        ret.apEffect = "+1 AOE range per 20 AP";
+        ret.levelEffect = "+0.25 Magical Electro damage per Mana per Level";
+        return ret;
     }
 }

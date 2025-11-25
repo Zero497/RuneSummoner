@@ -83,4 +83,12 @@ public class Charge : PassiveAbility
 
         mostRecentLine = newLine;
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Charge\n";
+        ret += "Description: Damage this Unit deals with melee (range 1) attacks is increased by "+(level*10)+"% (10% base) for each tile this Unit moved in a straight line before using that attack.\n";
+        ret += "Level Effect: +10% damage bonus per tile per Level.\n";
+        return ret;
+    }
 }

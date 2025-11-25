@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ElectricShroud : ActiveAbility
@@ -61,5 +62,26 @@ public class ElectricShroud : ActiveAbility
     public override bool RushCompletion()
     {
         throw new System.NotImplementedException();
+    }
+
+    public static AbilityText GetAbilityText(int level, float abilityPower)
+    {
+        AbilityText ret = new AbilityText();
+        AbilityData abData = Resources.Load<AbilityData>("AbilityData/Electric Shroud");
+        ret.name = "Electric Shroud";
+        ret.desc = abData.description;
+        ret.abilityType = "Support";
+        ret.range = "Self";
+        float temp = abData.manaCost*(1+0.05f*abilityPower);
+        temp = MathF.Round(temp, 2);
+        ret.cost = temp + " ("+abData.manaCost+" base) Mana";
+        ret.targetType = "Self";
+        temp = Mathf.FloorToInt(20 * (1 + 0.05f * abilityPower));
+        temp = Mathf.FloorToInt(temp * (0.5f + 0.5f * level));
+        ret.special =
+            "Free Action. User gains Spikes Magical Electro "+temp+" (20 base) until the User's next turn.";
+        ret.apEffect = "+5% (rounded down) Spikes applied and +5% Mana Cost";
+        ret.levelEffect = "Spikes applied +50% after the increase from AP";
+        return ret;
     }
 }

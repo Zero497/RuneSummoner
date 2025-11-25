@@ -57,4 +57,13 @@ public class DefensiveAttacks : PassiveAbility
             attack.damage -= attack.baseDamage * 0.25f * level;
         }
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Defensive Attacks\n";
+        ret += 
+            "After attacking a Unit, this Unit takes "+(25*level)+"% (25% base) less damage from attacks made by that Unit until this Unit’s next turn.\n";
+        ret += "Level Effect: +25% damage reduction per Level.\n";
+        return ret;
+    }
 }

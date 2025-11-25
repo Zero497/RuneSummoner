@@ -64,6 +64,14 @@ public class ClockworkStrikes : PassiveAbility
             attack.damage += attack.baseDamage * Mathf.Max(0.15f * attacksLastTurn[attack.sourceAttack], 0.6f) * level;
         }
         attacksThisTurn.Add(attack.sourceAttack);
-        
+    }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Clockwork Strikes\n";
+        ret += 
+            "For each previous turn in succession this Unit has used a particular attack, that attack’s damage is increased by "+(level*15)+"% (15% base), to a maximum of "+(level*60)+"% (60% base).\n";
+        ret += "Level Effect: +15% damage increase per turn and +60% max damage increase amount per Level.\n";
+        return ret;
     }
 }

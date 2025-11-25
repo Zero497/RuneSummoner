@@ -8,6 +8,8 @@ public class Attack : ActiveAbility
 {
     private ActiveAbility _activeAbilityImplementation;
 
+    public static float physMagAttBonus = 0.03f;
+
     public override bool RunAction(SendData sentData)
     {
         if (source.usedAbilityThisTurn) return false;
@@ -111,17 +113,17 @@ public class Attack : ActiveAbility
         float mult = 1;
         if (retval.damageType == AttackData.DamageType.Magic)
         {
-            mult += source.magicalAttack / 100;
+            mult += source.magicalAttack  * 3 / 100;
         }
         else if (retval.damageType == AttackData.DamageType.Physical)
         {
-            mult += source.physicalAttack / 100;
+            mult += source.physicalAttack * 3 / 100;
         }
         float abilityPowerBonus = AbilityPowerBonus(retval.baseDamage);
-        retval.baseDamage += abilityPowerBonus;
-        retval.damage += abilityPowerBonus;
         retval.baseDamage *= mult * mod;
         retval.damage *= mult * mod;
+        retval.baseDamage += abilityPowerBonus;
+        retval.damage += abilityPowerBonus;
         source.ModifyOutgoingAttack(retval);
         return retval;
     }
@@ -179,6 +181,65 @@ public class Attack : ActiveAbility
             default:
                 return "Attack";
         }
+    }
+
+    public static AbilityText GetAbilityText(int level, float abilityPower, float physicalAttack, float magicalAttack, ActiveAbilityDes des, AttackData.Element defaultElement)
+    {
+        AbilityText ret = new AbilityText();
+        ret.isAttack = true;
+        AttackData attackData = null;
+        float temp;
+        switch (des)
+        {
+            case ActiveAbilityDes.physicalMelee:
+                attackData = Resources.Load<AttackData>("AttackData/Physical Melee");
+                ret.name = "Basic Attack (Physical Melee)";
+                temp = attackData.damage*(1+0.05f*abilityPower)+attackData.damage*0.03f*physicalAttack;
+                temp = MathF.Round(temp, 2);
+                ret.damage = temp + " ("+attackData.damage+" base) Physical "+defaultElement.ToString();
+                temp = attackData.staminaCost * (1 + 0.05f * abilityPower);
+                temp = MathF.Round(temp, 2);
+                ret.cost = temp+" ("+attackData.staminaCost+" base) Stamina";
+                break;
+            case ActiveAbilityDes.physicalRanged:
+                attackData = Resources.Load<AttackData>("AttackData/Physical Ranged");
+                ret.name = "Basic Attack (Physical Ranged)";
+                temp = attackData.damage*(1+0.05f*abilityPower)+attackData.damage*0.03f*physicalAttack;
+                temp = MathF.Round(temp, 2);
+                ret.damage = temp + " ("+attackData.damage+" base) Physical "+defaultElement.ToString();
+                temp = attackData.staminaCost * (1 + 0.05f * abilityPower);
+                temp = MathF.Round(temp, 2);
+                ret.cost = temp+" ("+attackData.staminaCost+" base) Stamina";
+                break;
+            case ActiveAbilityDes.magicalMelee:
+                attackData = Resources.Load<AttackData>("AttackData/Magical Melee");
+                ret.name = "Basic Attack (Magical Melee)";
+                temp = attackData.damage*(1+0.05f*abilityPower)+attackData.damage*0.03f*magicalAttack;
+                temp = MathF.Round(temp, 2);
+                ret.damage = temp + " ("+attackData.damage+" base) Magical "+defaultElement.ToString();
+                temp = attackData.manaCost * (1 + 0.05f * abilityPower);
+                temp = MathF.Round(temp, 2);
+                ret.cost = temp+" ("+attackData.manaCost+" base) Mana";
+                break;
+            case ActiveAbilityDes.magicalRanged:
+                attackData = Resources.Load<AttackData>("AttackData/Magical Ranged");
+                ret.name = "Basic Attack (Magical Ranged)";
+                temp = attackData.damage*(1+0.05f*abilityPower)+attackData.damage*0.03f*magicalAttack;
+                temp = MathF.Round(temp, 2);
+                ret.damage = temp + " ("+attackData.damage+" base) Magical "+defaultElement.ToString();
+                temp = attackData.manaCost * (1 + 0.05f * abilityPower);
+                temp = MathF.Round(temp, 2);
+                ret.cost = temp+" ("+attackData.manaCost+" base) Mana";
+                break;
+        }
+        ret.range = attackData.range+"";
+        ret.desc = attackData.description;
+        ret.abilityType = "Attack";
+        ret.targetType = "Single Enemy";
+        ret.special = "";
+        ret.apEffect = "+5% damage and cost per AP";
+        ret.levelEffect = "";
+        return ret;
     }
 
     public class AttackMessageToTarget

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,5 +66,29 @@ public class Fury : Attack
         ClickManager.clickManager.SetAction(null);
         prepped = false;
         return false;
+    }
+
+    public static AbilityText GetAbilityText(int level, float abilityPower, float physicalAttack, float magicalAttack, AbilityText basicAbilityText)
+    {
+        AbilityText ret = new AbilityText();
+        AttackData attackData = Resources.Load<AttackData>("AttackData/Fury");
+        ret.isAttack = true;
+        ret.name = "Fury";
+        ret.desc = attackData.description;
+        ret.abilityType = "Attack";
+        ret.range = basicAbilityText.range;
+        string[] temp = basicAbilityText.damage.Split(" ");
+        float temp2 = int.Parse(temp[0]) * 0.75f;
+        temp2 = MathF.Round(temp2, 2);
+        ret.damage = temp2+" "+temp[1]+" "+temp[2]+" "+temp[3]+" "+temp[4]+" x"+(2+level);
+        temp = basicAbilityText.cost.Split(" ");
+        temp2 = int.Parse(temp[0]) * 1.25f;
+        temp2 = MathF.Round(temp2, 2);
+        ret.cost = temp2+" "+temp[1]+" "+temp[2]+" "+temp[3];
+        ret.targetType = "Single Enemy";
+        ret.special = "Make "+(2+level)+" (3 base) Basic Attacks at a single target with 25% reduced damage and 25% increased Stamina or Mana Cost.";
+        ret.apEffect = "+5% damage and cost per AP";
+        ret.levelEffect = "Make 1 additional Basic Attack per level";
+        return ret;
     }
 }

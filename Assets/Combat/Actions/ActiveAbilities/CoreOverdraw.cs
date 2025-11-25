@@ -38,4 +38,22 @@ public class CoreOverdraw : ActiveAbility
     {
         throw new System.NotImplementedException();
     }
+
+    public static AbilityText GetAbilityText(int level, float abilityPower)
+    {
+        AbilityText ret = new AbilityText();
+        AbilityData abData = Resources.Load<AbilityData>("AbilityData/Core OverdrawM");
+        ret.name = "Core Overdraw";
+        ret.desc = abData.description;
+        ret.abilityType = "Support";
+        ret.range = "Self";
+        float temp = abData.manaCost*(1+0.05f*abilityPower);
+        ret.cost = temp + " ("+abData.manaCost+" base) Mana or "+temp+" ("+abData.manaCost+" base) Stamina";
+        ret.targetType = "Self";
+        ret.special =
+            "The user gains Mana or Stamina equal to "+(30+20*level)+"% (50% base) the cost paid in the other and takes "+Mathf.Max(0,60-level*10)+"% (50% base) that much damage.";
+        ret.apEffect = "+5% cost per AP";
+        ret.levelEffect = "Increases the Mana or Stamina gain by 20% (additive) and reduces the damage percentage by 10% (subtractive)";
+        return ret;
+    }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Block : Reaction
@@ -43,5 +44,24 @@ public class Block : Reaction
     public override bool RushCompletion()
     {
         throw new System.NotImplementedException();
+    }
+
+    public static AbilityText GetAbilityText(float level, float abilityPower)
+    {
+        AbilityText ret = new AbilityText();
+        AbilityData abData = Resources.Load<AbilityData>("AbilityData/Block");
+        ret.name = "Block";
+        ret.desc = abData.description;
+        ret.abilityType = "Reaction";
+        ret.range = "Self";
+        float temp = 2.5f * (1 - 0.02f * abilityPower) * (1.2f - level * 0.2f);
+        temp = MathF.Round(temp, 2);
+        ret.cost = temp + " (base 2.5) Stamina per point of incoming damage";
+        ret.targetType = "Self";
+        ret.special =
+            "Negate the damage from an incoming attack entirely by paying Stamina. Fails if insufficient Stamina remains.";
+        ret.apEffect = "Stamina cost reduced by 0.2% per AP";
+        ret.levelEffect = "Stamina cost reduced by 20% per Level after AP";
+        return ret;
     }
 }

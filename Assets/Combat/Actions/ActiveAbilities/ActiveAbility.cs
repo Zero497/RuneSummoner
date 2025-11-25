@@ -65,167 +65,103 @@ public abstract class ActiveAbility : UnitAction
         sprint,
         taunt
     }
-    
-    public static string GetFullDescription(ActiveAbilityDes des, UnitSimple unit, int level)
+
+    public class AbilityText
+    {
+        public string damage = "";
+        public string aoeRange = "";
+        public string name = "";
+        public string desc = "";
+        public string abilityType = "";
+        public string range = "";
+        public string cost = "";
+        public string targetType = "";
+        public string special = "";
+        public string apEffect = "";
+        public string levelEffect = "";
+        public bool isAttack = false;
+        public bool isAOE = false;
+    }
+
+    public static string AbilityTextToFullDesc(AbilityText text, int level)
+    {
+        string ret = "<style=\"H1\">" + text.name+"</style>\n";
+        ret += "\t<style=\"H2\">Level: " + level+"\n";
+        ret += text.desc+"</style>\n";
+        ret += "\tAbility Type: "+text.abilityType+"\n";
+        ret += "\tRange: "+text.range+"\n";
+        if (text.isAttack)
+            ret += "\tDamage: " + text.damage + "\n";
+        ret += "\tCost: " + text.cost+"\n";
+        ret += "\tTarget Type: " + text.targetType+"\n";
+        if (text.isAOE)
+            ret += "\tAOE Range: " + text.aoeRange + "\n";
+        ret += "\tAdditional Details: " + text.special + "\n";
+        ret += "\tAbility Power Effect: " + text.apEffect+"\n";
+        ret += "\tLevel Effect: " + text.levelEffect+"\n";
+        return ret;
+    }
+    public static AbilityText GetAbilityText(ActiveAbilityDes des, UnitSimple unit, int level)
     {
         UnitData unitData = Resources.Load<UnitData>(unit.name);
         float abilityPower =
             UnitCombatStats.GetActualBase(unitData.abilityPower, unit.statGrades.abilityPowerGrade, unit.level);
-        string name = "";
-        string desc = "";
-        string abilityType = "";
-        string range = "";
-        string cost = "";
-        string targetType = "";
-        string special = "";
-        string apEffect = "";
-        string levelEffect = "";
-        bool isAttack = false;
-        bool isAOE = false;
-        AbilityData abData;
-        AttackData attackData;
-        float temp;
-        string damage = "";
-        string aoeRange = "";
+        float physicalAttack =
+            UnitCombatStats.GetActualBase(unitData.physicalAttack, unit.statGrades.physicalAttackGrade, unit.level);
+        float magicalAttack =
+            UnitCombatStats.GetActualBase(unitData.magicalAttack, unit.statGrades.magicalAttackGrade, unit.level);
+        AbilityText text = new AbilityText();
         switch (des)
         {
             case ActiveAbilityDes.block:
-                abData = Resources.Load<AbilityData>("AbilityData/Block");
-                name = "Block";
-                desc = abData.description;
-                abilityType = "Reaction";
-                range = "Self";
-                temp = 2.5f * (1 - 0.02f * abilityPower) * (1.2f - level * 0.2f);
-                cost = temp + " Stamina per point of incoming damage";
-                targetType = "Self";
-                special =
-                    "Negate the damage from an incoming attack entirely by paying Stamina. Fails if insufficient Stamina remains.";
-                apEffect = "Stamina cost reduced by 0.2% per AP";
-                levelEffect = "Stamina cost reduced by 20% per Level after AP";
+                text = Block.GetAbilityText(level, abilityPower);
                 break;
             case ActiveAbilityDes.coreOverdraw:
-                abData = Resources.Load<AbilityData>("AbilityData/Core OverdrawM");
-                name = "Core Overdraw";
-                desc = abData.description;
-                abilityType = "Support";
-                range = "Self";
-                temp = abData.manaCost*(1+0.05f*abilityPower);
-                cost = temp + " Mana or "+temp+" Stamina";
-                targetType = "Self";
-                special =
-                    "The user gains Mana or Stamina equal to "+(30+20*level)+"% the cost paid in the other and takes "+Mathf.Max(0,60-level*10)+"% that much damage.";
-                apEffect = "+5% cost per AP";
-                levelEffect = "Increases the Mana or Stamina gain by 20% (additive) and reduces the damage percentage by 10% (subtractive)";
+                text = CoreOverdraw.GetAbilityText(level, abilityPower);
                 break;
             case ActiveAbilityDes.coreOverload:
-                abData = Resources.Load<AbilityData>("AttackData/Core Overload");
-                isAttack = true;
-                isAOE = true;
-                name = "Core Overload";
-                desc = abData.description;
-                abilityType = "Attack";
-                range = "Self";
-                temp = 0.5f + 0.25f * level;
-                damage = temp + "Magical Electro per Mana Spent";
-                cost = "100% current Mana";
-                targetType = "AOE All";
-                aoeRange = (abData.aoeRange + Mathf.FloorToInt(abilityPower / 20)).ToString();
-                special = "This Unit Dies";
-                apEffect = "+1 AOE range per AP";
-                levelEffect = "+0.25 Magical Electro damage per Mana per Level";
+                text = CoreOverload.GetAbilityText(level, abilityPower, magicalAttack);
                 break;
             case ActiveAbilityDes.divert:
-                abData = Resources.Load<AbilityData>("AbilityData/Divert");
-                name = "Divert";
-                desc = abData.description;
-                abilityType = "Reaction";
-                range = "1";
-                temp = abData.staminaCost;
-                cost = temp + " Stamina";
-                targetType = "Single Enemy";
-                special =
-                    "When an adjacent friendly Unit makes an attack on an adjacent Unit, apply "+(1+2*level)+" stacks of Marked (after the attack).";
-                apEffect = "None";
-                levelEffect = "+2 Marked stacks applied";
+                text = Divert.GetAbilityText(level, abilityPower);
                 break;
             case ActiveAbilityDes.dodge:
-                abData = Resources.Load<AbilityData>("AbilityData/Dodge");
-                name = "Dodge";
-                desc = abData.description;
-                abilityType = "Support";
-                range = "Self";
-                temp = abData.staminaCost*(1-0.01f*abilityPower);
-                cost = temp + " Stamina";
-                targetType = "Self";
-                special =
-                    "Grants "+(6+4*level)+" stacks of Evade.";
-                apEffect = "-1% Stamina Cost per AP";
-                levelEffect = "+4 Stacks of Evade per Level";
+                text = Dodge.GetAbilityText(level, abilityPower);
                 break;
             case ActiveAbilityDes.electricShroud:
-                abData = Resources.Load<AbilityData>("AbilityData/Electric Shroud");
-                name = "Electric Shroud";
-                desc = abData.description;
-                abilityType = "Support";
-                range = "Self";
-                temp = abData.manaCost*(1+0.05f*abilityPower);
-                cost = temp + " Mana";
-                targetType = "Self";
-                temp = Mathf.FloorToInt(20 * (1 + 0.05f * abilityPower));
-                temp = Mathf.FloorToInt(temp * (0.5f + 0.5f * level));
-                special =
-                    "Free Action. User gains Spikes Magical Electro "+temp+" until the User's next turn.";
-                apEffect = "+5% (rounded down) Spikes applied and +5% Mana Cost";
-                levelEffect = "Spikes applied +50% after the increase from AP";
+                text = ElectricShroud.GetAbilityText(level, abilityPower);
                 break;
             case ActiveAbilityDes.exposeCore:
-                attackData = Resources.Load<AttackData>("AttackData/Expose Core");
-                isAttack = true;
-                name = "Expose Core";
-                desc = attackData.description;
-                abilityType = "Attack";
-                range = (attackData.range+(level-1)).ToString();
-                temp = attackData.damage*(1+0.05f*abilityPower);
-                damage = temp + " Magical Electro";
-                cost = attackData.manaCost+" Mana";
-                targetType = "Single Enemy";
-                special = "The target gains Shocked "+(5*level)+". This Unit gains Vulnerable 3.";
-                apEffect = "+5% damage and cost per AP";
-                levelEffect = "+1 Range per Level +5 Shocked applied per Level";
+                text = ExposeCore.GetAbilityText(level, abilityPower, magicalAttack);
                 break;
             case ActiveAbilityDes.fury:
-                attackData = Resources.Load<AttackData>("AttackData/Fury");
-                AttackData basicData;
-                
-                isAttack = true;
-                name = "Fury";
-                desc = attackData.description;
-                abilityType = "Attack";
-                range = (attackData.range+(level-1)).ToString();
-                temp = attackData.damage*(1+0.05f*abilityPower);
-                damage = temp + " Magical Electro";
-                cost = attackData.manaCost+" Mana";
-                targetType = "Single Enemy";
-                special = "The target gains Shocked "+(5*level)+". This Unit gains Vulnerable 3.";
-                apEffect = "+5% damage and cost per AP";
-                levelEffect = "+1 Range per Level +5 Shocked applied per Level";
+                AbilityText basicText = new AbilityText();
+                foreach (ActiveAbilityDes abilityDes in unitData.baseActiveAbilities)
+                {
+                    if (abilityDes == ActiveAbilityDes.physicalMelee || abilityDes == ActiveAbilityDes.physicalRanged || abilityDes == ActiveAbilityDes.magicalMelee || abilityDes == ActiveAbilityDes.magicalRanged)
+                        basicText = Attack.GetAbilityText(level, abilityPower, physicalAttack, magicalAttack, abilityDes,
+                            unitData.DefaultDamageElement);
+                }
+                text = Fury.GetAbilityText(level, abilityPower, physicalAttack, magicalAttack, basicText);
+                break;
+            case ActiveAbilityDes.physicalMelee:
+            case ActiveAbilityDes.physicalRanged:
+            case ActiveAbilityDes.magicalMelee:
+            case ActiveAbilityDes.magicalRanged:
+                text = Attack.GetAbilityText(level, abilityPower, physicalAttack, magicalAttack, des,
+                    unitData.DefaultDamageElement);
+                break;
+            case ActiveAbilityDes.mark:
+                text = Mark.GetAbilityText(level, abilityPower);
+                break;
+            case ActiveAbilityDes.sprint:
+                text = Sprint.GetAbilityText(level, abilityPower);
+                break;
+            case ActiveAbilityDes.taunt:
+                text = Taunt.GetAbilityText(level, abilityPower);
                 break;
         }
-        string ret = "<style=\"H1\">"+name+"</style>\n";
-        ret += "\t<style=\"H2\">Level: " + level+"\n";
-        ret += desc+"</style>\n";
-        ret += "\tAbility Type: "+abilityType+"\n";
-        ret += "\tRange: "+range+"\n";
-        if (isAttack)
-            ret += "\tDamage: " + damage + "\n";
-        ret += "\tCost: " + cost+"\n";
-        ret += "\tTarget Type: " + targetType+"\n";
-        if (isAOE)
-            ret += "\tAOE Range: " + aoeRange + "\n";
-        ret += "\tAdditional Details: " + special + "\n";
-        ret += "\tAbility Power Effect: " + apEffect+"\n";
-        ret += "\tLevel Effect: " + levelEffect+"\n";
-        return ret;
+        return text;
     }
 
 

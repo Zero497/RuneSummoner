@@ -46,4 +46,13 @@ public class Lumbering : PassiveAbility
         source.myCombatStats.AddPhysicalAttack(-source.myCombatStats.getPhysicalAttack(true)*0.15f*level*tilesMoved);
         source.myCombatStats.AddMagicalAttack(-source.myCombatStats.getMagicalAttack(true)*0.1f*level*tilesMoved);
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Lumbering\n";
+        ret += 
+            "This Unit has +"+(75*level)+"% (75% base) Physical Attack and +"+(50*level)+"% (50% base) Magical Attack. This Unit loses -"+(level*15)+"% (15% base) Physical Attack and -"+(level*10)+"% (10% base) Magical Attack for each tile it moves until the start of its next turn.\n";
+        ret += "Level Effect: +75% Physical Defense and +50% Magical Defense per Level and -15% Physical Defense and -10% Magical Defense per tile moved per Level.\n";
+        return ret;
+    }
 }

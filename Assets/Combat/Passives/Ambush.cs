@@ -65,4 +65,12 @@ public class Ambush : PassiveAbility
             }
         }
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Ambush\n";
+        ret += "Description: When this Unit attacks an enemy Unit that could not see it at the start of this Unit’s turn, it deals "+(50*level)+"% (base 50) additional damage.\n";
+        ret += "Level Effect: +50% bonus damage per Level.\n";
+        return ret;
+    }
 }

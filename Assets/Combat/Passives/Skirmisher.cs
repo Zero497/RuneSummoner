@@ -18,4 +18,13 @@ public class Skirmisher : PassiveAbility
     {
         return "Skirmisher";
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Skirmisher\n";
+        ret += 
+            "This Unit can use any remaining movement after using an ability.\n";
+        ret += "Level Effect: N/A\n";
+        return ret;
+    }
 }

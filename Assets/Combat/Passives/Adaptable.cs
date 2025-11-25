@@ -31,4 +31,12 @@ public class Adaptable : PassiveAbility
         resData.AddFloat((int) attack.damageElement);
         myUnit.AddEffect(resData);
     }
+
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Adaptable\n";
+        ret += "Description: When damaged, gain Resistant " + (level * 4) + " (base 4) against that damage's Element.\n";
+        ret += "Level Effect: +4 Resistant per Level.\n";
+        return ret;
+    }
 }

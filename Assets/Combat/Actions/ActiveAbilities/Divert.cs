@@ -95,4 +95,22 @@ public class Divert : ActiveAbility
     {
         return "Divert";
     }
+
+    public static AbilityText GetAbilityText(int level, float abilityPower)
+    {
+        AbilityText ret = new AbilityText();
+        AbilityData abData = Resources.Load<AbilityData>("AbilityData/Divert");
+        ret.name = "Divert";
+        ret.desc = abData.description;
+        ret.abilityType = "Reaction";
+        ret.range = "1";
+        float temp = abData.staminaCost;
+        ret.cost = temp + " Stamina";
+        ret.targetType = "Single Enemy";
+        ret.special =
+            "When an adjacent friendly Unit makes an attack on an adjacent Unit, apply "+(1+2*level)+" (base 3) stacks of Marked (after the attack).";
+        ret.apEffect = "None";
+        ret.levelEffect = "+2 Marked stacks applied";
+        return ret;
+    }
 }

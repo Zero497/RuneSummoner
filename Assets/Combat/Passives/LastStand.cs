@@ -46,4 +46,13 @@ public class LastStand : PassiveAbility
             myUnit.Die();
         }
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Last Stand\n";
+        ret += 
+            "When this Unit would die for the first "+level+" (1 base) times, it is instead reduced to 1 Health and gains Invulnerable. It dies at the end of its next turn.\n";
+        ret += "Level Effect: +1 saves from death per Level\n";
+        return ret;
+    }
 }

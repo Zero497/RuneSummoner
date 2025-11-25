@@ -12,4 +12,13 @@ public class Resilient : PassiveAbility
     {
         return "Resilient";
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Resilient\n";
+        ret += 
+            "Increases Physical Defense by "+(50*level)+"% (50% base).\n";
+        ret += "Level Effect: +50% Physical Defense per Level.\n";
+        return ret;
+    }
 }

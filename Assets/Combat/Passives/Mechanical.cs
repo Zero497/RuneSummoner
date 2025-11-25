@@ -30,15 +30,24 @@ public class Mechanical : PassiveAbility
         if (stacks == 1)
         {
             float rand = Random.Range(0, 1);
-            if (rand >= 0.3f + 0.2f * level)
+            if (rand >= Mathf.Min(0.3f + 0.2f * level, 0.9f))
             {
                 incomingEffect.AddStacks(-1);
             }
         }
         else
         {
-            int toRemove = Mathf.FloorToInt(stacks / (float)level);
+            int toRemove = Mathf.FloorToInt(stacks / (float)level+1);
             incomingEffect.AddStacks(-toRemove);
         }
+    }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Mechanical\n";
+        ret += 
+            "When inflicted with two or more debuff stacks, divide incoming stack count by "+(level+1)+" (2 base), rounded up. When inflicted with a single debuff stack (or a non-stacking debuff), have a "+(Mathf.Min(30+20*level, 90))+"% (50% base) chance not to gain that debuff.\n";
+        ret += "Level Effect: Increase divisor for incoming stacks by 1 per Level. Reduce to chance to receive incoming single stack debuffs by 20% to a maximum of 90%.\n";
+        return ret;
     }
 }

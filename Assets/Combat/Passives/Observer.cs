@@ -40,4 +40,13 @@ public class Observer : PassiveAbility
     {
         myUnit.myCombatStats.AddSightRadius(myUnit.myCombatStats.getSightRadius(true)*level);
     }
+    
+    public static string GetFullText(int level)
+    {
+        string ret = "Name: Observer\n";
+        ret += 
+            "While it is not this Unit's turn, its Sight Radius is increased by "+(100*level)+"% (100% base).\n";
+        ret += "Level Effect: +100% Sight Radius increase per Level.\n";
+        return ret;
+    }
 }
