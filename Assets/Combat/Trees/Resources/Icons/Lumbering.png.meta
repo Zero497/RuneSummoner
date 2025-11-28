@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Lumbering_0: -4949180827310432777
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

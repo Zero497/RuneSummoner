@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      MagDefNBG_0: 4716379761602183527
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

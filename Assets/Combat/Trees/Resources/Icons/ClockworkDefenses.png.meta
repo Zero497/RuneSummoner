@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ClockworkDefenses_0: 3554445970662323660
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

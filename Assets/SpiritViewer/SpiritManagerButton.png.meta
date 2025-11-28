@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SpiritManagerButton_0: 2727290494587402787
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

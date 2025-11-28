@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ElectricShroud_0: 1825217043304347438
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

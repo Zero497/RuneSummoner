@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ManaRegenIcon_0: 6261004760717184210
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

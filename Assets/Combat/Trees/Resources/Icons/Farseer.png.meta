@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Farseer_0: 5168828267394358275
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

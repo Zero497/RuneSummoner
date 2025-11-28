@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      MagicalMelee_0: 5753420553998148088
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

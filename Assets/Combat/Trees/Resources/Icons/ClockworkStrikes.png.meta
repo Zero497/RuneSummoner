@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ClockworkStrikes_0: -5671655689377659595
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

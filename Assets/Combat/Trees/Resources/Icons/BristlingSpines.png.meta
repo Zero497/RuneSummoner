@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BristlingSpines_0: 1388903512918738152
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
