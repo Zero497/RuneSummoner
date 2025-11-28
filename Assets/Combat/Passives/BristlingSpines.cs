@@ -40,11 +40,12 @@ public class BristlingSpines : PassiveAbility
         }
     }
     
-    public static string GetFullText(int level, AttackData.Element defaultElement)
+    public static PassiveText GetFullText(int level, AttackData.Element defaultElement)
     {
-        string ret = "Name: Bristling Spines\n";
-        ret += "Description: This Unit perpetually has Spikes Physical "+defaultElement+" equal to "+(level*50)+"% (50% base) of its Physical Defense. This buff cannot be removed.\n";
-        ret += "Level Effect: +50% of Physical Defense added as Spikes per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Bristling Spines";
+        ret.desc = "This Unit perpetually has Spikes Physical "+defaultElement+" equal to "+(level*50)+"% (50% base) of its Physical Defense. This buff cannot be removed.";
+        ret.levelEffect = "+50% of Physical Defense added as Spikes per Level.";
         return ret;
     }
 }

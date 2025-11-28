@@ -69,97 +69,206 @@ public abstract class PassiveAbility : IEquatable<PassiveAbility>
        return level;
    }
 
+   public class PassiveText
+   {
+       public string pName;
+       public string desc;
+       public string levelEffect;
+   }
+
    public static string GetPassiveFullText(PassiveAbilityDes des, UnitSimple unit, int level)
    {
-       UnitData unitData = Resources.Load<UnitData>(unit.name);
-       float abilityPower =
-           UnitCombatStats.GetActualBase(unitData.abilityPower, unit.statGrades.abilityPowerGrade, unit.level);
+       UnitData unitData = unit.GetMyUnitData();
        string ret = "";
+       PassiveText text = new PassiveText();
        switch (des)
        {
            case PassiveAbilityDes.adaptable:
-               ret = Adaptable.GetFullText(level);
+               text = Adaptable.GetFullText(level);
                break;
            case PassiveAbilityDes.ambush:
-               ret = Ambush.GetFullText(level);
+               text = Ambush.GetFullText(level);
                break;
            case PassiveAbilityDes.berserker:
-               ret = Berserker.GetFullText(level);
+               text = Berserker.GetFullText(level);
                break;
            case PassiveAbilityDes.bristlingSpines:
-               ret = BristlingSpines.GetFullText(level, unitData.DefaultDamageElement);
+               text = BristlingSpines.GetFullText(level, unitData.DefaultDamageElement);
                break;
            case PassiveAbilityDes.charge:
-               ret = Charge.GetFullText(level);
+               text = Charge.GetFullText(level);
                break;
            case PassiveAbilityDes.clockworkDefenses:
-               ret = ClockworkDefenses.GetFullText(level);
+               text = ClockworkDefenses.GetFullText(level);
                break;
            case PassiveAbilityDes.clockworkStrikes:
-               ret = ClockworkStrikes.GetFullText(level);
+               text = ClockworkStrikes.GetFullText(level);
                break;
            case PassiveAbilityDes.debilitatingMark:
-               ret = DebilitatingMark.GetFullText(level);
+               text = DebilitatingMark.GetFullText(level);
                break;
            case PassiveAbilityDes.defensiveAttacks:
-               ret = DefensiveAttacks.GetFullText(level);
+               text = DefensiveAttacks.GetFullText(level);
                break;
            case PassiveAbilityDes.diversion:
-               ret = Diversion.GetFullText(level);
+               text = Diversion.GetFullText(level);
                break;
            case PassiveAbilityDes.entrenched:
-               ret = Entrenched.GetFullText(level);
+               text = Entrenched.GetFullText(level);
                break;
            case PassiveAbilityDes.evasive:
-               ret = Evasive.GetFullText(level);
+               text = Evasive.GetFullText(level);
                break;
            case PassiveAbilityDes.exposingEvade:
-               ret = ExposingEvade.GetFullText(level);
+               text = ExposingEvade.GetFullText(level);
                break;
            case PassiveAbilityDes.farseer:
-               ret = Farseer.GetFullText(level);
+               text = Farseer.GetFullText(level);
                break;
            case PassiveAbilityDes.guardian:
-               ret = Guardian.GetFullText(level);
+               text = Guardian.GetFullText(level);
                break;
            case PassiveAbilityDes.hyperAdapted:
-               ret = HyperAdapted.GetFullText(level);
+               text = HyperAdapted.GetFullText(level);
                break;
            case PassiveAbilityDes.lastingMark:
-               ret = LastingMark.GetFullText(level);
+               text = LastingMark.GetFullText(level);
                break;
            case PassiveAbilityDes.lastStand:
-               ret = LastStand.GetFullText(level);
+               text = LastStand.GetFullText(level);
                break;
            case PassiveAbilityDes.lumbering:
-               ret = Lumbering.GetFullText(level);
+               text = Lumbering.GetFullText(level);
                break;
            case PassiveAbilityDes.mechanical:
-               ret = Mechanical.GetFullText(level);
+               text = Mechanical.GetFullText(level);
                break;
            case PassiveAbilityDes.observer:
-               ret = Observer.GetFullText(level);
+               text = Observer.GetFullText(level);
                break;
            case PassiveAbilityDes.openingAssault:
-               ret = OpeningAssault.GetFullText(level);
+               text = OpeningAssault.GetFullText(level);
                break;
            case PassiveAbilityDes.rage:
-               ret = Rage.GetFullText(level);
+               text = Rage.GetFullText(level);
                break;
            case PassiveAbilityDes.rageBoost:
-               ret = RageBoost.GetFullText(level);
+               text = RageBoost.GetFullText(level);
                break;
            case PassiveAbilityDes.resilient:
-               ret = Resilient.GetFullText(level);
+               text = Resilient.GetFullText(level);
                break;
            case PassiveAbilityDes.skirmisher:
-               ret = Skirmisher.GetFullText(level);
+               text = Skirmisher.GetFullText(level);
+               break;
+           case PassiveAbilityDes.stealth:
+               text = Stealth.GetFullText(level);
                break;
            case PassiveAbilityDes.tauntExtension:
-               ret = TauntExtension.GetFullText(level);
+               text = TauntExtension.GetFullText(level);
                break;
            case PassiveAbilityDes.unstoppable:
-               ret = Unstoppable.GetFullText(level);
+               text = Unstoppable.GetFullText(level);
+               break;
+       }
+       ret += "<style=\"H1\">" + text.pName + "</style>\n";
+       ret += "<style=\"H2\">Level: " + level + "</style>\n";
+       ret += "Desc: " + text.desc + "\n";
+       ret += "Level Effect: " + text.levelEffect + "\n";
+       return ret;
+   }
+   
+   public static PassiveData GetPassiveData(PassiveAbilityDes des)
+   {
+       PassiveData ret = null;
+       switch (des)
+       {
+           case PassiveAbilityDes.adaptable:
+               ret = Resources.Load<PassiveData>("Adaptable");
+               break;
+           case PassiveAbilityDes.ambush:
+               ret = Resources.Load<PassiveData>("Ambush");
+               break;
+           case PassiveAbilityDes.berserker:
+               ret = Resources.Load<PassiveData>("Berserker");
+               break;
+           case PassiveAbilityDes.bristlingSpines:
+               ret = Resources.Load<PassiveData>("Bristling Spines");
+               break;
+           case PassiveAbilityDes.charge:
+               ret = Resources.Load<PassiveData>("Charge");
+               break;
+           case PassiveAbilityDes.clockworkDefenses:
+               ret = Resources.Load<PassiveData>("Clockwork Defenses");
+               break;
+           case PassiveAbilityDes.clockworkStrikes:
+               ret = Resources.Load<PassiveData>("Clockwork Strikes");
+               break;
+           case PassiveAbilityDes.debilitatingMark:
+               ret = Resources.Load<PassiveData>("Debilitating Mark");
+               break;
+           case PassiveAbilityDes.defensiveAttacks:
+               ret = Resources.Load<PassiveData>("Defensive Attacks");
+               break;
+           case PassiveAbilityDes.diversion:
+               ret = Resources.Load<PassiveData>("Diversion");
+               break;
+           case PassiveAbilityDes.entrenched:
+               ret = Resources.Load<PassiveData>("Entrenched");
+               break;
+           case PassiveAbilityDes.evasive:
+               ret = Resources.Load<PassiveData>("Evasive");
+               break;
+           case PassiveAbilityDes.exposingEvade:
+               ret = Resources.Load<PassiveData>("Exposing Evade");
+               break;
+           case PassiveAbilityDes.farseer:
+               ret = Resources.Load<PassiveData>("Farseer");
+               break;
+           case PassiveAbilityDes.guardian:
+               ret = Resources.Load<PassiveData>("Guardian");
+               break;
+           case PassiveAbilityDes.hyperAdapted:
+               ret = Resources.Load<PassiveData>("Hyper-Adapted");
+               break;
+           case PassiveAbilityDes.lastingMark:
+               ret = Resources.Load<PassiveData>("Lasting Mark");
+               break;
+           case PassiveAbilityDes.lastStand:
+               ret = Resources.Load<PassiveData>("Last Stand");
+               break;
+           case PassiveAbilityDes.lumbering:
+               ret = Resources.Load<PassiveData>("Lumbering");
+               break;
+           case PassiveAbilityDes.mechanical:
+               ret = Resources.Load<PassiveData>("Mechanical");
+               break;
+           case PassiveAbilityDes.observer:
+               ret = Resources.Load<PassiveData>("Observer");
+               break;
+           case PassiveAbilityDes.openingAssault:
+               ret = Resources.Load<PassiveData>("OpeningAssault");
+               break;
+           case PassiveAbilityDes.rage:
+               ret = Resources.Load<PassiveData>("Rage");
+               break;
+           case PassiveAbilityDes.rageBoost:
+               ret = Resources.Load<PassiveData>("Rage Boost");
+               break;
+           case PassiveAbilityDes.resilient:
+               ret = Resources.Load<PassiveData>("Resilient");
+               break;
+           case PassiveAbilityDes.skirmisher:
+               ret = Resources.Load<PassiveData>("Skirmisher");
+               break;
+           case PassiveAbilityDes.stealth:
+               ret = Resources.Load<PassiveData>("Stealth");
+               break;
+           case PassiveAbilityDes.tauntExtension:
+               ret = Resources.Load<PassiveData>("Taunt Extension");
+               break;
+           case PassiveAbilityDes.unstoppable:
+               ret = Resources.Load<PassiveData>("Unstoppable");
                break;
        }
        return ret;

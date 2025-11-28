@@ -49,6 +49,7 @@ public class Sprint : ActiveAbility
             "Free action. Increase Speed this turn by "+(100+5*abilityPower)+"% (100% base).";
         ret.apEffect = "Speed increase raised by 5% (additive, rounds down) and cost increased by 5%.";
         ret.levelEffect = "Stamina cost reduced by 20% per Level, after AP increases.";
+        ret.icon = Resources.Load<Sprite>("Icons/Sprint");
         return ret;
     }
 }

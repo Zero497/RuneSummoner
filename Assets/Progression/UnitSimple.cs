@@ -41,8 +41,6 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
     public UnitSimple()
     {
         statGrades = new StatGrades();
-        activeAbilities = new Dictionary<ActiveAbility.ActiveAbilityDes, int>();
-        passiveAbilities = new Dictionary<PassiveAbility.PassiveAbilityDes, int>();
     }
 
     public UnitSimple(string name, string id, int level, StatGrades statGrades)
@@ -52,9 +50,8 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
         this.id = id;
         this.level = level;
         this.statGrades = statGrades;
-        activeAbilities = new Dictionary<ActiveAbility.ActiveAbilityDes, int>();
-        passiveAbilities = new Dictionary<PassiveAbility.PassiveAbilityDes, int>();
         UnitData myData = GetMyUnitData();
+        acquiredUpgrades = new List<string>();
         if (myData.superRoot != null)
         {
             for (int i = 0; i < myData.superRoot.branches.Count; i++)
@@ -62,10 +59,59 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
                 acquiredUpgrades.Add(i.ToString());
             }
         }
+        InitAbilities();
+    }
+    
+    public void UnlockUpgrade(string upgradeStr, UnitData myData = null, bool unlock = true)
+    {
+        if(myData == null)
+            myData = GetMyUnitData();
+        char[] chars = upgradeStr.ToCharArray();
+        UpgradeTreeNode node = myData.superRoot;
+        for (int i = 0; i < chars.Length; i++)
+        {
+            int ind = int.Parse(chars[i].ToString());
+            if (node.branches.Count <= ind)
+            {
+                Debug.LogError("Unit got invalid upgrade string");
+            }
+            node = node.branches[ind];
+        }
+        foreach (ActiveAbility.ActiveAbilityDes active in node.activeGrant)
+        {
+            if (activeAbilities.ContainsKey(active))
+            {
+                activeAbilities[active]++;
+            }
+            else
+            {
+                activeAbilities.Add(active, 1);
+            }
+        }
+        foreach (PassiveAbility.PassiveAbilityDes passive in node.passiveGrant)
+        {
+            if (passiveAbilities.ContainsKey(passive))
+            {
+                passiveAbilities[passive]++;
+            }
+            else
+            {
+                passiveAbilities.Add(passive, 1);
+            }
+        }
+
+        if (unlock && availableUpgradePoints > 0)
+        {
+            acquiredUpgrades.Add(upgradeStr);
+            availableUpgradePoints--;
+            UnitManager.ModUnit(this);
+        }
     }
 
     public void InitAbilities()
     {
+        activeAbilities = new Dictionary<ActiveAbility.ActiveAbilityDes, int>();
+        passiveAbilities = new Dictionary<PassiveAbility.PassiveAbilityDes, int>();
         UnitData myData = GetMyUnitData();
         foreach (ActiveAbility.ActiveAbilityDes active in myData.baseActiveAbilities)
         {
@@ -77,39 +123,7 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
         }
         foreach (string upgradeStr in acquiredUpgrades)
         {
-            char[] chars = upgradeStr.ToCharArray();
-            UpgradeTreeNode node = myData.superRoot;
-            for (int i = 0; i < chars.Length; i++)
-            {
-                int ind = int.Parse(chars[i].ToString());
-                if (node.branches.Count <= ind)
-                {
-                    Debug.LogError("Unit got invalid upgrade string");
-                }
-                node = node.branches[ind];
-            }
-            foreach (ActiveAbility.ActiveAbilityDes active in node.activeGrant)
-            {
-                if (activeAbilities.ContainsKey(active))
-                {
-                    activeAbilities[active]++;
-                }
-                else
-                {
-                    activeAbilities.Add(active, 1);
-                }
-            }
-            foreach (PassiveAbility.PassiveAbilityDes passive in node.passiveGrant)
-            {
-                if (passiveAbilities.ContainsKey(passive))
-                {
-                    passiveAbilities[passive]++;
-                }
-                else
-                {
-                    passiveAbilities.Add(passive, 1);
-                }
-            }
+            UnlockUpgrade(upgradeStr, myData, false);
         }
     }
 

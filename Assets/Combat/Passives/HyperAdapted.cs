@@ -40,12 +40,13 @@ public class HyperAdapted : PassiveAbility
         }
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Hyper-Adapted\n";
-        ret += 
-            "This Unit can only have Resistant stacks for one Element (new instances replace old ones). Whenever it gains Resistant stacks, it gains "+(250*level)+"% (250% base) as many.\n";
-        ret += "Level Effect: +250% Resistant applied per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Hyper-Adapted";
+        ret.desc = 
+            "This Unit can only have Resistant stacks for one Element (new instances replace old ones). Whenever it gains Resistant stacks, it gains "+(250*level)+"% (250% base) as many.";
+        ret.levelEffect = "+250% Resistant applied per Level.";
         return ret;
     }
 }

@@ -39,4 +39,14 @@ public class Stealth : PassiveAbility
             }
         }
     }
+    
+    public static PassiveText GetFullText(int level)
+    {
+        PassiveText ret = new PassiveText();
+        ret.pName = "Stealth";
+        ret.desc = 
+            "This Unit is invisible to enemy Units that are further than "+(8-2*level)+" (6 base) tiles away from this Unit.";
+        ret.levelEffect = "Enemies must be +2 tiles closer to see Unit per Level (minimum of 1).";
+        return ret;
+    }
 }

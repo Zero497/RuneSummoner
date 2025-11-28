@@ -55,12 +55,13 @@ public class Guardian : PassiveAbility
         }
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Guardian\n";
-        ret += 
-            "When an adjacent friendly non-Tank Unit would receive attack damage, that damage is reduced by 50% and this Unit takes damage equal to "+(100-20*level)+"% (80% base) of the reduction.\n";
-        ret += "Level Effect: % of reduced damage this Unit receives decreased by 20% per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Guardian";
+        ret.desc = 
+            "When an adjacent friendly non-Tank Unit would receive attack damage, that damage is reduced by 50% and this Unit takes damage equal to "+(100-20*level)+"% (80% base) of the reduction.";
+        ret.levelEffect = "% of reduced damage this Unit receives decreased by 20% per Level.";
         return ret;
     }
 }

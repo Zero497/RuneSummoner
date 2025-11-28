@@ -34,6 +34,7 @@ public class ExposeCore : Attack
         ret.special = "The target gains Shocked "+(5*level)+" (5 base). This Unit gains Vulnerable 3.";
         ret.apEffect = "+5% damage and cost per AP";
         ret.levelEffect = "+1 Range per Level +5 Shocked applied per Level";
+        ret.icon = Resources.Load<Sprite>("Icons/ExposeCore");
         return ret;
     }
 }

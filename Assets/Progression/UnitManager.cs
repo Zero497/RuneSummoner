@@ -56,11 +56,12 @@ public static class UnitManager
             using FileStream myFileStream = new FileStream(file, FileMode.Open);
             UnitSimple unit = (UnitSimple)mySerializer.Deserialize(myFileStream);
             playerUnits.Add(unit);
+            unit.InitAbilities();
         }
         playerUnits.Sort();
     }
 
-    private static void ModUnit(UnitSimple mod)
+    public static void ModUnit(UnitSimple mod)
     {
         if (!IDExists(mod.id))
         {
@@ -100,6 +101,7 @@ public static class UnitManager
     {
         if (IDExists(add.id)) return;
         playerUnits.Add(add);
+        add.InitAbilities();
         XmlSerializer ser = new XmlSerializer(typeof(UnitSimple));
         TextWriter writer = new StreamWriter(SaveHandler.getSavePath()+"/units/"+add.id);
         ser.Serialize(writer, add);

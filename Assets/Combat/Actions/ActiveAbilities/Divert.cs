@@ -111,6 +111,7 @@ public class Divert : ActiveAbility
             "When an adjacent friendly Unit makes an attack on an adjacent Unit, apply "+(1+2*level)+" (base 3) stacks of Marked (after the attack).";
         ret.apEffect = "None";
         ret.levelEffect = "+2 Marked stacks applied";
+        ret.icon = Resources.Load<Sprite>("Icons/Divert");
         return ret;
     }
 }

@@ -60,12 +60,13 @@ public class ClockworkDefenses : PassiveAbility
         }
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: ClockworkDefenses\n";
-        ret += 
-            "At the start of this Unit’s turn, it gains Physical Defense Up"+(5*level)+" (5 base) and Magical Defense Up "+(5*level)+" (5 base) if it took damage since the start of its last turn. Otherwise, it loses all stacks of Physical Defense Up and Magical Defense Up.\n";
-        ret += "Level Effect: +5 Physical Defense Up and Magical Defense Up per turn per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "ClockworkDefenses";
+        ret.desc = 
+            "At the start of this Unit’s turn, it gains Physical Defense Up"+(5*level)+" (5 base) and Magical Defense Up "+(5*level)+" (5 base) if it took damage since the start of its last turn. Otherwise, it loses all stacks of Physical Defense Up and Magical Defense Up.";
+        ret.levelEffect = "+5 Physical Defense Up and Magical Defense Up per turn per Level.";
         return ret;
     }
 }

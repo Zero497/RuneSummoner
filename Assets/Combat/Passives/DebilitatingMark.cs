@@ -7,12 +7,13 @@ public class DebilitatingMark : PassiveAbility
         return "Debilitating Mark";
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Debilitating Mark\n";
-        ret += 
-            "Units Marked by this Unit deal "+(level*25)+"% (25% base) less damage with attacks.\n";
-        ret += "Level Effect: +25% damage reduction per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Debilitating Mark";
+        ret.desc = 
+            "Units Marked by this Unit deal "+(level*25)+"% (25% base) less damage with attacks.";
+        ret.levelEffect = "+25% damage reduction per Level.";
         return ret;
     }
 }

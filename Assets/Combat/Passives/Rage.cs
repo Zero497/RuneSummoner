@@ -80,12 +80,13 @@ public class Rage : PassiveAbility
         }
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Rage\n";
-        ret += 
-            "When this Unit takes damage, it gains Physical Attack Up "+(5*level)+" (5 base) and Magical Attack Up "+(5*level)+" (5 base). When this Unit's turn begins, if it hasn't taken damage since its last turn, it loses all stacks of Physical Attack Up and Magical Attack Up.\n";
-        ret += "Level Effect: +5 Physical Attack Up and Magical Attack Up applied per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Rage";
+        ret.desc = 
+            "When this Unit takes damage, it gains Physical Attack Up "+(5*level)+" (5 base) and Magical Attack Up "+(5*level)+" (5 base). When this Unit's turn begins, if it hasn't taken damage since its last turn, it loses all stacks of Physical Attack Up and Magical Attack Up.";
+        ret.levelEffect = "+5 Physical Attack Up and Magical Attack Up applied per Level.";
         return ret;
     }
 }

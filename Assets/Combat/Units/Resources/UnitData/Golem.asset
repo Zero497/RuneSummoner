@@ -30,12 +30,11 @@ MonoBehaviour:
   speed: 4
   stamina: 400
   staminaRegen: 6
-  baseActiveAbilities:
-  - PhysicalMelee
-  basePassiveAbilities: []
+  baseActiveAbilities: 00000000
+  basePassiveAbilities: 
   portrait: {fileID: 21300000, guid: 0f2ca02a65246a84aa9c46b51cf97c96, type: 3}
   UnitSprite: {fileID: 21300000, guid: 0f2ca02a65246a84aa9c46b51cf97c96, type: 3}
   defaultEntryState: {fileID: 0}
-  uniqueTree: {fileID: 0}
+  superRoot: {fileID: 11400000, guid: 0f9219dae50e97c49850045bd6a5dce5, type: 2}
   DefaultDamageElement: 0
   myGrade: 2

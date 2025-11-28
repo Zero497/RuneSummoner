@@ -82,6 +82,7 @@ public class ElectricShroud : ActiveAbility
             "Free Action. User gains Spikes Magical Electro "+temp+" (20 base) until the User's next turn.";
         ret.apEffect = "+5% (rounded down) Spikes applied and +5% Mana Cost";
         ret.levelEffect = "Spikes applied +50% after the increase from AP";
+        ret.icon = Resources.Load<Sprite>("Icons/ElectricShroud");
         return ret;
     }
 }

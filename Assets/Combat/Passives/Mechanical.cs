@@ -42,12 +42,13 @@ public class Mechanical : PassiveAbility
         }
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Mechanical\n";
-        ret += 
-            "When inflicted with two or more debuff stacks, divide incoming stack count by "+(level+1)+" (2 base), rounded up. When inflicted with a single debuff stack (or a non-stacking debuff), have a "+(Mathf.Min(30+20*level, 90))+"% (50% base) chance not to gain that debuff.\n";
-        ret += "Level Effect: Increase divisor for incoming stacks by 1 per Level. Reduce to chance to receive incoming single stack debuffs by 20% to a maximum of 90%.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Mechanical";
+        ret.desc = 
+            "When inflicted with two or more debuff stacks, divide incoming stack count by "+(level+1)+" (2 base), rounded up. When inflicted with a single debuff stack (or a non-stacking debuff), have a "+(Mathf.Min(30+20*level, 90))+"% (50% base) chance not to gain that debuff.";
+        ret.levelEffect = "Increase divisor for incoming stacks by 1 per Level. Reduce to chance to receive incoming single stack debuffs by 20% to a maximum of 90%.";
         return ret;
     }
 }

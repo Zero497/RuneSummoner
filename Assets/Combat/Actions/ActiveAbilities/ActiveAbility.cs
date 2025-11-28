@@ -81,13 +81,13 @@ public abstract class ActiveAbility : UnitAction
         public string levelEffect = "";
         public bool isAttack = false;
         public bool isAOE = false;
+        public Sprite icon;
     }
 
     public static string AbilityTextToFullDesc(AbilityText text, int level)
     {
         string ret = "<style=\"H1\">" + text.name+"</style>\n";
-        ret += "\t<style=\"H2\">Level: " + level+"\n";
-        ret += text.desc+"</style>\n";
+        ret += "\t<style=\"H2\">Level: " + level+"</style>\n";
         ret += "\tAbility Type: "+text.abilityType+"\n";
         ret += "\tRange: "+text.range+"\n";
         if (text.isAttack)
@@ -103,7 +103,7 @@ public abstract class ActiveAbility : UnitAction
     }
     public static AbilityText GetAbilityText(ActiveAbilityDes des, UnitSimple unit, int level)
     {
-        UnitData unitData = Resources.Load<UnitData>(unit.name);
+        UnitData unitData = unit.GetMyUnitData();
         float abilityPower =
             UnitCombatStats.GetActualBase(unitData.abilityPower, unit.statGrades.abilityPowerGrade, unit.level);
         float physicalAttack =

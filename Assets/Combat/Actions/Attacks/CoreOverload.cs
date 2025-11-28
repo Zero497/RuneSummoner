@@ -90,6 +90,7 @@ public class CoreOverload : Attack
         ret.special = "This Unit Dies";
         ret.apEffect = "+1 AOE range per 20 AP";
         ret.levelEffect = "+0.25 Magical Electro damage per Mana per Level";
+        ret.icon = Resources.Load<Sprite>("Icons/CoreOverload");
         return ret;
     }
 }

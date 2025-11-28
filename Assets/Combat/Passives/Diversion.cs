@@ -28,12 +28,13 @@ public class Diversion : PassiveAbility
         attack.target.AddEffect(markData);
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Diversion\n";
-        ret += 
-            "When this Unit attacks an enemy Unit it deals 75% reduced damage and that enemy Unit gains Marked "+(5*level)+" (5 base).\n";
-        ret += "Level Effect: +5 Marked applied per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Diversion";
+        ret.desc = 
+            "When this Unit attacks an enemy Unit it deals 75% reduced damage and that enemy Unit gains Marked "+(5*level)+" (5 base).";
+        ret.levelEffect = "+5 Marked applied per Level.";
         return ret;
     }
 }

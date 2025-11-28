@@ -69,6 +69,7 @@ public class Mark : ActiveAbility
             "The target gains Marked "+(1+2*level)+" (3 base).";
         ret.apEffect = "None.";
         ret.levelEffect = "+2 stacks of Marked per Level.";
+        ret.icon = Resources.Load<Sprite>("Icons/Mark");
         return ret;
     }
 }

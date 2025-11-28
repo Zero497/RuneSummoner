@@ -200,6 +200,7 @@ public class Attack : ActiveAbility
                 temp = attackData.staminaCost * (1 + 0.05f * abilityPower);
                 temp = MathF.Round(temp, 2);
                 ret.cost = temp+" ("+attackData.staminaCost+" base) Stamina";
+                ret.icon = Resources.Load<Sprite>("Icons/PhysicalMelee");
                 break;
             case ActiveAbilityDes.physicalRanged:
                 attackData = Resources.Load<AttackData>("AttackData/Physical Ranged");
@@ -210,6 +211,7 @@ public class Attack : ActiveAbility
                 temp = attackData.staminaCost * (1 + 0.05f * abilityPower);
                 temp = MathF.Round(temp, 2);
                 ret.cost = temp+" ("+attackData.staminaCost+" base) Stamina";
+                ret.icon = Resources.Load<Sprite>("Icons/PhysicalRanged");
                 break;
             case ActiveAbilityDes.magicalMelee:
                 attackData = Resources.Load<AttackData>("AttackData/Magical Melee");
@@ -220,6 +222,7 @@ public class Attack : ActiveAbility
                 temp = attackData.manaCost * (1 + 0.05f * abilityPower);
                 temp = MathF.Round(temp, 2);
                 ret.cost = temp+" ("+attackData.manaCost+" base) Mana";
+                ret.icon = Resources.Load<Sprite>("Icons/MagicalMelee");
                 break;
             case ActiveAbilityDes.magicalRanged:
                 attackData = Resources.Load<AttackData>("AttackData/Magical Ranged");
@@ -230,6 +233,7 @@ public class Attack : ActiveAbility
                 temp = attackData.manaCost * (1 + 0.05f * abilityPower);
                 temp = MathF.Round(temp, 2);
                 ret.cost = temp+" ("+attackData.manaCost+" base) Mana";
+                ret.icon = Resources.Load<Sprite>("Icons/MagicalRanged");
                 break;
         }
         ret.range = attackData.range+"";

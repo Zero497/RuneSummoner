@@ -32,11 +32,12 @@ public class Adaptable : PassiveAbility
         myUnit.AddEffect(resData);
     }
 
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Adaptable\n";
-        ret += "Description: When damaged, gain Resistant " + (level * 4) + " (base 4) against that damage's Element.\n";
-        ret += "Level Effect: +4 Resistant per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Adaptable";
+        ret.desc =  "When damaged, gain Resistant " + (level * 4) + " (base 4) against that damage's Element.";
+        ret.levelEffect = "+4 Resistant per Level.";
         return ret;
     }
 }

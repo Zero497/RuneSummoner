@@ -62,6 +62,7 @@ public class Block : Reaction
             "Negate the damage from an incoming attack entirely by paying Stamina. Fails if insufficient Stamina remains.";
         ret.apEffect = "Stamina cost reduced by 0.2% per AP";
         ret.levelEffect = "Stamina cost reduced by 20% per Level after AP";
+        ret.icon = Resources.Load<Sprite>("Icons/Block");
         return ret;
     }
 }

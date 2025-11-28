@@ -53,12 +53,13 @@ public class Evasive : PassiveAbility
         attackedThisTurn = false;
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Evasive";
-        ret += 
+        PassiveText ret = new PassiveText();
+        ret.pName = "Evasive";
+        ret.desc = 
             "When this Unit ends its turn without using an attack, it gains Evade "+(5*level)+" (5 base).";
-        ret += "Level Effect: +5 Evade applied per Level.";
+        ret.levelEffect = "+5 Evade applied per Level.";
         return ret;
     }
 }

@@ -70,12 +70,13 @@ public class OpeningAssault : PassiveAbility
         }
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Opening Assault\n";
-        ret += 
-            "Until this Unit makes its first attack in a combat, its Physical Attack and Magical Attack are increased by "+(50*level)+"% (50% base). This bonus resets after 3 turns where the Unit did not attack.\n";
-        ret += "Level Effect: +50% Physical and Magical Attack increase per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Opening Assault";
+        ret.desc = 
+            "Until this Unit makes its first attack in a combat, its Physical Attack and Magical Attack are increased by "+(50*level)+"% (50% base). This bonus resets after 3 turns where the Unit did not attack.";
+        ret.levelEffect = "+50% Physical and Magical Attack increase per Level.";
         return ret;
     }
 }

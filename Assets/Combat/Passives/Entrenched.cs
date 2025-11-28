@@ -47,12 +47,13 @@ public class Entrenched : PassiveAbility
         source.myCombatStats.AddMagicalDefense(-source.myCombatStats.getMagicalDefense(true)*0.05f*level*tilesMoved);
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Entrenched\n";
-        ret += 
-            "This Unit has +"+(level*50)+"% (50% base) Physical Defense and +"+(level*25)+"% (25% base) Magical Defense. This Unit loses -"+(10*level)+"% (10% base) Physical Defense and -"+(5*level)+"% Magical Defense for each tile it moves until the start of its next turn.\n";
-        ret += "Level Effect: +50% Physical Defense and +25% Magical Defense per Level and -10% Physical Defense and -5% Magical Defense per tile moved per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Entrenched";
+        ret.desc = 
+            "This Unit has +"+(level*50)+"% (50% base) Physical Defense and +"+(level*25)+"% (25% base) Magical Defense. This Unit loses -"+(10*level)+"% (10% base) Physical Defense and -"+(5*level)+"% Magical Defense for each tile it moves until the start of its next turn.";
+        ret.levelEffect = "+50% Physical Defense and +25% Magical Defense per Level and -10% Physical Defense and -5% Magical Defense per tile moved per Level.";
         return ret;
     }
 }

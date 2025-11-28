@@ -19,12 +19,13 @@ public class Farseer : PassiveAbility
         return "Farseer";
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Farseer\n";
-        ret += 
-            "Increases Sight Radius by "+(50*level)+"% (50% base) (rounded down)\n";
-        ret += "Level Effect: +50% Sight Radius per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Farseer";
+        ret.desc = 
+            "Increases Sight Radius by "+(50*level)+"% (50% base) (rounded down)";
+        ret.levelEffect = "+50% Sight Radius per Level.";
         return ret;
     }
 }

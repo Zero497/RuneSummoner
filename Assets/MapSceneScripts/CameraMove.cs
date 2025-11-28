@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraMove : MonoBehaviour
 {
@@ -8,10 +9,13 @@ public class CameraMove : MonoBehaviour
     public float ylim;
 
     public float speed;
+
+    public InputActionReference moveRef;
     
     public void Update()
     {
-        transform.Translate(speed*Input.GetAxis("Horizontal")*Time.deltaTime, speed*Input.GetAxis("Vertical")*Time.deltaTime, -10);
+        Vector2 move = moveRef.action.ReadValue<Vector2>();
+        transform.Translate(speed*move.x*Time.deltaTime, speed*move.y*Time.deltaTime,0);
         Vector3 pos = transform.position;
         float x = pos.x;
         float y = pos.y;
@@ -31,6 +35,6 @@ public class CameraMove : MonoBehaviour
             y = -ylim;
         }
 
-        transform.position = new Vector3(x, y, -10);
+        transform.position = new Vector3(x, y, -50);
     }
 }

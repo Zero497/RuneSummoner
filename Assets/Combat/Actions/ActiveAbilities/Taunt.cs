@@ -89,6 +89,7 @@ public class Taunt : ActiveAbility
             "Free action. Raises threat against targets by "+temp+" (200 base).";
         ret.apEffect = "Threat amount +5% per AP. Cost +5% per AP. AOE Range +1 per 20 AP.";
         ret.levelEffect = "AOE Range +1 per Level, Threat amount +25% per Level after AP increases.";
+        ret.icon = Resources.Load<Sprite>("Icons/Taunt");
         return ret;
     }
 }

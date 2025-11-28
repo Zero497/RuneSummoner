@@ -49,6 +49,7 @@ public class Dodge : ActiveAbility
             "Grants "+(6+4*level)+" (10 base) stacks of Evade.";
         ret.apEffect = "-1% Stamina Cost per AP";
         ret.levelEffect = "+4 Stacks of Evade per Level";
+        ret.icon = Resources.Load<Sprite>("Icons/Dodge");
         return ret;
     }
 }

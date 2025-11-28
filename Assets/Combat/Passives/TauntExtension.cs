@@ -7,12 +7,13 @@ public class TauntExtension : PassiveAbility
         return "Taunt Extension";
     }
     
-    public static string GetFullText(int level)
+    public static PassiveText GetFullText(int level)
     {
-        string ret = "Name: Taunt Extension\n";
-        ret += 
-            "Increases the AOE Range of this Unit's Taunt ability by "+(3*level)+" (3 base).\n";
-        ret += "Level Effect: +3 AOE Range per Level.\n";
+        PassiveText ret = new PassiveText();
+        ret.pName = "Taunt Extension";
+        ret.desc = 
+            "Increases the AOE Range of this Unit's Taunt ability by "+(3*level)+" (3 base).";
+        ret.levelEffect = "+3 AOE Range per Level.";
         return ret;
     }
 }

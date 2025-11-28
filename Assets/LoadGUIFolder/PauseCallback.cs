@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace Misc
 {
@@ -24,6 +25,16 @@ namespace Misc
             }
             pauseManager = this;
             DontDestroyOnLoad(this.gameObject);
+        }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         //sub to pause event
@@ -84,6 +95,11 @@ namespace Misc
             {
                 Resume();
             }
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            Resume();
         }
     }
 }
