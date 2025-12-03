@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
-public class MapTest : MonoBehaviour
+public class MapGen : MonoBehaviour
 {
     public Tilemap map;
 
@@ -18,7 +18,7 @@ public class MapTest : MonoBehaviour
     public int sizeX;
 
     public int sizeY;
-    private void Start()
+    public void Start()
     {
         List<MapGenerator.GenDetails> detailsList = new List<MapGenerator.GenDetails>();
         for (int i = 0; i < genTypes.Count; i++)

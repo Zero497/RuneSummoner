@@ -19,6 +19,6 @@ public class StartCombatTest : MonoBehaviour
         MainCombatManager.manager.CreateUnit(direFerret, new Vector3Int(0, 3), "fer", false);
         //MainCombatManager.manager.CreateUnit(dummy, new Vector3Int(5, 5), "dummy", false, team:2);
         
-        MainCombatManager.manager.StartCombat();
+        //MainCombatManager.manager.StartCombat();
     }
 }

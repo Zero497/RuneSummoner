@@ -1390,11 +1390,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: area1
   mapSizes:
-  - {x: 24, y: 24}
+  - {x: 25, y: 25}
   encounterLevels: 0100000004000000080000000c000000
   validEnemies:
   - {fileID: 11400000, guid: 492fffcad66c8ca429b0409a2185e7ff, type: 2}
   - {fileID: 11400000, guid: c0cdca4d6a75ae7499fe0b9f55dab554, type: 2}
+  tiles:
+  - {fileID: 11400000, guid: f9dd293a4b89e37428d8495aef14df5c, type: 2}
+  - {fileID: 11400000, guid: b05ea68e7e0e00a4592823e1ccd27e9c, type: 2}
+  - {fileID: 11400000, guid: f331beb332ad4e2429fd8caa05e1d607, type: 2}
+  genTypes: 000000000100000002000000
+  spawnFrequency:
+  - 1
+  - 0.03
+  - 0.01
   launchPanel: {fileID: 1514664553}
   rightButtonL: {fileID: 61065075}
   leftButtonL: {fileID: 465496642}

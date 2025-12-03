@@ -38,6 +38,7 @@ public class MainCombatManager : MonoBehaviour
         }
         manager = this;
         hideAbilities();
+        StartCombat(BattleGenerator.launchBattle);
     }
 
     public void SendAbilities(List<ActiveAbility> abilities)
@@ -62,10 +63,37 @@ public class MainCombatManager : MonoBehaviour
         AbilityButtons.Add(button.GetComponent<AbilityButton>());
     }
 
-    public void StartCombat()
+    public void StartCombat(Battle battle)
     {
+        InitMap(battle);
+        Vector3Int playerOriginPos =
+            new Vector3Int(Random.Range(0, battle.mapSize.x), Random.Range(0, battle.mapSize.y), 0);
+        CreateUnit(UnitManager.player, playerOriginPos, UnitManager.player.id, false);
+        foreach (UnitSimple unit in UnitManager.playerParty)
+        {
+            CreateUnit(unit, playerOriginPos, unit.id, false);
+        }
+        foreach (UnitSimple unit in battle.enemies)
+        {
+            Vector3Int rand = playerOriginPos;
+            while (HexTileUtility.GetTileDistance(rand, playerOriginPos) < 8)
+            {
+                rand = new Vector3Int(Random.Range(0, battle.mapSize.x), Random.Range(0, battle.mapSize.y), 0);
+            }
+            CreateUnit(unit, rand, unit.id, false, false, 1);
+        }
         TurnController.controller.TurnQueueRepaint();
         TurnController.controller.NextEvent();
+    }
+    
+    public void InitMap(Battle battle)
+    {
+        List<MapGenerator.GenDetails> detailsList = new List<MapGenerator.GenDetails>();
+        for (int i = 0; i < battle.genTypes.Count; i++)
+        {
+            detailsList.Add(new MapGenerator.GenDetails(battle.genTypes[i], battle.spawnFrequency[i]));
+        }
+        MapGenerator.GenerateMap(mainMap, battle.tiles, detailsList, battle.mapSize.x, battle.mapSize.y);
     }
 
     public void EndTurn()
@@ -137,7 +165,7 @@ public class MainCombatManager : MonoBehaviour
         if (unit.isFriendly)
         {
             allFriendly.Remove(unit);
-            if (allFriendly.Count == 0)
+            if (unit.name.Equals("Player"))
             {
                 loseCanv.SetActive(true);
             }

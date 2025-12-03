@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3803432099905237390}
   - component: {fileID: 8081943687148347702}
   - component: {fileID: 6269800950552355537}
-  - component: {fileID: -77238461769141110}
+  - component: {fileID: 6581669424044211438}
   m_Layer: 5
   m_Name: PortraitPrefab
   m_TagString: Untagged
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c1e153c81701ef64a9e20c65186b959e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0f2ca02a65246a84aa9c46b51cf97c96, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &-77238461769141110
+--- !u!114 &6581669424044211438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,6 +85,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1482178080836992241}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9efccf739b11d944f80ca2d062a44103, type: 3}
+  m_Script: {fileID: 11500000, guid: f795ecc173ffc4f4cb47e2d3846afd80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myUnit: {fileID: 0}

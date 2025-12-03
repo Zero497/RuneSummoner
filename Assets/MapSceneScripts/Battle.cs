@@ -10,9 +10,15 @@ public class Battle : IComparable<Battle>
 
     public int level;
 
-    public Vector2 mapSize;
+    public Vector2Int mapSize;
 
     public List<UnitSimple> enemies;
+    
+    public List<DataTile> tiles;
+
+    public List<MapGenerator.GenerationType> genTypes;
+
+    public List<float> spawnFrequency;
     
     public enum Difficulty
     {

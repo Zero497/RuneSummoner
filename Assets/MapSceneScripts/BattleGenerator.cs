@@ -16,7 +16,7 @@ public class BattleGenerator : MonoBehaviour
     
     public string id;
 
-    public List<Vector2> mapSizes;
+    public List<Vector2Int> mapSizes;
 
     public List<int> encounterLevels;
 
@@ -25,6 +25,12 @@ public class BattleGenerator : MonoBehaviour
     private int curLevelSelection = 0;
 
     private Battle.Difficulty curDiffSelection = 0;
+    
+    public List<DataTile> tiles;
+
+    public List<MapGenerator.GenerationType> genTypes;
+
+    public List<float> spawnFrequency;
 
     public GameObject launchPanel;
 
@@ -83,6 +89,8 @@ public class BattleGenerator : MonoBehaviour
     public void Launch()
     {
         launchBattle = GetSelectedBattle();
+        encounters = new List<List<Battle>>();
+        Fill();
         SceneManager.LoadScene("CombatScene");
     }
     
@@ -197,6 +205,9 @@ public class BattleGenerator : MonoBehaviour
         ret.diff = difficulty;
         ret.level = level;
         ret.mapSize = mapSizes[Random.Range(0, mapSizes.Count)];
+        ret.tiles = tiles;
+        ret.genTypes = genTypes;
+        ret.spawnFrequency = spawnFrequency;
         float points = GetPoints(ret);
         float min = MinPointCost(level - 3);
         List<(EnemyGenData, float)> randList = GetRandList(level - 3);

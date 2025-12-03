@@ -19,7 +19,9 @@ public class TurnController : MonoBehaviour
 
     public UnityEvent<UnitBase, float> turnPassed = new UnityEvent<UnitBase, float>();
 
-    public TurnView view;
+    public GameObject portraitPrefab;
+
+    public Transform queueContent;
 
     public Image curUnitIndicator;
 
@@ -30,6 +32,8 @@ public class TurnController : MonoBehaviour
     private TimeQueue<TimeWrapper> turnQueue = new TimeQueue<TimeWrapper>();
 
     private int wrapperID = 1;
+
+    private List<Portrait> activePortraits;
 
     public class TimeWrapper : IEquatable<TimeWrapper>
     {
@@ -70,7 +74,7 @@ public class TurnController : MonoBehaviour
     public void RemoveFromQueue(UnitBase toRemove, bool repaint=true)
     {
         turnQueue.Remove(new TimeWrapper(toRemove));
-        view.RemoveUnit(toRemove);
+        
         if(repaint) TurnQueueRepaint();
     }
 
@@ -142,7 +146,23 @@ public class TurnController : MonoBehaviour
     public void TurnQueueRepaint()
     {
         List<TimeNode<TimeWrapper>> queue = turnQueue.queue;
-        view.Repaint(queue);
+        foreach (TimeNode<TimeWrapper> node in queue)
+        {
+            if (node.value.unit == null) continue;
+            Portrait myPortrait = null;
+            foreach (Portrait portrait in activePortraits)
+            {
+                if (portrait.myUnit.Equals(node.value.unit))
+                {
+                    myPortrait = portrait;
+                    break;
+                }
+            }
+            if (myPortrait == null)
+            {
+                activePortraits.Add(Instantiate(portraitPrefab, queueContent).GetComponent<Portrait>());
+            }
+        }
     }
 
     
