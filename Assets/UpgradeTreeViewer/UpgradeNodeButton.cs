@@ -144,6 +144,13 @@ public class UpgradeNodeButton : MonoBehaviour
             }
             isEnabled = false;
         }
+        else
+        {
+            foreach (UpgradeNodeButton child in myChildren)
+            {
+                child.isEnabled = false;
+            }
+        }
         if (unlocked)
         {
             buttonImage.sprite = unlockedButton;

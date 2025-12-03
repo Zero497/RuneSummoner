@@ -1,0 +1,845 @@
+fileFormatVersion: 2
+guid: 19619a43847f0904c8bcadf77e1f2088
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5763660375574823925
+    second: Area1MapSprite_0
+  - first:
+      213: -4554871064732164808
+    second: Area1MapSprite_1
+  - first:
+      213: -5270351530485222680
+    second: Area1MapSprite_2
+  - first:
+      213: 5969304461796494065
+    second: Area1MapSprite_3
+  - first:
+      213: 2042133083207538312
+    second: Area1MapSprite_4
+  - first:
+      213: -4598333735739656749
+    second: Area1MapSprite_5
+  - first:
+      213: 8264548308443400114
+    second: Area1MapSprite_6
+  - first:
+      213: 7799902350813179907
+    second: Area1MapSprite_7
+  - first:
+      213: -2263997818982106736
+    second: Area1MapSprite_8
+  - first:
+      213: -6182487943300756990
+    second: Area1MapSprite_9
+  - first:
+      213: 1035883335117955355
+    second: Area1MapSprite_10
+  - first:
+      213: 4952049534253853356
+    second: Area1MapSprite_11
+  - first:
+      213: 7402739070471434152
+    second: Area1MapSprite_12
+  - first:
+      213: -695589410484892610
+    second: Area1MapSprite_13
+  - first:
+      213: -3454154696708610212
+    second: Area1MapSprite_14
+  - first:
+      213: 1464858053858834195
+    second: Area1MapSprite_15
+  - first:
+      213: 1323051594866944408
+    second: Area1MapSprite_16
+  - first:
+      213: -3006198869348385899
+    second: Area1MapSprite_17
+  - first:
+      213: -1174326777407482778
+    second: Area1MapSprite_18
+  - first:
+      213: -507613401165571018
+    second: Area1MapSprite_19
+  - first:
+      213: -8808652116546812288
+    second: Area1MapSprite_20
+  - first:
+      213: -3807536007847106293
+    second: Area1MapSprite_21
+  - first:
+      213: 5326986439744009824
+    second: Area1MapSprite_22
+  - first:
+      213: 1803698636042904940
+    second: Area1MapSprite_23
+  - first:
+      213: 2545448620556251783
+    second: Area1MapSprite_24
+  - first:
+      213: 7800236023191597509
+    second: Area1MapSprite_25
+  - first:
+      213: -2137885264428650892
+    second: Area1MapSprite_26
+  - first:
+      213: -6453300758596144566
+    second: Area1MapSprite_27
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Area1MapSprite_0
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 539
+        width: 26
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0c3ed3fc6d5300b0800000000000000
+      internalID: -5763660375574823925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_1
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 545
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83d1fec36e8d9c0c0800000000000000
+      internalID: -4554871064732164808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_2
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 567
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e2fdffd433fbd6b0800000000000000
+      internalID: -5270351530485222680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_3
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 567
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fac88108ca37d250800000000000000
+      internalID: 5969304461796494065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_4
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 566
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88698a0383d175c10800000000000000
+      internalID: 2042133083207538312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_5
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 519
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d5fa8294df6f20c0800000000000000
+      internalID: -4598333735739656749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_6
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 537
+        width: 20
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b703d926e291b270800000000000000
+      internalID: 8264548308443400114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_7
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 540
+        width: 39
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30034f6ccd1de3c60800000000000000
+      internalID: 7799902350813179907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_8
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 541
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 099ff439af9a490e0800000000000000
+      internalID: -2263997818982106736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 516
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20a4c67c8f3633aa0800000000000000
+      internalID: -6182487943300756990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_10
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 93
+        width: 375
+        height: 427
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b11e37aa762306e00800000000000000
+      internalID: 1035883335117955355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_11
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 520
+        width: 45
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: caae65770d639b440800000000000000
+      internalID: 4952049534253853356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_12
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 505
+        width: 24
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8afea5496ffcbb660800000000000000
+      internalID: 7402739070471434152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 159
+        width: 33
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3c4686dd15c856f0800000000000000
+      internalID: -695589410484892610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_14
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 150
+        width: 49
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c57af6faa906010d0800000000000000
+      internalID: -3454154696708610212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_15
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 132
+        width: 27
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31730aa83a8345410800000000000000
+      internalID: 1464858053858834195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_16
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 119
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 899ee8b6a6c6c5210800000000000000
+      internalID: 1323051594866944408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_17
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 73
+        width: 39
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59bfe4c4e06d746d0800000000000000
+      internalID: -3006198869348385899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_18
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 99
+        width: 38
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 664d56e8404f3bfe0800000000000000
+      internalID: -1174326777407482778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_19
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 59
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63c5c441d4894f8f0800000000000000
+      internalID: -507613401165571018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_20
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 34
+        width: 21
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0860c3bf19161c580800000000000000
+      internalID: -8808652116546812288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_21
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 47
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b09a3ce8c2ae82bc0800000000000000
+      internalID: -3807536007847106293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_22
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 30
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 066b34081f14de940800000000000000
+      internalID: 5326986439744009824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_23
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 31
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c65a1336a56080910800000000000000
+      internalID: 1803698636042904940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_24
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 34
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7827346b800435320800000000000000
+      internalID: 2545448620556251783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_25
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 22
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c17a8ee551004c60800000000000000
+      internalID: 7800236023191597509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_26
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 29
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47e2033dda4b452e0800000000000000
+      internalID: -2137885264428650892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Area1MapSprite_27
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 18
+        width: 24
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a423e1fa6254176a0800000000000000
+      internalID: -6453300758596144566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Area1MapSprite_0: -5763660375574823925
+      Area1MapSprite_1: -4554871064732164808
+      Area1MapSprite_10: 1035883335117955355
+      Area1MapSprite_11: 4952049534253853356
+      Area1MapSprite_12: 7402739070471434152
+      Area1MapSprite_13: -695589410484892610
+      Area1MapSprite_14: -3454154696708610212
+      Area1MapSprite_15: 1464858053858834195
+      Area1MapSprite_16: 1323051594866944408
+      Area1MapSprite_17: -3006198869348385899
+      Area1MapSprite_18: -1174326777407482778
+      Area1MapSprite_19: -507613401165571018
+      Area1MapSprite_2: -5270351530485222680
+      Area1MapSprite_20: -8808652116546812288
+      Area1MapSprite_21: -3807536007847106293
+      Area1MapSprite_22: 5326986439744009824
+      Area1MapSprite_23: 1803698636042904940
+      Area1MapSprite_24: 2545448620556251783
+      Area1MapSprite_25: 7800236023191597509
+      Area1MapSprite_26: -2137885264428650892
+      Area1MapSprite_27: -6453300758596144566
+      Area1MapSprite_3: 5969304461796494065
+      Area1MapSprite_4: 2042133083207538312
+      Area1MapSprite_5: -4598333735739656749
+      Area1MapSprite_6: 8264548308443400114
+      Area1MapSprite_7: 7799902350813179907
+      Area1MapSprite_8: -2263997818982106736
+      Area1MapSprite_9: -6182487943300756990
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

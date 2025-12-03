@@ -34,22 +34,64 @@ public class SpiritViewManager : MonoBehaviour
     public GameObject upgradeButton;
 
     public TextMeshProUGUI availablePointsText;
+
+    public TextMeshProUGUI summonCostText;
+
+    public TextMeshProUGUI summonCapText;
+
+    public Button addToPartyButton;
+
+    public Image checkmark;
+
+    private UnitSimple activeUnit;
     
     private void Awake()
     {
         spiritViewManager = this;
+        GenerateCharList();
+        summonCapText.text = "Summoning Capacity: " + UnitManager.partyCost + "/" + UnitManager.summonCap;
+    }
+
+    private void GenerateCharList()
+    {
+        foreach (Transform child in characterFrameContent)
+        {
+            Destroy(child.gameObject);
+        }
+        UnitSimple temp = UnitManager.player;
+        GameObject unitButton = Instantiate(characterButtonPrefab, characterFrameContent);
+        unitButton.transform.GetChild(0).GetComponent<Image>().sprite = temp.GetMyUnitData().portrait;
+        unitButton.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = temp.nickname;
+        unitButton.GetComponent<DisplaySpiritInfoOnClick>().unit = temp;
         foreach (UnitSimple unit in UnitManager.playerUnits)
         {
-            GameObject unitButton = Instantiate(characterButtonPrefab, characterFrameContent);
+            unitButton = Instantiate(characterButtonPrefab, characterFrameContent);
             unitButton.transform.GetChild(0).GetComponent<Image>().sprite = unit.GetMyUnitData().portrait;
             unitButton.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = unit.nickname;
             unitButton.GetComponent<DisplaySpiritInfoOnClick>().unit = unit;
         }
     }
 
+    public void ChangePartyStatus()
+    {
+        if (activeUnit.inParty)
+        {
+            if(UnitManager.RemoveFromParty(activeUnit))
+                checkmark.gameObject.SetActive(false);
+        }
+        else
+        {
+            if(UnitManager.AddToParty(activeUnit))
+                checkmark.gameObject.SetActive(true);
+        }
+        GenerateCharList();
+        summonCapText.text = "Summoning Capacity: " + UnitManager.partyCost + "/" + UnitManager.summonCap;
+    }
+
     public void DisplayUnitInfo(UnitSimple unit)
     {
-        SetStatsPanel(unit);
+        activeUnit = unit;
+        SetStatsAndVisPanel(unit);
         SetAbilitiesPanel(unit);
     }
 
@@ -71,14 +113,22 @@ public class SpiritViewManager : MonoBehaviour
         }
     }
 
-    private void SetStatsPanel(UnitSimple unit)
+    private void SetStatsAndVisPanel(UnitSimple unit)
     {
+        
         levelFrame.SetActive(true);
         levelFrame.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = unit.level.ToString();
-        expFrame.SetActive(true);
-        float expToNext = unit.ExpToNextLevel();
-        expFrame.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Exp to Next Level\n"+ unit.currentExp + "/" + expToNext;
-        expFrame.transform.GetChild(0).GetComponent<Image>().fillAmount = unit.currentExp / expToNext;
+        if (unit.level < 12 || (unit.name.Equals("Player") && unit.level < 20))
+        {
+            expFrame.SetActive(true);
+            float expToNext = unit.ExpToNextLevel();
+            expFrame.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Exp to Next Level\n"+ unit.currentExp + "/" + expToNext;
+            expFrame.transform.GetChild(0).GetComponent<Image>().fillAmount = unit.currentExp / expToNext;
+        }
+        else
+        {
+            expFrame.SetActive(false);
+        }
         statsPanel.SetActive(true);
         UnitData unitData = unit.GetMyUnitData();
         foreach (StatFrame frame in statsFrames)
@@ -95,6 +145,8 @@ public class SpiritViewManager : MonoBehaviour
             availablePointsText.gameObject.SetActive(false);
             unitGrade.gameObject.SetActive(false);
             upgradeButton.SetActive(false);
+            summonCostText.gameObject.SetActive(false);
+            addToPartyButton.gameObject.SetActive(false);
         }
         else
         {
@@ -103,6 +155,11 @@ public class SpiritViewManager : MonoBehaviour
             upgradeButton.SetActive(true);
             availablePointsText.gameObject.SetActive(true);
             availablePointsText.text = "Available Upgrade Points: " + unit.availableUpgradePoints;
+            summonCostText.gameObject.SetActive(true);
+            summonCostText.text = "Summoning Requirement: " + unitData.summonCost;
+            addToPartyButton.gameObject.SetActive(true);
+            addToPartyButton.interactable = (UnitManager.summonCap >= UnitManager.partyCost + unitData.summonCost) || unit.inParty;
+            checkmark.gameObject.SetActive(unit.inParty);
         }
     }
 }

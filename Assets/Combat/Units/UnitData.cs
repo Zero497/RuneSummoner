@@ -157,6 +157,35 @@ public class UnitData : ScriptableObject
         return "<color=#"+color+">"+word+"</color>";
     }
     
+    public static string GradeToColor(Grade grade)
+    {
+        string color = "";
+        switch (grade)
+        {
+            case Grade.poor:
+                color = "6B6B6B";
+                break;
+            case Grade.common:
+                color = "D9DCE3";
+                break;
+            case Grade.normal:
+                color = "4FB36A";
+                break;
+            case Grade.rare:
+                color = "3A7BFF";
+                break;
+            case Grade.epic:
+                color = "A25CFF";
+                break;
+            case Grade.legendary:
+                color = "FF9A1F";
+                break;
+            default:
+                return "";
+        }
+        return "<color=#"+color+">";
+    }
+    
     public enum UnitType
     {
         none,

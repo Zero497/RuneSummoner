@@ -162,6 +162,11 @@ public static class SaveHandler
     {
         return Application.persistentDataPath+"/"+savePath;
     }
+    
+    public static string getPartialPath()
+    {
+        return savePath;
+    }
 
     public static void NewGame(string path)
     {

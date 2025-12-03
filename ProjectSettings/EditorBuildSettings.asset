@@ -6,7 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/MainMenu.unity
+    guid: 2d029cf19af760847872a1801b20de4c
+  - enabled: 1
+    path: Assets/Scenes/MainScene.unity
+    guid: 174b32582d1b0c54a9c00a7a24470e92
+  - enabled: 1
+    path: Assets/Scenes/CombatScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/UnitDescriptionView.unity
@@ -14,9 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TileDescriptionView.unity
     guid: 8645bd8aff4882844abc15a137117455
-  - enabled: 1
-    path: Assets/Scenes/MainScene.unity
-    guid: 174b32582d1b0c54a9c00a7a24470e92
   - enabled: 1
     path: Assets/Scenes/PauseMenu.unity
     guid: 5fe656adb88aa7c4b81f34aa7a9b52a2

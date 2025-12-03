@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0516f65c0d607784cbe72d3ce5609ab1, type: 3}
+  m_Name: Dire Ferret
+  m_EditorClassIdentifier: 
+  eName: Dire Ferret
+  minLevel: 1
+  frequency: 80
+  upgradeStrings:
+  - 20
+  - 201
+  - 21
+  - 211
+  - 02
+  - 020
+  - 021
+  - 11
+  - 22
+  - 220
+  - 221
+  - 10

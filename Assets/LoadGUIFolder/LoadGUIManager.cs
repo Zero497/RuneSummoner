@@ -89,7 +89,7 @@ namespace LoadGUIFolder
         public void ClosePopUp()
         {
             Destroy(popUps.Last());
-            OnGUIUnload.Invoke(popUps[popUps.Count-1].GetComponent<PopUpTextManager>().titleActual.text);
+            OnGUIUnload.Invoke(popUps[^1].GetComponent<PopUpTextManager>().titleActual.text);
             popUps.RemoveAt(popUps.Count-1);
             if (!isGUIOpen() && popUps.Count == 0)
             {

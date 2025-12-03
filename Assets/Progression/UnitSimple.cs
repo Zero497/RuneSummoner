@@ -26,6 +26,8 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
 
     public StatGrades statGrades;
 
+    public bool inParty;
+
     public float ExpToNextLevel()
     {
         return ExpToNextLevel(level);
@@ -140,6 +142,10 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
 
     public int CompareTo(UnitSimple other)
     {
+        if (inParty && !other.inParty)
+            return -1;
+        if (!inParty && other.inParty)
+            return 1;
         if (name.Equals(other.name))
         {
             return level.CompareTo(other.level);

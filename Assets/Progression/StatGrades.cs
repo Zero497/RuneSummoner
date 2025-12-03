@@ -22,6 +22,50 @@ public class StatGrades
     
     public UnitData.Grade staminaRegenGrade = UnitData.Grade.normal;
 
+    public static StatGrades RandomStatGrades()
+    {
+        StatGrades ret = new StatGrades();
+        ret.healthGrade = GetRandomGrade();
+        ret.magicalAttackGrade = GetRandomGrade();
+        ret.physicalAttackGrade = GetRandomGrade();
+        ret.magicalDefenseGrade = GetRandomGrade();
+        ret.physicalDefenseGrade = GetRandomGrade();
+        ret.abilityPowerGrade = GetRandomGrade();
+        ret.manaGrade = GetRandomGrade();
+        ret.manaRegenGrade = GetRandomGrade();
+        ret.stamainaGrade = GetRandomGrade();
+        ret.staminaRegenGrade = GetRandomGrade();
+        return ret;
+    }
+
+    public static UnitData.Grade GetRandomGrade()
+    {
+        float rand = Random.Range(0, 100);
+        UnitData.Grade ret = UnitData.Grade.normal;
+        switch (rand)
+        {
+            case <2.28f:
+                ret = UnitData.Grade.poor;
+                break;
+            case <15.87f:
+                ret = UnitData.Grade.common;
+                break;
+            case <84.13f:
+                ret = UnitData.Grade.normal;
+                break;
+            case <97.73f:
+                ret = UnitData.Grade.rare;
+                break;
+            case <99.87f:
+                ret = UnitData.Grade.epic;
+                break;
+            default:
+                ret = UnitData.Grade.legendary;
+                break;
+        }
+        return ret;
+    }
+
     public UnitData.Grade GetGrade(UnitData.Stat stat)
     {
         switch (stat)

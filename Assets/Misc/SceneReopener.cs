@@ -7,7 +7,7 @@ public class SceneReopener : MonoBehaviour
 {
     public static string Reopen = "";
 
-    private void Awake()
+    private void Start()
     {
         if (Reopen.Equals("")) return;
         LoadGUIManager.loadGUIManager.Load(Reopen);

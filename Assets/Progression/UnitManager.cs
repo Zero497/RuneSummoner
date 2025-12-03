@@ -15,6 +15,18 @@ public static class UnitManager
     private static ActionPriorityWrapper<string, string> VCCallback;
 
     public static List<UnitSimple> playerUnits;
+
+    public static UnitSimple player;
+
+    public static List<UnitSimple> playerParty;
+
+    private static float baseSummonCap = 300;
+
+    public static float partyCost => _partyCost;
+
+    private static float _partyCost;
+    
+    public static float summonCap => GetSummonCap();
     
     public static void Init()
     {
@@ -32,7 +44,14 @@ public static class UnitManager
         SaveHandler.versionConversion.Subscribe(VCCallback);
         playerUnits = new List<UnitSimple>();
     }
-    
+
+    private static float GetSummonCap()
+    {
+        if (player == null)
+            return 0;
+        return baseSummonCap * (0.9f + 0.1f * player.level);
+    }
+
     private static void Save(string path)
     {
         Directory.CreateDirectory(Application.persistentDataPath+"/"+path+"/units");
@@ -45,17 +64,37 @@ public static class UnitManager
         }
     }
 
+    private static void GetPlayer(string path)
+    {
+        XmlSerializer mySerializer = new XmlSerializer(typeof(UnitSimple));
+        using FileStream myFileStream = new FileStream(Application.persistentDataPath + "/" + path + "/units/player", FileMode.Open);
+        UnitSimple unit = (UnitSimple)mySerializer.Deserialize(myFileStream);
+        player = unit;
+        unit.InitAbilities();
+        AddToParty(unit, false);
+    }
+
     private static void Load(string path)
     {
         playerUnits = new List<UnitSimple>();
+        playerParty = new List<UnitSimple>();
         Directory.CreateDirectory(Application.persistentDataPath+"/"+path+"/units");
+        GetPlayer(path);
         string[] files = Directory.GetFiles(Application.persistentDataPath + "/" + path + "/units");
         foreach (string file in files)
         {
             XmlSerializer mySerializer = new XmlSerializer(typeof(UnitSimple));
             using FileStream myFileStream = new FileStream(file, FileMode.Open);
             UnitSimple unit = (UnitSimple)mySerializer.Deserialize(myFileStream);
+            if (unit.name.Equals("Player"))
+            {
+                continue;
+            }
             playerUnits.Add(unit);
+            if (unit.inParty)
+            {
+                AddToParty(unit, false);
+            }
             unit.InitAbilities();
         }
         playerUnits.Sort();
@@ -97,6 +136,35 @@ public static class UnitManager
         return false;
     }
 
+    public static bool AddToParty(UnitSimple unit, bool save = true)
+    {
+        UnitData data = unit.GetMyUnitData();
+        if (partyCost + data.summonCost <= summonCap && (!unit.inParty || !save))
+        {
+            unit.inParty = true;
+            if(save) {ModUnit(unit);}
+            _partyCost += data.summonCost;
+            playerParty.Add(unit);
+            playerUnits.Sort();
+            return true;
+        }
+        return false;
+    }
+
+    public static bool RemoveFromParty(UnitSimple unit)
+    {
+        if (playerParty.Contains(unit))
+        {
+            playerParty.Remove(unit);
+            unit.inParty = false;
+            ModUnit(unit);
+            _partyCost -= unit.GetMyUnitData().summonCost;
+            playerUnits.Sort();
+            return true;
+        }
+        return false;
+    }
+
     private static void AddUnit(UnitSimple add)
     {
         if (IDExists(add.id)) return;
@@ -117,12 +185,15 @@ public static class UnitManager
     {
         Directory.CreateDirectory(Application.persistentDataPath+"/"+path+"/units");
         UnitSimple player = new UnitSimple("Player", "player", 1, new StatGrades());
+        player.inParty = true;
         AddUnit(player);
         UnitSimple golem = new UnitSimple("Golem", "golem1", 1, new StatGrades());
         golem.availableUpgradePoints = 1;
+        golem.inParty = true;
         AddUnit(golem);
-        UnitSimple ferret = new UnitSimple("DireFerret", "direferret1", 1, new StatGrades());
+        UnitSimple ferret = new UnitSimple("Dire Ferret", "direferret1", 1, new StatGrades());
         ferret.availableUpgradePoints = 1;
+        ferret.inParty = true;
         AddUnit(ferret);
     }
 }
