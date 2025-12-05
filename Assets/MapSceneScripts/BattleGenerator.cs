@@ -107,7 +107,7 @@ public class BattleGenerator : MonoBehaviour
     public void ChangeDiffSelectionR()
     {
         curDiffSelection += 1;
-        if ((int)curDiffSelection < difficultyIcons.Count)
+        if ((int)curDiffSelection >= difficultyIcons.Count)
         {
             curDiffSelection -= difficultyIcons.Count;
         }
@@ -127,7 +127,7 @@ public class BattleGenerator : MonoBehaviour
     public void ChangeLevelSelectionR()
     {
         curLevelSelection += 1;
-        if (curLevelSelection < encounterLevels.Count)
+        if (curLevelSelection >= encounterLevels.Count)
         {
             curLevelSelection -= encounterLevels.Count;
         }
@@ -142,7 +142,7 @@ public class BattleGenerator : MonoBehaviour
     private void UpdateText()
     {
         levelText.text = "<style=\"C6\">Level " + encounterLevels[curLevelSelection] + "</style>";
-        diffText.text = "<style=" + curDiffSelection + ">" + curDiffSelection.ToString().FirstCharacterToUpper() +
+        diffText.text = "<style=" + curDiffSelection.ToString() + ">" + curDiffSelection.ToString().FirstCharacterToUpper() +
                         "</style>";
         launchButtonImage.sprite = difficultyIcons[(int)curDiffSelection];
         Battle cur = GetSelectedBattle();
@@ -185,15 +185,24 @@ public class BattleGenerator : MonoBehaviour
     {
         for (int i = 0; i < encounterLevels.Count; i++)
         {
-            if(i == encounterLevels.Count)
+            if(i == encounters.Count)
                 encounters.Add(new List<Battle>());
-            for (int j = 0; j < 4; j++)
+            List<Battle.Difficulty> unfilledDiff = new List<Battle.Difficulty>
             {
-                if (j == encounters.Count)
-                {
-                    encounters[i].Add(GenerateBattle(encounterLevels[i], (Battle.Difficulty)j));
-                }
+                Battle.Difficulty.novice, Battle.Difficulty.standard, Battle.Difficulty.heroic, Battle.Difficulty.mythic
+            };
+            for (int j = 0; j < encounters[i].Count; j++)
+            {
+                Battle cur = encounters[i][j];
+                if (unfilledDiff.Contains(cur.diff))
+                    unfilledDiff.Remove(cur.diff);
             }
+
+            foreach (Battle.Difficulty diff in unfilledDiff)
+            {
+                encounters[i].Add(GenerateBattle(encounterLevels[i], diff));
+            }
+            encounters[i].Sort();
         }
         Save(SaveHandler.getPartialPath());
     }
@@ -209,8 +218,8 @@ public class BattleGenerator : MonoBehaviour
         ret.genTypes = genTypes;
         ret.spawnFrequency = spawnFrequency;
         float points = GetPoints(ret);
-        float min = MinPointCost(level - 3);
-        List<(EnemyGenData, float)> randList = GetRandList(level - 3);
+        float min = MinPointCost(level - 3, level+3);
+        List<(EnemyGenData, float)> randList = GetRandList(level + 3);
         float randMax = randList[^1].Item2;
         int eCount = 0;
         ret.enemies = new List<UnitSimple>();
@@ -223,13 +232,18 @@ public class BattleGenerator : MonoBehaviour
                 if (rand <= randList[ind].Item2)
                     break;
             }
-
+            if (ind >= randList.Count)
+                ind = randList.Count - 1;
             EnemyGenData data = randList[ind].Item1;
             int unitLevel = Random.Range(Mathf.Max(level - 3, data.minLevel), level + 3);
             UnitData ud = Resources.Load<UnitData>("UnitData/" + data.eName);
             float cost = GetCost(ud.summonCost, unitLevel);
             if (cost > points)
+            {
+                if(GetCost(ud.summonCost, Mathf.Max(level - 3, data.minLevel))>points)
+                    randList.Remove(randList[ind]);
                 continue;
+            }
             points -= cost;
             UnitSimple unit = new UnitSimple(data.eName, "Enemy" + data.eName + eCount, unitLevel,
                 StatGrades.RandomStatGrades());
@@ -244,13 +258,13 @@ public class BattleGenerator : MonoBehaviour
         return ret;
     }
 
-    private List<(EnemyGenData, float)> GetRandList(int levelMin)
+    private List<(EnemyGenData, float)> GetRandList(int levelMax)
     {
         List<(EnemyGenData, float)> ret = new List<(EnemyGenData, float)>();
         float val = 0;
         foreach (EnemyGenData data in validEnemies)
         {
-            if (data.minLevel >= levelMin)
+            if (data.minLevel <= levelMax)
             {
                 val += data.frequency;
                 ret.Add((data, val));
@@ -264,17 +278,20 @@ public class BattleGenerator : MonoBehaviour
         return baseCost * (1 + 0.1f * (level - 1));
     }
 
-    private float MinPointCost(int levelMin)
+    private float MinPointCost(int levelMin, int levelMax)
     {
         float min = float.PositiveInfinity;
         foreach (EnemyGenData data in validEnemies)
         {
+            if (data.minLevel > levelMax) continue;
+            int lvl = levelMin;
             if (data.minLevel >= levelMin)
             {
-                UnitData ud = Resources.Load<UnitData>("UnitData/" + data.eName);
-                float cost = GetCost(ud.summonCost, levelMin);
-                min = Mathf.Min(min, cost);
+                lvl = data.minLevel;
             }
+            UnitData ud = Resources.Load<UnitData>("UnitData/" + data.eName);
+            float cost = GetCost(ud.summonCost, lvl);
+            min = Mathf.Min(min, cost);
         }
         return min;
     }
@@ -314,6 +331,9 @@ public class BattleGenerator : MonoBehaviour
             using FileStream myFileStream = new FileStream(file, FileMode.Open);
             Battle battle = (Battle)mySerializer.Deserialize(myFileStream);
             encounters[encounterLevels.IndexOf(battle.level)].Add(battle);
+            battle.tiles = tiles;
+            foreach(UnitSimple enemy in battle.enemies)
+                enemy.InitAbilities();
         }
         for(int i = 0; i<encounterLevels.Count; i++)
             encounters[i].Sort();

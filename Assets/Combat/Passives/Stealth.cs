@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Stealth : PassiveAbility
@@ -22,11 +23,33 @@ public class Stealth : PassiveAbility
     {
         return "stealth";
     }
+
+    public int GetMaxSightDist()
+    {
+        return Mathf.Max(1, 8 - 2 * level);
+    }
     
     private void OnRevealed(UnitBase myUnit, UnitBase revealer)
     {
-        if (HexTileUtility.GetTileDistance(myUnit.currentPosition, revealer.currentPosition) >
-            (Mathf.Max(1, 8 - 2 * level)))
+        HashSet<string> viewers = VisionManager.visionManager.GetViewers(myUnit.currentPosition);
+        if (myUnit.isFriendly)
+            viewers = VisionManager.visionManager.GetViewersE(myUnit.currentPosition);
+        List<UnitBase> searchList = MainCombatManager.manager.allFriendly;
+        if (myUnit.isFriendly)
+            searchList = MainCombatManager.manager.allEnemy;
+        bool found = false;
+        foreach (UnitBase unit in searchList)
+        {
+            if (viewers.Contains(unit.myId))
+            {
+                if (HexTileUtility.GetTileDistance(myUnit.currentPosition, revealer.currentPosition) <=
+                    GetMaxSightDist())
+                {
+                    found = true;
+                }
+            }
+        }
+        if (!found)
         {
             if (myUnit.isFriendly)
             {

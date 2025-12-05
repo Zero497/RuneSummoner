@@ -66,6 +66,43 @@ public class StatGrades
         return ret;
     }
 
+    public void ChangeGrade(UnitData.Grade newGrade, UnitData.Stat stat)
+    {
+        switch (stat)
+        {
+            case UnitData.Stat.health:
+                healthGrade = newGrade;
+                break;
+            case UnitData.Stat.magicalAttack:
+                magicalAttackGrade = newGrade;
+                break;
+            case UnitData.Stat.physicalAttack:
+                physicalAttackGrade = newGrade;
+                break;
+            case UnitData.Stat.magicalDefense:
+                magicalDefenseGrade = newGrade;
+                break;
+            case UnitData.Stat.physicalDefense:
+                physicalDefenseGrade = newGrade;
+                break;
+            case UnitData.Stat.abilityPower:
+                abilityPowerGrade = newGrade;
+                break;
+            case UnitData.Stat.mana:
+                manaGrade = newGrade;
+                break;
+            case UnitData.Stat.manaRegen:
+                manaRegenGrade = newGrade;
+                break;
+            case UnitData.Stat.stamina:
+                stamainaGrade = newGrade;
+                break;
+            case UnitData.Stat.staminaRegen:
+                staminaRegenGrade = newGrade;
+                break;
+        }
+    }
+
     public UnitData.Grade GetGrade(UnitData.Stat stat)
     {
         switch (stat)

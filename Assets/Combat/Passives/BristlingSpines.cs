@@ -15,6 +15,7 @@ public class BristlingSpines : PassiveAbility
     {
         base.Initialize(data);
         myEffect = new SpikesUndispellable();
+        myEffect.isBuff = true;
         SendData d2 = new SendData(source);
         d2.AddStr("spikes");
         d2.AddFloat(Mathf.FloorToInt(source.physicalDefence*0.5f*level));

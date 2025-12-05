@@ -33,7 +33,7 @@ public class TurnController : MonoBehaviour
 
     private int wrapperID = 1;
 
-    private List<Portrait> activePortraits;
+    private List<Portrait> activePortraits = new List<Portrait>();
 
     public class TimeWrapper : IEquatable<TimeWrapper>
     {
@@ -121,6 +121,7 @@ public class TurnController : MonoBehaviour
         if (_currentActor != null)
         {
             _currentActor.myEvents.onTurnEnded.Invoke(_currentActor);
+            _currentActor.SetArrow();
         }
         (TimeWrapper, float) val = turnQueue.AdvanceAndPop();
         nextEventStarting.Invoke(val.Item2, val.Item1);
@@ -137,31 +138,24 @@ public class TurnController : MonoBehaviour
         }
         else
         {
+            _currentActor = null;
             if(val.Item1.action != null)
                 val.Item1.action.Invoke();
-            _currentActor = null;
         }
     }
 
     public void TurnQueueRepaint()
     {
         List<TimeNode<TimeWrapper>> queue = turnQueue.queue;
+        foreach(Transform child in queueContent)
+            Destroy(child.gameObject);
         foreach (TimeNode<TimeWrapper> node in queue)
         {
             if (node.value.unit == null) continue;
-            Portrait myPortrait = null;
-            foreach (Portrait portrait in activePortraits)
-            {
-                if (portrait.myUnit.Equals(node.value.unit))
-                {
-                    myPortrait = portrait;
-                    break;
-                }
-            }
-            if (myPortrait == null)
-            {
-                activePortraits.Add(Instantiate(portraitPrefab, queueContent).GetComponent<Portrait>());
-            }
+            Portrait myPortrait = Instantiate(portraitPrefab, queueContent).GetComponent<Portrait>();
+            activePortraits.Add(myPortrait);
+            myPortrait.Init(node.value.unit);
+            myPortrait.gameObject.transform.SetAsLastSibling();
         }
     }
 

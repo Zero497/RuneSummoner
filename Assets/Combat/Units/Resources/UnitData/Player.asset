@@ -25,7 +25,7 @@ MonoBehaviour:
   physicalDefence: 10
   mana: 500
   manaRegen: 6
-  sightRadius: 8
+  sightRadius: 6
   speed: 4
   stamina: 500
   staminaRegen: 6

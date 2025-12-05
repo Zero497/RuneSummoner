@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Taunt : ActiveAbility
 {
+    
     public override bool RunAction(SendData actionData)
     {
-        if (!source.PayCost(this)) return false;
+        if (!source.PayCost(this, false) || usedThisTurn) return false;
+        usedThisTurn = true;
+        source.PayCost(this);
         foreach (UnitBase unit in MainCombatManager.manager.allEnemy)
         {
             if (HexTileUtility.GetTileDistance(source.currentPosition, unit.currentPosition) < GetAOERange())
@@ -21,6 +24,7 @@ public class Taunt : ActiveAbility
                 }
             }
         }
+        OverlayManager.instance.ClearOverlays();
         return true;
     }
 
@@ -51,7 +55,7 @@ public class Taunt : ActiveAbility
     public override bool PrepAction()
     {
         OverlayManager.instance.ClearOverlays();
-        if (!prepped)
+        if (!prepped && !usedThisTurn)
         {
             OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, GetAOERange(), 1),"AttackOverlay");
             prepped = true;

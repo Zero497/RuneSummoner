@@ -8,6 +8,8 @@ public abstract class ActiveAbility : UnitAction
     public int level;
 
     public ActiveAbilityDes myDes;
+
+    public bool usedThisTurn;
     public override void Initialize(SendData sendData)
     {
         base.Initialize(sendData);
@@ -167,10 +169,8 @@ public abstract class ActiveAbility : UnitAction
 
     public static ActiveAbility GetActiveAbility(SendData data)
     {
-        if (data.strData[0] == null) return null;
         ActiveAbilityDes des = (ActiveAbilityDes)data.intData[0];
         ActiveAbility ability;
-        AbilityData abilityData = Resources.Load<AbilityData>(data.strData[0]);
         switch (des)
         {
             /*
@@ -287,7 +287,6 @@ public abstract class ActiveAbility : UnitAction
             default:
                 return null;
         }
-        ability.abilityData = abilityData;
         ability.Initialize(data);
         return ability;
     }

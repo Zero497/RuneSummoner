@@ -13,6 +13,18 @@ public class CameraMover : MonoBehaviour
 
     public InputActionReference move;
 
+    public InputActionReference scroll;
+
+    public float yMod;
+
+    public float xMod;
+
+    public float minCamSize;
+
+    public float maxCamSize;
+
+    public float scrollSpeed;
+
     private float zPos;
 
     private Camera self;
@@ -25,9 +37,13 @@ public class CameraMover : MonoBehaviour
 
     void FixedUpdate()
     {
+        self.orthographicSize -= scrollSpeed * scroll.action.ReadValue<Vector2>().y * Time.fixedDeltaTime;
+        if (self.orthographicSize < minCamSize)
+            self.orthographicSize = minCamSize;
+        else if (self.orthographicSize > maxCamSize)
+            self.orthographicSize = maxCamSize;
+        
         Vector2 axis = move.action.ReadValue<Vector2>();
-        float xMod = 1.66f;
-        float yMod = 1f;
         float newX = transform.position.x +axis.x *Time.deltaTime * speed;
         if (newX < map.LocalToWorld(map.localBounds.min).x+self.orthographicSize*xMod)
         {

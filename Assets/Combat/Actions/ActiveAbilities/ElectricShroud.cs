@@ -25,7 +25,9 @@ public class ElectricShroud : ActiveAbility
 
     public override bool RunAction(SendData actionData)
     {
-        if (!source.PayCost(this)) return false;
+        if (!source.PayCost(this, false) || usedThisTurn) return false;
+        source.PayCost(this);
+        usedThisTurn = true;
         int spikesApplied = GetSpikesToApply();
         spikesLastApplied = spikesApplied;
         SendData data = new SendData("spikes");
@@ -56,7 +58,7 @@ public class ElectricShroud : ActiveAbility
 
     public override bool PrepAction()
     {
-        throw new System.NotImplementedException();
+        return RunAction(new SendData(""));
     }
 
     public override bool RushCompletion()

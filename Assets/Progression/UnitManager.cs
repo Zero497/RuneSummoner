@@ -165,7 +165,7 @@ public static class UnitManager
         return false;
     }
 
-    private static void AddUnit(UnitSimple add)
+    public static void AddUnit(UnitSimple add)
     {
         if (IDExists(add.id)) return;
         playerUnits.Add(add);

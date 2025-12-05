@@ -8,7 +8,7 @@ public abstract class Effect : IEquatable<Effect>
 {
     protected UnitBase source;
     
-    protected int stackDecayTime;
+    protected int stackDecayTime = 0;
 
     protected int stackDecayAmount;
 

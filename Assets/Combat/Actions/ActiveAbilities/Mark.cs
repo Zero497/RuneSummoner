@@ -11,6 +11,7 @@ public class Mark : ActiveAbility
         if (!source.PayCost(this, false)) return false;
         Func<int, bool> ValidTarget = getValidTargets();
         UnitBase unitAtPosition = MainCombatManager.manager.getUnitAtPosition(sentData.positionData[0]);
+        if (unitAtPosition == null) return false;
         if (ValidTarget(unitAtPosition.myTeam))
         {
             SendData markData = new SendData(unitAtPosition);

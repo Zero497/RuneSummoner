@@ -28,6 +28,8 @@ public class ClockworkStrikes : PassiveAbility
         onTurnEnd.priority = 72;
         onTurnEnd.action = OnTurnEnd;
         source.myEvents.onTurnEnded.Subscribe(onTurnEnd);
+        attacksLastTurn = new Dictionary<Attack, int>();
+        attacksThisTurn = new List<Attack>();
     }
     
     public override string GetAbilityName()

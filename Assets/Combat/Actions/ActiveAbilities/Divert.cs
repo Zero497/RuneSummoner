@@ -1,20 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Divert : ActiveAbility
+public class Divert : Reaction
 {
-    private bool isActive = false;
-
     private ActionPriorityWrapper<UnitBase, Attack.AttackMessageToTarget> onAttack;
 
     private ActionPriorityWrapper<UnitBase> onUnitAddedToCombat;
 
     private ActionPriorityWrapper<UnitBase> onTurnStarted;
-    
-    public override bool RunAction(SendData actionData)
-    {
-        return false;
-    }
 
     private void OnTurnStarted(UnitBase myUnit)
     {
@@ -44,8 +37,7 @@ public class Divert : ActiveAbility
 
     public override bool PrepAction()
     {
-        isActive = !isActive;
-        return true;
+        return RunAction(new SendData(""));
     }
 
     public override bool RushCompletion()

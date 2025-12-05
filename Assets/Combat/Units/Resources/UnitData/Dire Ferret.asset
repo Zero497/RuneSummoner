@@ -34,7 +34,7 @@ MonoBehaviour:
   basePassiveAbilities: 
   portrait: {fileID: 4592195683352871208, guid: 787ff3ca856200f49ade68a2a5229709, type: 3}
   UnitSprite: {fileID: 4592195683352871208, guid: 787ff3ca856200f49ade68a2a5229709, type: 3}
-  defaultEntryState: {fileID: 0}
+  defaultEntryState: {fileID: 11400000, guid: 756348ef929a638478432e7fa7c90801, type: 2}
   superRoot: {fileID: 11400000, guid: b2980cbf35147ac43943a3f5e6c8a343, type: 2}
   DefaultDamageElement: 0
   myGrade: 2

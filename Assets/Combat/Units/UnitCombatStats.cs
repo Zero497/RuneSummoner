@@ -1,3 +1,4 @@
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 public class UnitCombatStats
@@ -415,7 +416,12 @@ public class UnitCombatStats
     public void AddSightRadius(float add)
     {
         sightRadius += add;
-        VisionManager.visionManager.UpdateFriendlyVision(myUnit);
+        if(myUnit.isFriendly)
+            VisionManager.visionManager.UpdateFriendlyVision(myUnit);
+        else
+        {
+            VisionManager.visionManager.UpdateEnemyVision(myUnit);
+        }
         onStatChanged.Invoke(myUnit, "sightradius", add);
     }
 }

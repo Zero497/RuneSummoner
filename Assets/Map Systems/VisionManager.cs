@@ -58,7 +58,14 @@ public class VisionManager : MonoBehaviour
 
     public HashSet<String> GetViewers(Vector3Int position)
     {
+        if (!revealedPositions.ContainsKey(position)) return new HashSet<string>();
         return revealedPositions[position];
+    }
+
+    public HashSet<String> GetViewersE(Vector3Int position)
+    {
+        if (!positionsKnownToEnemy.ContainsKey(position)) return new HashSet<string>();
+        return positionsKnownToEnemy[position];
     }
 
     /*
@@ -205,7 +212,7 @@ public class VisionManager : MonoBehaviour
                 }
             }
         }
-        RevealInRadius(unit, unit.baseData.sightRadius, unit.currentPosition);
+        RevealInRadius(unit, unit.sightRadius, unit.currentPosition);
     }
     
     public List<Vector3Int> DjikstrasSightCheck(Vector3Int start, float sightRadius, bool ignoreSightBlocking = false)

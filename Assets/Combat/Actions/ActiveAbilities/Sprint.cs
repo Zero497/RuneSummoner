@@ -5,9 +5,11 @@ public class Sprint : ActiveAbility
 { 
     public override bool RunAction(SendData actionData)
     {
-        if (source.PayCost(this))
+        if (source.PayCost(this, false) && !usedThisTurn)
         {
+            source.PayCost(this);
             source.moveRemaining += source.speed*(1+0.05f*source.abilityPower);
+            usedThisTurn = true;
             return true;
         }
         return false;
@@ -25,7 +27,7 @@ public class Sprint : ActiveAbility
 
     public override bool PrepAction()
     {
-        throw new System.NotImplementedException();
+        return RunAction(new SendData(""));
     }
 
     public override bool RushCompletion()

@@ -156,7 +156,9 @@ public class Attack : ActiveAbility
     public override void Initialize(SendData sendData)
     {
         source = sendData.unitData[0];
-        abilityData = Resources.Load<AbilityData>("AttackData/"+GetID());
+        myDes = (ActiveAbilityDes)sendData.intData[0];
+        string path = "AttackData/" + GetID();
+        abilityData = Resources.Load<AbilityData>(path);
         level = sendData.intData[1];
     }
 

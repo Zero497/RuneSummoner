@@ -38,7 +38,7 @@ public class Block : Reaction
 
     public override bool PrepAction()
     {
-        throw new System.NotImplementedException();
+        return RunAction(new SendData(""));
     }
 
     public override bool RushCompletion()

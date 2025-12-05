@@ -276,6 +276,6 @@ public class UnitData : ScriptableObject
 
     public static UnitData GetUnitData(string name)
     {
-        return Resources.Load<UnitData>(name);
+        return Resources.Load<UnitData>("UnitData/"+name);
     }
 }

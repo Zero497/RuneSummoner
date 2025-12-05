@@ -5,7 +5,17 @@ public class CoreOverdraw : ActiveAbility
     public override void Initialize(SendData sendData)
     {
         base.Initialize(sendData);
-        abilityData = Resources.Load<AbilityData>("AbilityData/Core OverdrawM");
+        if(sendData.intData.Count > 2 && sendData.intData[2] > 0)
+            abilityData = Resources.Load<AbilityData>("AbilityData/Core OverdrawM");
+        else
+        {
+            abilityData = Resources.Load<AbilityData>("AbilityData/Core OverdrawS");
+            SendData dCopy = new SendData(sendData.unitData[0]);
+            dCopy.AddInt(sendData.intData[0]);
+            dCopy.AddInt(sendData.intData[1]);
+            dCopy.AddInt(1);
+            sendData.unitData[0].activeAbilities.Add(ActiveAbility.GetActiveAbility(dCopy));
+        }
     }
 
     public override string GetID()
@@ -15,7 +25,9 @@ public class CoreOverdraw : ActiveAbility
 
     public override bool RunAction(SendData actionData)
     {
-        if (!source.PayCost(this)) return false;
+        if (!source.PayCost(this, false) || usedThisTurn) return false;
+        source.PayCost(this);
+        usedThisTurn = true;
         if (abilityData.staminaCost > 0)
         {
             source.myCombatStats.AddMana(GetStaminaCost().flt * (0.3f+0.2f*level));
@@ -31,7 +43,7 @@ public class CoreOverdraw : ActiveAbility
 
     public override bool PrepAction()
     {
-        throw new System.NotImplementedException();
+        return RunAction(new SendData(""));
     }
 
     public override bool RushCompletion()

@@ -9,8 +9,9 @@ public class Move : UnitAction
     {
         if (inProgress) return false;
         if (source.usedAbilityThisTurn) return false;
-        inProgress = true;
-        return MoveController.mControl.Move(data.positionData[0], out moveRoutine, OnMoveStopped);
+        bool val = MoveController.mControl.Move(data.positionData[0], out moveRoutine, OnMoveStopped);
+        inProgress = val;
+        return val;
     }
 
     public override bool PrepAction()

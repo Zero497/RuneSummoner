@@ -14,7 +14,7 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
 
     public int level;
 
-    public int currentExp;
+    public float currentExp;
 
     public int availableUpgradePoints;
 
@@ -27,6 +27,15 @@ public class UnitSimple : IEquatable<UnitSimple>, IComparable<UnitSimple>
     public StatGrades statGrades;
 
     public bool inParty;
+
+    public void LevelUp()
+    {
+        if (currentExp < ExpToNextLevel()) return;
+        currentExp -= ExpToNextLevel();
+        level++;
+        availableUpgradePoints++;
+        UnitManager.ModUnit(this);
+    }
 
     public float ExpToNextLevel()
     {

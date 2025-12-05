@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Misc;
 using NUnit.Framework.Constraints;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,13 +14,18 @@ using UnityEngine.UI;
 public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 {
     //Inspector assignments
-    public UnitData baseData;
     public SpriteRenderer mySprite;
     public Image healthBar;
     public Image manaBar;
     public Image stamBar;
+    public GameObject dmgTextPrefab;
+    public Image arrow;
+    public Sprite greenArrow;
+    public Sprite redArrow;
+    public Sprite blueArrow;
 
     //stats
+    [NonSerialized]public UnitData baseData;
     [NonSerialized]public UnitData.UnitType MyUnitType;
     [NonSerialized]public int level;
     [NonSerialized]public float summonCost;
@@ -65,6 +72,8 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
     //other
     [NonSerialized]public bool forceMove;
     private bool initialized = false;
+    [NonSerialized] public UnitSimple mySimple;
+    private Dictionary<ActionPriorityWrapper<UnitBase>, UnitBase> threatDictSubs = new Dictionary<ActionPriorityWrapper<UnitBase>, UnitBase>();
     
     //events
     public UnitEvents myEvents = new UnitEvents();
@@ -88,7 +97,10 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
             TurnController.controller.NextEvent();
             return;
         }
+        arrow.sprite = greenArrow;
         usedAbilityThisTurn = false;
+        foreach (ActiveAbility ability in activeAbilities)
+            ability.usedThisTurn = false;
         moveRemaining = speed;
         updateBars();
         myEvents.onTurnStarted.Invoke(this);
@@ -114,32 +126,50 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         return threatDict[u1].CompareTo(threatDict[u2]);
     }
 
-    public void Init(UnitSimple unit, UnitData inBaseData=null /*, TODO: EquipmentData */)
+    public void SetArrow()
     {
-        if (inBaseData == null) inBaseData = baseData;
+        if (isFriendly)
+        {
+            arrow.sprite = blueArrow;
+        }
+        else
+        {
+            arrow.sprite = redArrow;
+        }
+    }
+    
+    public void Init(UnitSimple unit/*, TODO: EquipmentData */)
+    {
+        UnitData inBaseData = unit.GetMyUnitData();
         if (initialized) return;
+        mySimple = unit;
         baseData = inBaseData;
         level = unit.level;
         if (unit.id != null)
         {
             myId = unit.id;
         }
+
+        SetArrow();
         MyUnitType = inBaseData.myUnitType;
         summonCost = inBaseData.summonCost;
         myCombatStats = new UnitCombatStats(inBaseData, unit, myEvents, this);
-        myMovement = new Move();
         SendData data = new SendData(this);
         data.AddInt(1);
         data.AddInt(1);
-        foreach (int abilityID in inBaseData.baseActiveAbilities)
+        myMovement = new Move();
+        myMovement.Initialize(data);
+        foreach (ActiveAbility.ActiveAbilityDes key in unit.activeAbilities.Keys)
         {
-            data.intData[0] = abilityID;
+            data.intData[0] = (int)key;
+            data.intData[1] = unit.activeAbilities[key];
             ActiveAbility newAbility = ActiveAbility.GetActiveAbility(data);
             activeAbilities.Add(newAbility);
         }
-        foreach (int abilityID in inBaseData.basePassiveAbilities)
+        foreach (PassiveAbility.PassiveAbilityDes key in unit.passiveAbilities.Keys)
         {
-            data.intData[0] = abilityID;
+            data.intData[0] = (int)key;
+            data.intData[1] = unit.passiveAbilities[key];
             PassiveAbility newAbility = PassiveAbility.GetPassive(data);
             passiveAbilities.Add(newAbility);
         }
@@ -177,7 +207,8 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
 
     private void ReduceThreat(float time, TurnController.TimeWrapper n)
     {
-        foreach (UnitBase key in threatDict.Keys)
+        var keys = threatDict.Keys.ToArray();
+        foreach (UnitBase key in keys)
         {
             threatDict[key] -= time * 0.4f;
             if (threatDict[key] < 0)
@@ -280,7 +311,18 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         myEvents.modifyIncomingDamageAfterDef.Invoke(this, finalDamage.flt, finalDamage);
         if (finalDamage.flt < 0)
             finalDamage.flt = 0;
-        myCombatStats.AddCurrentHealth(-finalDamage.flt);
+        myCombatStats.AddCurrentHealth(-finalDamage.flt); 
+        GameObject mainCanv = GameObject.Find("MainCanvas");
+        GameObject dmgText = Instantiate(dmgTextPrefab, mainCanv.transform);
+        Camera cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        Vector3 pos = cam.WorldToScreenPoint(transform.position + new Vector3(0.5f, 0.5f, 0));
+        dmgText.transform.position = pos;
+        dmgText.GetComponent<TextMeshProUGUI>().text = finalDamage.flt.ToString();
+    }
+
+    public void RemoveFromThreatDict(UnitBase unit)
+    {
+        threatDict.Remove(unit);
     }
 
     public void ReceiveAttack(Attack.AttackMessageToTarget attack)
@@ -289,16 +331,6 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         if(attack.damageElement != AttackData.Element.neutral)
             attack.damage *= typeMatchups[MyUnitType][attack.damageElement];
         //TODO: effects for certain type matchups
-        if (attack.damageType == AttackData.DamageType.Physical)
-        {
-            attack.damage -= physicalDefence;
-        }
-        else if (attack.damageType == AttackData.DamageType.Magic)
-        {
-            attack.damage -= magicalDefence;
-        }
-        if (attack.damage < 0)
-            attack.damage = 0;
         if (!isFriendly)
         {
             if (threatDict.ContainsKey(attack.source))
@@ -308,9 +340,14 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
             else
             {
                 threatDict.Add(attack.source, attack.damage);
+                ActionPriorityWrapper<UnitBase> sub = new ActionPriorityWrapper<UnitBase>();
+                sub.action = RemoveFromThreatDict;
+                sub.priority = 72;
+                threatDictSubs.Add(sub, attack.source);
+                attack.source.myEvents.onDeath.Subscribe(sub);
             }
         }
-        myCombatStats.AddCurrentHealth(attack.damage);
+        TakeDamage(attack.damageType, attack.damageElement, attack.damage);
         if (attack.effectsToApplyTarget != null)
         {
             for(int i = 0; i<attack.effectsToApplyTarget.Count; i++)
@@ -409,6 +446,10 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         else
         {
             myEvents.onDeath.Invoke(this);
+            foreach (ActionPriorityWrapper<UnitBase> key in threatDictSubs.Keys)
+            {
+                threatDictSubs[key].myEvents.onDeath.Unsubscribe(key);
+            }
             TurnController.controller.nextEventStarting.RemoveListener(Regen);
             if(!isFriendly)
                 TurnController.controller.nextEventStarting.RemoveListener(ReduceThreat);
@@ -434,6 +475,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         healthBar.enabled = true;
         manaBar.enabled = true;
         stamBar.enabled = true;
+        arrow.enabled = true;
     }
 
     public void ConcealMe(UnitBase me)
@@ -442,6 +484,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         healthBar.enabled = false;
         manaBar.enabled = false;
         stamBar.enabled = false;
+        arrow.enabled = false;
     }
 
     public IEnumerator MoveUnit(HexTileUtility.DjikstrasNode target, Tilemap mainMap, UnityAction<bool> returnToCaller = null)
@@ -456,6 +499,49 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
             {
                 if (returnToCaller != null) returnToCaller(true);
                 break;
+            }
+            if (!isFriendly)
+            {
+                if (!VisionManager.visionManager.isRevealed(next.location) && healthBar.enabled)
+                {
+                    ConcealMe(this);
+                }
+                else if(!healthBar.enabled && VisionManager.visionManager.isRevealed(next.location))
+                {
+                    Stealth stealth = GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.stealth)) as Stealth;
+                    HashSet<string> viewers = VisionManager.visionManager.GetViewers(next.location);
+                    if (isFriendly)
+                        viewers = VisionManager.visionManager.GetViewersE(next.location);
+                    List<UnitBase> searchList = MainCombatManager.manager.allFriendly;
+                    if (isFriendly)
+                        searchList = MainCombatManager.manager.allEnemy;
+                    foreach (UnitBase unit in searchList)
+                    {
+                        if (viewers.Contains(unit.myId))
+                        {
+                            if (!isFriendly)
+                            {
+                                RevealMe(this, unit);
+                                if(VisionManager.visionManager.visibleEnemyUnits.ContainsKey(this))
+                                    VisionManager.visionManager.visibleEnemyUnits[this].Add(unit.myId);
+                                else
+                                {
+                                    VisionManager.visionManager.visibleEnemyUnits.Add(this, new HashSet<string>{unit.myId});
+                                }
+                            }
+                            else
+                            {
+                                if(VisionManager.visionManager.visibleFriendlyUnits.ContainsKey(this))
+                                    VisionManager.visionManager.visibleFriendlyUnits[this].Add(unit.myId);
+                                else
+                                {
+                                    VisionManager.visionManager.visibleFriendlyUnits.Add(this, new HashSet<string>{unit.myId});
+                                }
+                            }
+                            if(stealth != null) stealth.onRevealed.action.Invoke(this, unit);
+                        }
+                    }
+                }
             }
             Vector3 nextPosition = mainMap.GetCellCenterWorld(next.location);
             Vector3 moveRate = (nextPosition - transform.position)/moveSpeed;
@@ -501,8 +587,30 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         {
             if (tiles.Contains(unit.currentPosition))
             {
-                if(VisionManager.visionManager.GetViewers(unit.currentPosition).Count == 1 || !sharedSight)
+                Stealth stealth = unit.GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.stealth)) as Stealth;
+                if (stealth != null)
+                {
+                    HashSet<string> viewers = VisionManager.visionManager.GetViewers(unit.currentPosition);
+                    if (isFriendly)
+                        viewers = VisionManager.visionManager.GetViewersE(unit.currentPosition);
+                    int actualViewers = 0;
+                    foreach (string unitID in viewers)
+                    {
+                        UnitBase unita = MainCombatManager.manager.GetUnit(unitID);
+                        if(unita == null) continue;
+                        if (HexTileUtility.GetTileDistance(unita.currentPosition,
+                                unit.currentPosition) <= stealth.GetMaxSightDist())
+                        {
+                            actualViewers++;
+                        }
+                    }
+
+                    if (actualViewers == 1 || (!sharedSight && actualViewers >= 1)) return true;
+                }
+                else if (VisionManager.visionManager.GetViewers(unit.currentPosition).Count == 1 || !sharedSight)
+                {
                     return true;
+                }
             }
         }
         return false;

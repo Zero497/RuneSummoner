@@ -55,7 +55,7 @@ public class ClickManager : MonoBehaviour
             MoveController.mControl.InitMovement(TurnController.controller.currentActor, false);
             currentAction = null;
         }
-        if (currentAction is { inProgress: false })
+        else if (currentAction is { inProgress: false })
         {
             if (!currentAction.RunAction(new SendData(clickPosition)))
             {
@@ -64,16 +64,18 @@ public class ClickManager : MonoBehaviour
             }
             return;
         }
-        if (isDoubleClick())
+        else if (isDoubleClick())
         {
             OnDoubleClickTile(clickPosition);
             return;
         }
-        if(currentAction == null)
-            currentAction = InferAction(1, clickPosition);
-        if (currentAction is { inProgress: false })
+        else if (currentAction == null)
         {
-            currentAction.PrepAction();
+            currentAction = InferAction(1, clickPosition);
+            if (currentAction != null && !currentAction.inProgress)
+            {
+                currentAction.PrepAction();
+            }
         }
         sinceLastClick = DateTime.Now;
     }
@@ -113,6 +115,7 @@ public class ClickManager : MonoBehaviour
             {
                 if (clickPosition == curActor.currentPosition)
                 {
+                    curActor.myMovement.inProgress = false;
                     return curActor.myMovement;
                 }
             }
@@ -135,7 +138,7 @@ public class ClickManager : MonoBehaviour
 
     private bool isDoubleClick()
     {
-        if (DateTime.Now - sinceLastClick < TimeSpan.FromSeconds(1))
+        if (DateTime.Now - sinceLastClick < TimeSpan.FromSeconds(0.05f))
             return true;
         return false;
     }

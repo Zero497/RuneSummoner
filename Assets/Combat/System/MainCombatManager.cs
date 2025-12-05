@@ -20,6 +20,8 @@ public class MainCombatManager : MonoBehaviour
     public GameObject loseCanv;
 
     public GameObject blankUnitPrefab;
+
+    public Camera mainCamera;
     
     private List<AbilityButton> AbilityButtons = new List<AbilityButton>();
     
@@ -68,7 +70,6 @@ public class MainCombatManager : MonoBehaviour
         InitMap(battle);
         Vector3Int playerOriginPos =
             new Vector3Int(Random.Range(0, battle.mapSize.x), Random.Range(0, battle.mapSize.y), 0);
-        CreateUnit(UnitManager.player, playerOriginPos, UnitManager.player.id, false);
         foreach (UnitSimple unit in UnitManager.playerParty)
         {
             CreateUnit(unit, playerOriginPos, unit.id, false);
@@ -82,6 +83,7 @@ public class MainCombatManager : MonoBehaviour
             }
             CreateUnit(unit, rand, unit.id, false, false, 1);
         }
+        mainCamera.gameObject.transform.position = allFriendly[0].gameObject.transform.position;
         TurnController.controller.TurnQueueRepaint();
         TurnController.controller.NextEvent();
     }
@@ -115,8 +117,8 @@ public class MainCombatManager : MonoBehaviour
         UnitData data = UnitData.GetUnitData(simple.name);
         GameObject newUnit = Instantiate(blankUnitPrefab);
         UnitBase newBase = newUnit.GetComponent<UnitBase>();
-        newUnit.GetComponent<SpriteRenderer>().sprite = data.UnitSprite;
-        newUnit.transform.position = mainMap.GetCellCenterWorld(pos);
+        SpriteRenderer s = newUnit.GetComponent<SpriteRenderer>();
+        s.sprite = data.UnitSprite;
         int sanityCheck = 0;
         while (!isValidPlacement(pos))
         {
@@ -139,10 +141,11 @@ public class MainCombatManager : MonoBehaviour
             }
         }
         newBase.currentPosition = pos;
+        newUnit.transform.position = mainMap.GetCellCenterWorld(pos);
         newBase.myId = id;
         newBase.isFriendly = isFriendly;
         newBase.myTeam = team;
-        newBase.Init(simple, data);
+        newBase.Init(simple);
         if(team != 0) newBase.myAI = new FSM(newBase,newBase.baseData.defaultEntryState);
         if (isFriendly)
         {
@@ -165,7 +168,7 @@ public class MainCombatManager : MonoBehaviour
         if (unit.isFriendly)
         {
             allFriendly.Remove(unit);
-            if (unit.name.Equals("Player"))
+            if (unit.myId.Equals("player"))
             {
                 loseCanv.SetActive(true);
             }
@@ -176,10 +179,32 @@ public class MainCombatManager : MonoBehaviour
             if (allEnemy.Count == 0)
             {
                 winCanv.SetActive(true);
+                ApplyWinProgression();
             }
         }
         VisionManager.visionManager.ConcealInRadius(unit.myId, Mathf.FloorToInt(unit.sightRadius), unit.currentPosition);
         TurnController.controller.RemoveFromQueue(unit);
+    }
+
+    private void ApplyWinProgression()
+    {
+        float expAward = 0;
+        foreach (UnitSimple enemy in BattleGenerator.launchBattle.enemies)
+        {
+            float rand = Random.Range(0, 100f);
+            if (rand < 60 - 10 * (int)enemy.GetMyUnitData().myGrade)
+                InventoryManager.ChangeSummonShards(enemy.name, Mathf.CeilToInt(5 * enemy.level*BattleGenerator.launchBattle.GetMult(enemy)));
+            expAward += 50 * Mathf.Pow(1.5f, enemy.level - 1);
+        }
+
+        foreach (UnitSimple unit in UnitManager.playerParty)
+        {
+            unit.currentExp += expAward;
+            while (unit.currentExp >= unit.ExpToNextLevel())
+            {
+                unit.LevelUp();
+            }
+        }
     }
     
     public List<UnitBase> getUnitsInRange(Vector3Int source, int range)
@@ -246,7 +271,20 @@ public class MainCombatManager : MonoBehaviour
         }
         return result;
     }
-    
+
+    public UnitBase GetUnit(string id)
+    {
+        foreach (UnitBase unit in allFriendly)
+        {
+            if (unit.myId.Equals(id)) return unit;
+        }
+
+        foreach (UnitBase unit in allEnemy)
+        {
+            if (unit.myId.Equals(id)) return unit;
+        }
+        return null;
+    }
     public UnitBase getUnitAtPosition(Vector3Int tile)
     {
         foreach (UnitBase unit in allFriendly)

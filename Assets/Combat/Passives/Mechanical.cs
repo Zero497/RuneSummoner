@@ -37,7 +37,7 @@ public class Mechanical : PassiveAbility
         }
         else
         {
-            int toRemove = Mathf.FloorToInt(stacks / (float)level+1);
+            int toRemove = Mathf.FloorToInt(stacks / ((float)level+1));
             incomingEffect.AddStacks(-toRemove);
         }
     }

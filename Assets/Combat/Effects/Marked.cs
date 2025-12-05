@@ -28,7 +28,7 @@ public class Marked : Effect
      */
     public override void Initialize(SendData data)
     {
-        stackDecayAmount = 1000;
+        stackDecayAmount = 10000;
         stackDecayTime = 200;
         base.Initialize(data);
         applier = data.unitData[1];
@@ -129,6 +129,12 @@ public class Marked : Effect
         if(onAttack != null)
             source.myEvents.applyToOutgoingAttack.Unsubscribe(onAttack);
         base.RemoveEffect();
+    }
+
+    public override void AddStacks(int addStacks)
+    {
+        base.AddStacks(addStacks);
+        //TODO stacks decay invidually
     }
 
     private void RemoveEffect(UnitBase unit)
