@@ -61,7 +61,7 @@ public class Attack : ActiveAbility
         return targets.Count > 0;
     }
 
-    protected virtual bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position, float mod=1)
+    public virtual bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position, float mod=1)
     {
         UnitBase unitAtPosition = MainCombatManager.manager.getUnitAtPosition(position);
         if (unitAtPosition != null && validTarget(unitAtPosition.myTeam))

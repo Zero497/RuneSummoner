@@ -41,13 +41,13 @@ public class Unstoppable : PassiveAbility
     private void OnTurnEnd(UnitBase myUnit)
     {
         SendData physDef = new SendData(myUnit);
-        physDef.AddStr("physicaldefense");
+        physDef.AddStr("physicaldefenseup");
         physDef.AddStr("physicaldefense");
         physDef.AddFloat(2*level);
         physDef.AddFloat(1);
         myUnit.AddEffect(physDef);
         SendData magDef = new SendData(myUnit);
-        magDef.AddStr("magicaldefense");
+        magDef.AddStr("magicaldefenseup");
         magDef.AddStr("magicaldefense");
         magDef.AddFloat(2*level);
         magDef.AddFloat(1);
@@ -65,7 +65,12 @@ public class Unstoppable : PassiveAbility
         List<Vector3Int> newLine = new List<Vector3Int>();
         while (cur != null)
         {
-            if (HexTileUtility.isInLine(cur.location, newLine[0]) && !HexTileUtility.AreAdjacent(newLine[^2], cur.location))
+            if (newLine.Count < 3)
+            {
+                newLine.Add(cur.location);
+                cur = cur.parent;
+            }
+            else if (HexTileUtility.isInLine(cur.location, newLine[0]) && !HexTileUtility.AreAdjacent(newLine[^2], cur.location))
             {
                 newLine.Add(cur.location);
                 cur = cur.parent;

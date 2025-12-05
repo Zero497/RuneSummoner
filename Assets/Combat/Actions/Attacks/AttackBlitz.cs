@@ -21,7 +21,7 @@ public class AttackBlitz : Attack
         return base.RunAction(sentData);
     }
 
-    protected override bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position, float mod = 1)
+    public override bool RunSingleTarget(Func<int, bool> validTarget, Vector3Int position, float mod = 1)
     {
         UnitBase unitAtPosition = MainCombatManager.manager.getUnitAtPosition(position);
         Attack myAttack = getBasicAttack();

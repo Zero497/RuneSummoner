@@ -81,7 +81,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
     //number of seconds to reach destination (from 1 tile to another)
     private static float moveSpeed = 0.2f;
 
-    private void updateBars()
+    public void updateBars()
     {
         healthBar.fillAmount = (currentHealth / health);
         manaBar.fillAmount = (currentMana / mana);
@@ -506,8 +506,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
                 {
                     ConcealMe(this);
                 }
-                else if(!healthBar.enabled && VisionManager.visionManager.isRevealed(next.location))
-                {
+            }
                     Stealth stealth = GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.stealth)) as Stealth;
                     HashSet<string> viewers = VisionManager.visionManager.GetViewers(next.location);
                     if (isFriendly)
@@ -541,8 +540,6 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
                             if(stealth != null) stealth.onRevealed.action.Invoke(this, unit);
                         }
                     }
-                }
-            }
             Vector3 nextPosition = mainMap.GetCellCenterWorld(next.location);
             Vector3 moveRate = (nextPosition - transform.position)/moveSpeed;
             Vector3 lastPos = transform.position;

@@ -1,7 +1,5 @@
 using System;
 using TMPro;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,6 +46,7 @@ public class StatFrame : MonoBehaviour
     public void GradeUp()
     {
         myUnit.statGrades.ChangeGrade(myUnit.statGrades.GetGrade(myStat)+1, myStat);
+        Init(myUnit, myUnit.GetMyUnitData());
     }
 
     private bool GradeUpShouldBeEnabled(UnitSimple unit)

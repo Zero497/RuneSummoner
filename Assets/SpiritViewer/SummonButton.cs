@@ -27,5 +27,6 @@ public class SummonButton : MonoBehaviour
         InventoryManager.ChangeSummonShards(myUnitName, -100);
         if(InventoryManager.GetSummonShards(myUnitName) < 100)
             myButton.interactable = false;
+        SpiritViewManager.spiritViewManager.GenerateCharList();
     }
 }

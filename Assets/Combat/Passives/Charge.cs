@@ -59,7 +59,12 @@ public class Charge : PassiveAbility
         List<Vector3Int> newLine = new List<Vector3Int>();
         while (cur != null)
         {
-            if (HexTileUtility.isInLine(cur.location, newLine[0]) && !HexTileUtility.AreAdjacent(newLine[^2], cur.location))
+            if (newLine.Count < 3)
+            {
+                newLine.Add(cur.location);
+                cur = cur.parent;
+            }
+            else if (HexTileUtility.isInLine(cur.location, newLine[0]) && !HexTileUtility.AreAdjacent(newLine[^2], cur.location))
             {
                 newLine.Add(cur.location);
                 cur = cur.parent;

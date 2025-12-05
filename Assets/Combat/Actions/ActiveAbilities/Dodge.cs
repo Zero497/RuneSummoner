@@ -6,6 +6,8 @@ public class Dodge : ActiveAbility
     {
         if (source.usedAbilityThisTurn) return false;
         if (!source.PayCost(this, false)) return false;
+        source.usedAbilityThisTurn = true;
+        source.PayCost(this);
         SendData evadeData = new SendData(source);
         evadeData.AddStr("evade");
         evadeData.AddFloat(6+4*level);

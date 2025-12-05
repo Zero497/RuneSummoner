@@ -32,6 +32,7 @@ public class CoreOverdraw : ActiveAbility
         {
             source.myCombatStats.AddMana(GetStaminaCost().flt * (0.3f+0.2f*level));
             source.TakeDamage(AttackData.DamageType.True, AttackData.Element.neutral, Mathf.Max(0, (0.6f-0.1f*level)*GetStaminaCost().flt));
+            source.updateBars();
         }
         else
         {

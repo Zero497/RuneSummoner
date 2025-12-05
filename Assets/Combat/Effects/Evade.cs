@@ -53,7 +53,7 @@ public class Evade : Effect
 
     private void OnAttacked(UnitBase myUnit, Attack.AttackMessageToTarget attack)
     {
-        float rand = Random.Range(0, 1);
+        float rand = Random.Range(0.0f, 1);
         if (rand > 0.05f * stacks)
         {
             attack.damage = 0;

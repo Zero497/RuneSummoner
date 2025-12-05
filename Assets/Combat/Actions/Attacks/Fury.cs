@@ -11,8 +11,8 @@ public class Fury : Attack
         base.Initialize(sendData);
         foreach (ActiveAbility ability in source.activeAbilities)
         {
-            if (ability.id.Equals("PhysicalMelee") || ability.id.Equals("PhysicalRanged") ||
-                ability.id.Equals("MagicalMelee") || ability.id.Equals("MagicalRanged"))
+            if (ability.id.Equals("Physical Melee") || ability.id.Equals("Physical Ranged") ||
+                ability.id.Equals("Magical Melee") || ability.id.Equals("Magical Ranged"))
             {
                 basicAttack = (Attack) ability;
             }
@@ -32,7 +32,7 @@ public class Fury : Attack
         float mod = 1;
         if (sentData.floatData.Count > 0) mod = sentData.floatData[0];
         for(int i = 0; i<level+2; i++)
-            ret = RunSingleTarget(getValidTargets(), sentData.positionData[0], mod);
+            ret = basicAttack.RunSingleTarget(getValidTargets(), sentData.positionData[0], mod);
         if (ret)
         {
             source.PayCost(this);
@@ -58,7 +58,8 @@ public class Fury : Attack
         OverlayManager.instance.ClearOverlays();
         if (!prepped)
         {
-            OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, (basicAttack.abilityData as AttackData).range, 1),"AttackOverlay");
+            AttackData dat = (basicAttack.abilityData as AttackData);
+            OverlayManager.instance.CreateOverlay(HexTileUtility.DjikstrasGetTilesInRange(TurnController.controller.mainMap, source.currentPosition, dat.range, 1),"AttackOverlay");
             prepped = true;
             ClickManager.clickManager.SetAction(this);
             return false;

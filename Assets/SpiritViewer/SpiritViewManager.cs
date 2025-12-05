@@ -52,12 +52,13 @@ public class SpiritViewManager : MonoBehaviour
         summonCapText.text = "Summoning Capacity: " + UnitManager.partyCost + "/" + UnitManager.summonCap;
     }
 
-    private void GenerateCharList()
+    public void GenerateCharList()
     {
         foreach (Transform child in characterFrameContent)
         {
             Destroy(child.gameObject);
         }
+        UnitManager.playerUnits.Sort();
         UnitSimple temp = UnitManager.player;
         GameObject unitButton = Instantiate(characterButtonPrefab, characterFrameContent);
         unitButton.transform.GetChild(0).GetComponent<Image>().sprite = temp.GetMyUnitData().portrait;
