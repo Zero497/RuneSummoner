@@ -25,8 +25,7 @@ public class SummonButton : MonoBehaviour
     {
         UnitManager.AddUnit(new UnitSimple(myUnitName, UnitManager.GetValidUnitID(myUnitName), 1, StatGrades.RandomStatGrades()));
         InventoryManager.ChangeSummonShards(myUnitName, -100);
-        if(InventoryManager.GetSummonShards(myUnitName) < 100)
-            myButton.interactable = false;
+        Init();
         SpiritViewManager.spiritViewManager.GenerateCharList();
     }
 }

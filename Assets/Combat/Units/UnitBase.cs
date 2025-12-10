@@ -485,6 +485,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
         manaBar.enabled = false;
         stamBar.enabled = false;
         arrow.enabled = false;
+        //Debug.Log(StackTraceUtility.ExtractStackTrace());
     }
 
     public IEnumerator MoveUnit(HexTileUtility.DjikstrasNode target, Tilemap mainMap, UnityAction<bool> returnToCaller = null)
@@ -507,39 +508,39 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
                     ConcealMe(this);
                 }
             }
-                    Stealth stealth = GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.stealth)) as Stealth;
-                    HashSet<string> viewers = VisionManager.visionManager.GetViewers(next.location);
-                    if (isFriendly)
-                        viewers = VisionManager.visionManager.GetViewersE(next.location);
-                    List<UnitBase> searchList = MainCombatManager.manager.allFriendly;
-                    if (isFriendly)
-                        searchList = MainCombatManager.manager.allEnemy;
-                    foreach (UnitBase unit in searchList)
+            Stealth stealth = GetPassive(new SendData((int)PassiveAbility.PassiveAbilityDes.stealth)) as Stealth;
+            HashSet<string> viewers = VisionManager.visionManager.GetViewers(next.location);
+            if (isFriendly)
+                viewers = VisionManager.visionManager.GetViewersE(next.location);
+            List<UnitBase> searchList = MainCombatManager.manager.allFriendly;
+            if (isFriendly)
+                searchList = MainCombatManager.manager.allEnemy;
+            foreach (UnitBase unit in searchList)
+            {
+                if (viewers.Contains(unit.myId))
+                {
+                    if (!isFriendly)
                     {
-                        if (viewers.Contains(unit.myId))
+                        RevealMe(this, unit);
+                        if(VisionManager.visionManager.visibleEnemyUnits.ContainsKey(this))
+                            VisionManager.visionManager.visibleEnemyUnits[this].Add(unit.myId);
+                        else
                         {
-                            if (!isFriendly)
-                            {
-                                RevealMe(this, unit);
-                                if(VisionManager.visionManager.visibleEnemyUnits.ContainsKey(this))
-                                    VisionManager.visionManager.visibleEnemyUnits[this].Add(unit.myId);
-                                else
-                                {
-                                    VisionManager.visionManager.visibleEnemyUnits.Add(this, new HashSet<string>{unit.myId});
-                                }
-                            }
-                            else
-                            {
-                                if(VisionManager.visionManager.visibleFriendlyUnits.ContainsKey(this))
-                                    VisionManager.visionManager.visibleFriendlyUnits[this].Add(unit.myId);
-                                else
-                                {
-                                    VisionManager.visionManager.visibleFriendlyUnits.Add(this, new HashSet<string>{unit.myId});
-                                }
-                            }
-                            if(stealth != null) stealth.onRevealed.action.Invoke(this, unit);
+                            VisionManager.visionManager.visibleEnemyUnits.Add(this, new HashSet<string>{unit.myId});
                         }
                     }
+                    else
+                    {
+                        if(VisionManager.visionManager.visibleFriendlyUnits.ContainsKey(this))
+                            VisionManager.visionManager.visibleFriendlyUnits[this].Add(unit.myId);
+                        else
+                        {
+                            VisionManager.visionManager.visibleFriendlyUnits.Add(this, new HashSet<string>{unit.myId});
+                        }
+                    }
+                    if(stealth != null) stealth.onRevealed.action.Invoke(this, unit);
+                }
+            }
             Vector3 nextPosition = mainMap.GetCellCenterWorld(next.location);
             Vector3 moveRate = (nextPosition - transform.position)/moveSpeed;
             Vector3 lastPos = transform.position;
@@ -588,7 +589,7 @@ public class UnitBase : MonoBehaviour, IEquatable<UnitBase>
                 if (stealth != null)
                 {
                     HashSet<string> viewers = VisionManager.visionManager.GetViewers(unit.currentPosition);
-                    if (isFriendly)
+                    if (unit.isFriendly)
                         viewers = VisionManager.visionManager.GetViewersE(unit.currentPosition);
                     int actualViewers = 0;
                     foreach (string unitID in viewers)

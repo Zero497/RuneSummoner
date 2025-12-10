@@ -42,7 +42,7 @@ public class Stealth : PassiveAbility
         {
             if (viewers.Contains(unit.myId))
             {
-                if (HexTileUtility.GetTileDistance(myUnit.currentPosition, revealer.currentPosition) <=
+                if (HexTileUtility.GetTileDistance(myUnit.currentPosition, unit.currentPosition) <=
                     GetMaxSightDist())
                 {
                     found = true;

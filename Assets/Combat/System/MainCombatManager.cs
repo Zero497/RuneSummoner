@@ -171,6 +171,7 @@ public class MainCombatManager : MonoBehaviour
             if (unit.myId.Equals("player"))
             {
                 loseCanv.SetActive(true);
+                return;
             }
         }
         else
@@ -204,6 +205,12 @@ public class MainCombatManager : MonoBehaviour
             {
                 unit.LevelUp();
             }
+        }
+
+        UnitManager.player.currentExp += expAward;
+        while (UnitManager.player.currentExp >= UnitManager.player.ExpToNextLevel())
+        {
+            UnitManager.player.LevelUp();
         }
     }
     

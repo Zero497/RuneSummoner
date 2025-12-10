@@ -86,7 +86,7 @@ public static class UnitManager
             XmlSerializer mySerializer = new XmlSerializer(typeof(UnitSimple));
             using FileStream myFileStream = new FileStream(file, FileMode.Open);
             UnitSimple unit = (UnitSimple)mySerializer.Deserialize(myFileStream);
-            if (unit.name.Equals("Player"))
+            if (unit.id.Equals("player"))
             {
                 continue;
             }
@@ -128,6 +128,7 @@ public static class UnitManager
 
     public static bool IDExists(string id)
     {
+        if (id.Equals("player") && player != null) return true;
         foreach (UnitSimple unit in playerUnits)
         {
             if (unit.id.Equals(id))

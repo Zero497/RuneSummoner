@@ -27,15 +27,21 @@ public class Fury : Attack
     public override bool RunAction(SendData sentData)
     {
         if (source.usedAbilityThisTurn) return false;
-        bool ret = true;
-        if (!source.PayCost(this, false)) return false;
+        bool ret = false;
+        if (!source.PayCost(basicAttack, false)) return false;
         float mod = 1;
         if (sentData.floatData.Count > 0) mod = sentData.floatData[0];
-        for(int i = 0; i<level+2; i++)
-            ret = basicAttack.RunSingleTarget(getValidTargets(), sentData.positionData[0], mod);
+        for (int i = 0; i < level + 2; i++)
+        {
+            ret = basicAttack.RunSingleTarget(getValidTargets(), sentData.positionData[0], mod) || ret;
+            if (ret)
+            {
+                source.PayCost(basicAttack);
+            }
+        }
         if (ret)
         {
-            source.PayCost(this);
+            
             source.usedAbilityThisTurn = true;
         }
         OverlayManager.instance.ClearOverlays();
